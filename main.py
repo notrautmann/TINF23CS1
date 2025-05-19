@@ -9,7 +9,7 @@ class DBConnection:
 
     @staticmethod
     def get_instance():
-        if DBConnection._instance is None:
+        if DBConnection._instance is None or DBConnection._instance.closed:
             DBConnection._instance = psycopg.connect(
                 host=os.getenv("HOST"),
                 dbname=os.getenv("DBNAME"),
