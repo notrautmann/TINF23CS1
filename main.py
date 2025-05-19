@@ -11,10 +11,10 @@ class DBConnection:
     def get_instance():
         if DBConnection._instance is None or DBConnection._instance.closed:
             DBConnection._instance = psycopg.connect(
-                host=os.getenv("HOST"),
-                dbname=os.getenv("DBNAME"),
-                user=os.getenv("USER"),
-                password=os.getenv("PASSWORD")
+                host=os.getenv("DB_HOST"),
+                dbname=os.getenv("DB_NAME"),
+                user=os.getenv("DB_USER"),
+                password=os.getenv("DB_PASSWORD")
             )
             print('Connected to the PostgreSQL server.')
         return DBConnection._instance
