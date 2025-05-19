@@ -59,9 +59,14 @@ def generate_crud_class(table_name, columns):
         f"{col[0]}: {pg_type_to_py(col[1])} = None" for col in columns
     ])
     fields = ', '.join([col[0] for col in columns])
+    # Spalten ohne ID für create
+    non_id_columns = [col for col in columns if col[0].lower() != 'id']
     create_args = ', '.join([
-        f"{col[0]}: {pg_type_to_py(col[1])}" for col in columns
+        f"{col[0]}: {pg_type_to_py(col[1])}" for col in non_id_columns
     ])
+    create_fields = ', '.join([col[0] for col in non_id_columns])
+    create_values = ', '.join(['%s'] * len(non_id_columns))
+    create_params = ', '.join([col[0] for col in non_id_columns])
     assignments = '\n        '.join([f"self.{col[0]} = {col[0]}" for col in columns])
     code = f"""
 class {class_name}:
@@ -72,7 +77,7 @@ class {class_name}:
     def create({create_args}) -> tuple | None:
         conn = connect()
         with conn.cursor() as cur:
-            cur.execute(\"INSERT INTO {table_name} ({fields}) VALUES ({', '.join(['%s']*len(columns))}) RETURNING *\", ({fields},))
+            cur.execute(\"INSERT INTO {table_name} ({create_fields}) VALUES ({create_values}) RETURNING *\", ({create_params},))
             result = cur.fetchone()
             conn.commit()
         conn.close()
