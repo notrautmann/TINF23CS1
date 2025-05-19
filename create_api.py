@@ -2,9 +2,12 @@ from create_db import get_table_names
 def generate():
     
     tables = get_table_names()
-    with open("routes.py", "a") as f:
+    with open("app.py", "w") as f:
         f.write("import db\n")
-        f.write("from flask import request, jsonify\n")
+        f.write("from flask import Flask, request, jsonify\n")
+
+        f.write("app = Flask(__name__)\n\n")
+        f.write("# API routes\n")
 
         for table in tables:
             f.write(f"# {table}\n")
