@@ -12,10 +12,10 @@ class Branch_order_window:
         self.order_end = order_end
 
     @staticmethod
-    def create(id: int, branch_id: int, weekday: int, order_start: str, order_end: str) -> tuple | None:
+    def create(branch_id: int, weekday: int, order_start: str, order_end: str) -> tuple | None:
         conn = connect()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO branch_order_window (id, branch_id, weekday, order_start, order_end) VALUES (%s, %s, %s, %s, %s) RETURNING *", (id, branch_id, weekday, order_start, order_end,))
+            cur.execute("INSERT INTO branch_order_window (branch_id, weekday, order_start, order_end) VALUES (%s, %s, %s, %s) RETURNING *", (branch_id, weekday, order_start, order_end,))
             result = cur.fetchone()
             conn.commit()
         conn.close()
@@ -64,10 +64,10 @@ class Employees:
         self.updated_at = updated_at
 
     @staticmethod
-    def create(id: int, first_name: str, last_name: str, email: str, phone: str, hire_date: str, termination_date: str, hourly_wage: float, monthly_salary: float, created_at: str, updated_at: str) -> tuple | None:
+    def create(first_name: str, last_name: str, email: str, phone: str, hire_date: str, termination_date: str, hourly_wage: float, monthly_salary: float, created_at: str, updated_at: str) -> tuple | None:
         conn = connect()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO employees (id, first_name, last_name, email, phone, hire_date, termination_date, hourly_wage, monthly_salary, created_at, updated_at) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING *", (id, first_name, last_name, email, phone, hire_date, termination_date, hourly_wage, monthly_salary, created_at, updated_at,))
+            cur.execute("INSERT INTO employees (first_name, last_name, email, phone, hire_date, termination_date, hourly_wage, monthly_salary, created_at, updated_at) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING *", (first_name, last_name, email, phone, hire_date, termination_date, hourly_wage, monthly_salary, created_at, updated_at,))
             result = cur.fetchone()
             conn.commit()
         conn.close()
@@ -111,10 +111,10 @@ class Employee_time_entries:
         self.break_minutes = break_minutes
 
     @staticmethod
-    def create(id: int, employee_id: int, branch_id: int, clock_in: str, clock_out: str, break_minutes: int) -> tuple | None:
+    def create(employee_id: int, branch_id: int, clock_in: str, clock_out: str, break_minutes: int) -> tuple | None:
         conn = connect()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO employee_time_entries (id, employee_id, branch_id, clock_in, clock_out, break_minutes) VALUES (%s, %s, %s, %s, %s, %s) RETURNING *", (id, employee_id, branch_id, clock_in, clock_out, break_minutes,))
+            cur.execute("INSERT INTO employee_time_entries (employee_id, branch_id, clock_in, clock_out, break_minutes) VALUES (%s, %s, %s, %s, %s) RETURNING *", (employee_id, branch_id, clock_in, clock_out, break_minutes,))
             result = cur.fetchone()
             conn.commit()
         conn.close()
@@ -156,10 +156,10 @@ class Payment_methods:
         self.is_cash = is_cash
 
     @staticmethod
-    def create(id: int, name: str, external_code: str, is_cash: bool) -> tuple | None:
+    def create(name: str, external_code: str, is_cash: bool) -> tuple | None:
         conn = connect()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO payment_methods (id, name, external_code, is_cash) VALUES (%s, %s, %s, %s) RETURNING *", (id, name, external_code, is_cash,))
+            cur.execute("INSERT INTO payment_methods (name, external_code, is_cash) VALUES (%s, %s, %s) RETURNING *", (name, external_code, is_cash,))
             result = cur.fetchone()
             conn.commit()
         conn.close()
@@ -203,10 +203,10 @@ class Accounts:
         self.description = description
 
     @staticmethod
-    def create(id: int, name: str, account_number: str, iban: str, bic: str, description: str) -> tuple | None:
+    def create(name: str, account_number: str, iban: str, bic: str, description: str) -> tuple | None:
         conn = connect()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO accounts (id, name, account_number, iban, bic, description) VALUES (%s, %s, %s, %s, %s, %s) RETURNING *", (id, name, account_number, iban, bic, description,))
+            cur.execute("INSERT INTO accounts (name, account_number, iban, bic, description) VALUES (%s, %s, %s, %s, %s) RETURNING *", (name, account_number, iban, bic, description,))
             result = cur.fetchone()
             conn.commit()
         conn.close()
@@ -255,10 +255,10 @@ class Branches:
         self.updated_at = updated_at
 
     @staticmethod
-    def create(id: int, name: str, address_line: str, postal_code: str, city: str, country: str, phone: str, email: str, opening_note: str, created_at: str, updated_at: str) -> tuple | None:
+    def create(name: str, address_line: str, postal_code: str, city: str, country: str, phone: str, email: str, opening_note: str, created_at: str, updated_at: str) -> tuple | None:
         conn = connect()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO branches (id, name, address_line, postal_code, city, country, phone, email, opening_note, created_at, updated_at) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING *", (id, name, address_line, postal_code, city, country, phone, email, opening_note, created_at, updated_at,))
+            cur.execute("INSERT INTO branches (name, address_line, postal_code, city, country, phone, email, opening_note, created_at, updated_at) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING *", (name, address_line, postal_code, city, country, phone, email, opening_note, created_at, updated_at,))
             result = cur.fetchone()
             conn.commit()
         conn.close()
@@ -299,10 +299,10 @@ class Roles:
         self.description = description
 
     @staticmethod
-    def create(id: int, name: str, description: str) -> tuple | None:
+    def create(name: str, description: str) -> tuple | None:
         conn = connect()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO roles (id, name, description) VALUES (%s, %s, %s) RETURNING *", (id, name, description,))
+            cur.execute("INSERT INTO roles (name, description) VALUES (%s, %s) RETURNING *", (name, description,))
             result = cur.fetchone()
             conn.commit()
         conn.close()
@@ -348,10 +348,10 @@ class Users:
         self.updated_at = updated_at
 
     @staticmethod
-    def create(id: int, username: str, password_hash: str, role_id: int, employee_id: int, is_active: bool, created_at: str, updated_at: str) -> tuple | None:
+    def create(username: str, password_hash: str, role_id: int, employee_id: int, is_active: bool, created_at: str, updated_at: str) -> tuple | None:
         conn = connect()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO users (id, username, password_hash, role_id, employee_id, is_active, created_at, updated_at) VALUES (%s, %s, %s, %s, %s, %s, %s, %s) RETURNING *", (id, username, password_hash, role_id, employee_id, is_active, created_at, updated_at,))
+            cur.execute("INSERT INTO users (username, password_hash, role_id, employee_id, is_active, created_at, updated_at) VALUES (%s, %s, %s, %s, %s, %s, %s) RETURNING *", (username, password_hash, role_id, employee_id, is_active, created_at, updated_at,))
             result = cur.fetchone()
             conn.commit()
         conn.close()
@@ -436,10 +436,10 @@ class Allergens:
         self.description = description
 
     @staticmethod
-    def create(id: int, code: str, name: str, description: str) -> tuple | None:
+    def create(code: str, name: str, description: str) -> tuple | None:
         conn = connect()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO allergens (id, code, name, description) VALUES (%s, %s, %s, %s) RETURNING *", (id, code, name, description,))
+            cur.execute("INSERT INTO allergens (code, name, description) VALUES (%s, %s, %s) RETURNING *", (code, name, description,))
             result = cur.fetchone()
             conn.commit()
         conn.close()
@@ -488,10 +488,10 @@ class Suppliers:
         self.updated_at = updated_at
 
     @staticmethod
-    def create(id: int, name: str, contact_name: str, email: str, phone: str, address_line: str, postal_code: str, city: str, country: str, created_at: str, updated_at: str) -> tuple | None:
+    def create(name: str, contact_name: str, email: str, phone: str, address_line: str, postal_code: str, city: str, country: str, created_at: str, updated_at: str) -> tuple | None:
         conn = connect()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO suppliers (id, name, contact_name, email, phone, address_line, postal_code, city, country, created_at, updated_at) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING *", (id, name, contact_name, email, phone, address_line, postal_code, city, country, created_at, updated_at,))
+            cur.execute("INSERT INTO suppliers (name, contact_name, email, phone, address_line, postal_code, city, country, created_at, updated_at) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING *", (name, contact_name, email, phone, address_line, postal_code, city, country, created_at, updated_at,))
             result = cur.fetchone()
             conn.commit()
         conn.close()
@@ -538,10 +538,10 @@ class Products:
         self.updated_at = updated_at
 
     @staticmethod
-    def create(id: int, name: str, sku: str, recipe_id: int, sales_price: float, tax_code_id: int, is_active: bool, created_at: str, updated_at: str) -> tuple | None:
+    def create(name: str, sku: str, recipe_id: int, sales_price: float, tax_code_id: int, is_active: bool, created_at: str, updated_at: str) -> tuple | None:
         conn = connect()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO products (id, name, sku, recipe_id, sales_price, tax_code_id, is_active, created_at, updated_at) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING *", (id, name, sku, recipe_id, sales_price, tax_code_id, is_active, created_at, updated_at,))
+            cur.execute("INSERT INTO products (name, sku, recipe_id, sales_price, tax_code_id, is_active, created_at, updated_at) VALUES (%s, %s, %s, %s, %s, %s, %s, %s) RETURNING *", (name, sku, recipe_id, sales_price, tax_code_id, is_active, created_at, updated_at,))
             result = cur.fetchone()
             conn.commit()
         conn.close()
@@ -626,10 +626,10 @@ class Inventory_locations:
         self.description = description
 
     @staticmethod
-    def create(id: int, warehouse_id: int, code: str, description: str) -> tuple | None:
+    def create(warehouse_id: int, code: str, description: str) -> tuple | None:
         conn = connect()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO inventory_locations (id, warehouse_id, code, description) VALUES (%s, %s, %s, %s) RETURNING *", (id, warehouse_id, code, description,))
+            cur.execute("INSERT INTO inventory_locations (warehouse_id, code, description) VALUES (%s, %s, %s) RETURNING *", (warehouse_id, code, description,))
             result = cur.fetchone()
             conn.commit()
         conn.close()
@@ -678,10 +678,10 @@ class Inventory_movements:
         self.user_id = user_id
 
     @staticmethod
-    def create(id: int, movement_type: str, ingredient_id: int, qty: float, unit: str, from_location_id: int, to_location_id: int, reference_type: str, reference_id: int, created_at: str, user_id: int) -> tuple | None:
+    def create(movement_type: str, ingredient_id: int, qty: float, unit: str, from_location_id: int, to_location_id: int, reference_type: str, reference_id: int, created_at: str, user_id: int) -> tuple | None:
         conn = connect()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO inventory_movements (id, movement_type, ingredient_id, qty, unit, from_location_id, to_location_id, reference_type, reference_id, created_at, user_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING *", (id, movement_type, ingredient_id, qty, unit, from_location_id, to_location_id, reference_type, reference_id, created_at, user_id,))
+            cur.execute("INSERT INTO inventory_movements (movement_type, ingredient_id, qty, unit, from_location_id, to_location_id, reference_type, reference_id, created_at, user_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING *", (movement_type, ingredient_id, qty, unit, from_location_id, to_location_id, reference_type, reference_id, created_at, user_id,))
             result = cur.fetchone()
             conn.commit()
         conn.close()
@@ -726,10 +726,10 @@ class Supplier_products:
         self.lead_time_days = lead_time_days
 
     @staticmethod
-    def create(id: int, supplier_id: int, ingredient_id: int, supplier_sku: str, purchase_price: float, min_order_qty: float, lead_time_days: int) -> tuple | None:
+    def create(supplier_id: int, ingredient_id: int, supplier_sku: str, purchase_price: float, min_order_qty: float, lead_time_days: int) -> tuple | None:
         conn = connect()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO supplier_products (id, supplier_id, ingredient_id, supplier_sku, purchase_price, min_order_qty, lead_time_days) VALUES (%s, %s, %s, %s, %s, %s, %s) RETURNING *", (id, supplier_id, ingredient_id, supplier_sku, purchase_price, min_order_qty, lead_time_days,))
+            cur.execute("INSERT INTO supplier_products (supplier_id, ingredient_id, supplier_sku, purchase_price, min_order_qty, lead_time_days) VALUES (%s, %s, %s, %s, %s, %s) RETURNING *", (supplier_id, ingredient_id, supplier_sku, purchase_price, min_order_qty, lead_time_days,))
             result = cur.fetchone()
             conn.commit()
         conn.close()
@@ -772,10 +772,10 @@ class Recipes:
         self.updated_at = updated_at
 
     @staticmethod
-    def create(id: int, name: str, description: str, created_at: str, updated_at: str) -> tuple | None:
+    def create(name: str, description: str, created_at: str, updated_at: str) -> tuple | None:
         conn = connect()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO recipes (id, name, description, created_at, updated_at) VALUES (%s, %s, %s, %s, %s) RETURNING *", (id, name, description, created_at, updated_at,))
+            cur.execute("INSERT INTO recipes (name, description, created_at, updated_at) VALUES (%s, %s, %s, %s) RETURNING *", (name, description, created_at, updated_at,))
             result = cur.fetchone()
             conn.commit()
         conn.close()
@@ -817,10 +817,10 @@ class Warehouses:
         self.description = description
 
     @staticmethod
-    def create(id: int, branch_id: int, name: str, description: str) -> tuple | None:
+    def create(branch_id: int, name: str, description: str) -> tuple | None:
         conn = connect()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO warehouses (id, branch_id, name, description) VALUES (%s, %s, %s, %s) RETURNING *", (id, branch_id, name, description,))
+            cur.execute("INSERT INTO warehouses (branch_id, name, description) VALUES (%s, %s, %s) RETURNING *", (branch_id, name, description,))
             result = cur.fetchone()
             conn.commit()
         conn.close()
@@ -864,10 +864,10 @@ class Customer_order_items:
         self.tax_code_id = tax_code_id
 
     @staticmethod
-    def create(id: int, order_id: int, product_id: int, quantity: int, unit_price: float, tax_code_id: int) -> tuple | None:
+    def create(order_id: int, product_id: int, quantity: int, unit_price: float, tax_code_id: int) -> tuple | None:
         conn = connect()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO customer_order_items (id, order_id, product_id, quantity, unit_price, tax_code_id) VALUES (%s, %s, %s, %s, %s, %s) RETURNING *", (id, order_id, product_id, quantity, unit_price, tax_code_id,))
+            cur.execute("INSERT INTO customer_order_items (order_id, product_id, quantity, unit_price, tax_code_id) VALUES (%s, %s, %s, %s, %s) RETURNING *", (order_id, product_id, quantity, unit_price, tax_code_id,))
             result = cur.fetchone()
             conn.commit()
         conn.close()
@@ -911,10 +911,10 @@ class Sales_receipt_items:
         self.tax_code_id = tax_code_id
 
     @staticmethod
-    def create(id: int, receipt_id: int, product_id: int, qty: float, unit_price: float, tax_code_id: int) -> tuple | None:
+    def create(receipt_id: int, product_id: int, qty: float, unit_price: float, tax_code_id: int) -> tuple | None:
         conn = connect()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO sales_receipt_items (id, receipt_id, product_id, qty, unit_price, tax_code_id) VALUES (%s, %s, %s, %s, %s, %s) RETURNING *", (id, receipt_id, product_id, qty, unit_price, tax_code_id,))
+            cur.execute("INSERT INTO sales_receipt_items (receipt_id, product_id, qty, unit_price, tax_code_id) VALUES (%s, %s, %s, %s, %s) RETURNING *", (receipt_id, product_id, qty, unit_price, tax_code_id,))
             result = cur.fetchone()
             conn.commit()
         conn.close()
@@ -960,10 +960,10 @@ class Complaints:
         self.resolved_at = resolved_at
 
     @staticmethod
-    def create(id: int, customer_id: int, order_id: int, product_id: int, description: str, resolved: bool, created_at: str, resolved_at: str) -> tuple | None:
+    def create(customer_id: int, order_id: int, product_id: int, description: str, resolved: bool, created_at: str, resolved_at: str) -> tuple | None:
         conn = connect()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO complaints (id, customer_id, order_id, product_id, description, resolved, created_at, resolved_at) VALUES (%s, %s, %s, %s, %s, %s, %s, %s) RETURNING *", (id, customer_id, order_id, product_id, description, resolved, created_at, resolved_at,))
+            cur.execute("INSERT INTO complaints (customer_id, order_id, product_id, description, resolved, created_at, resolved_at) VALUES (%s, %s, %s, %s, %s, %s, %s) RETURNING *", (customer_id, order_id, product_id, description, resolved, created_at, resolved_at,))
             result = cur.fetchone()
             conn.commit()
         conn.close()
@@ -1014,10 +1014,10 @@ class Customers:
         self.updated_at = updated_at
 
     @staticmethod
-    def create(id: int, type: str, company_name: str, first_name: str, last_name: str, email: str, phone: str, address_line: str, postal_code: str, city: str, country: str, created_at: str, updated_at: str) -> tuple | None:
+    def create(type: str, company_name: str, first_name: str, last_name: str, email: str, phone: str, address_line: str, postal_code: str, city: str, country: str, created_at: str, updated_at: str) -> tuple | None:
         conn = connect()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO customers (id, type, company_name, first_name, last_name, email, phone, address_line, postal_code, city, country, created_at, updated_at) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING *", (id, type, company_name, first_name, last_name, email, phone, address_line, postal_code, city, country, created_at, updated_at,))
+            cur.execute("INSERT INTO customers (type, company_name, first_name, last_name, email, phone, address_line, postal_code, city, country, created_at, updated_at) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING *", (type, company_name, first_name, last_name, email, phone, address_line, postal_code, city, country, created_at, updated_at,))
             result = cur.fetchone()
             conn.commit()
         conn.close()
@@ -1064,10 +1064,10 @@ class Sales_receipts:
         self.payment_reference = payment_reference
 
     @staticmethod
-    def create(id: int, receipt_number: str, branch_id: int, pos_terminal_id: int, sale_datetime: str, customer_id: int, total_amount: float, payment_method_id: int, payment_reference: str) -> tuple | None:
+    def create(receipt_number: str, branch_id: int, pos_terminal_id: int, sale_datetime: str, customer_id: int, total_amount: float, payment_method_id: int, payment_reference: str) -> tuple | None:
         conn = connect()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO sales_receipts (id, receipt_number, branch_id, pos_terminal_id, sale_datetime, customer_id, total_amount, payment_method_id, payment_reference) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING *", (id, receipt_number, branch_id, pos_terminal_id, sale_datetime, customer_id, total_amount, payment_method_id, payment_reference,))
+            cur.execute("INSERT INTO sales_receipts (receipt_number, branch_id, pos_terminal_id, sale_datetime, customer_id, total_amount, payment_method_id, payment_reference) VALUES (%s, %s, %s, %s, %s, %s, %s, %s) RETURNING *", (receipt_number, branch_id, pos_terminal_id, sale_datetime, customer_id, total_amount, payment_method_id, payment_reference,))
             result = cur.fetchone()
             conn.commit()
         conn.close()
@@ -1112,10 +1112,10 @@ class Customer_feedback:
         self.created_at = created_at
 
     @staticmethod
-    def create(id: int, customer_id: int, branch_id: int, order_id: int, rating: int, comment: str, created_at: str) -> tuple | None:
+    def create(customer_id: int, branch_id: int, order_id: int, rating: int, comment: str, created_at: str) -> tuple | None:
         conn = connect()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO customer_feedback (id, customer_id, branch_id, order_id, rating, comment, created_at) VALUES (%s, %s, %s, %s, %s, %s, %s) RETURNING *", (id, customer_id, branch_id, order_id, rating, comment, created_at,))
+            cur.execute("INSERT INTO customer_feedback (customer_id, branch_id, order_id, rating, comment, created_at) VALUES (%s, %s, %s, %s, %s, %s) RETURNING *", (customer_id, branch_id, order_id, rating, comment, created_at,))
             result = cur.fetchone()
             conn.commit()
         conn.close()
@@ -1158,10 +1158,10 @@ class Shift_schedule:
         self.assigned_hours = assigned_hours
 
     @staticmethod
-    def create(id: int, shift_id: int, employee_id: int, schedule_date: str, assigned_hours: float) -> tuple | None:
+    def create(shift_id: int, employee_id: int, schedule_date: str, assigned_hours: float) -> tuple | None:
         conn = connect()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO shift_schedule (id, shift_id, employee_id, schedule_date, assigned_hours) VALUES (%s, %s, %s, %s, %s) RETURNING *", (id, shift_id, employee_id, schedule_date, assigned_hours,))
+            cur.execute("INSERT INTO shift_schedule (shift_id, employee_id, schedule_date, assigned_hours) VALUES (%s, %s, %s, %s) RETURNING *", (shift_id, employee_id, schedule_date, assigned_hours,))
             result = cur.fetchone()
             conn.commit()
         conn.close()
@@ -1204,10 +1204,10 @@ class Production_feedback:
         self.timestamp = timestamp
 
     @staticmethod
-    def create(id: int, plan_item_id: int, user_id: int, produced_qty: float, timestamp: str) -> tuple | None:
+    def create(plan_item_id: int, user_id: int, produced_qty: float, timestamp: str) -> tuple | None:
         conn = connect()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO production_feedback (id, plan_item_id, user_id, produced_qty, timestamp) VALUES (%s, %s, %s, %s, %s) RETURNING *", (id, plan_item_id, user_id, produced_qty, timestamp,))
+            cur.execute("INSERT INTO production_feedback (plan_item_id, user_id, produced_qty, timestamp) VALUES (%s, %s, %s, %s) RETURNING *", (plan_item_id, user_id, produced_qty, timestamp,))
             result = cur.fetchone()
             conn.commit()
         conn.close()
@@ -1250,10 +1250,10 @@ class Shifts:
         self.end_time = end_time
 
     @staticmethod
-    def create(id: int, branch_id: int, name: str, start_time: str, end_time: str) -> tuple | None:
+    def create(branch_id: int, name: str, start_time: str, end_time: str) -> tuple | None:
         conn = connect()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO shifts (id, branch_id, name, start_time, end_time) VALUES (%s, %s, %s, %s, %s) RETURNING *", (id, branch_id, name, start_time, end_time,))
+            cur.execute("INSERT INTO shifts (branch_id, name, start_time, end_time) VALUES (%s, %s, %s, %s) RETURNING *", (branch_id, name, start_time, end_time,))
             result = cur.fetchone()
             conn.commit()
         conn.close()
@@ -1300,10 +1300,10 @@ class Supplier_order_items:
         self.tax_code_id = tax_code_id
 
     @staticmethod
-    def create(id: int, order_id: int, ingredient_id: int, qty: float, unit_price: float, received_amount: float, received: bool, received_at: str, tax_code_id: int) -> tuple | None:
+    def create(order_id: int, ingredient_id: int, qty: float, unit_price: float, received_amount: float, received: bool, received_at: str, tax_code_id: int) -> tuple | None:
         conn = connect()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO supplier_order_items (id, order_id, ingredient_id, qty, unit_price, received_amount, received, received_at, tax_code_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING *", (id, order_id, ingredient_id, qty, unit_price, received_amount, received, received_at, tax_code_id,))
+            cur.execute("INSERT INTO supplier_order_items (order_id, ingredient_id, qty, unit_price, received_amount, received, received_at, tax_code_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s) RETURNING *", (order_id, ingredient_id, qty, unit_price, received_amount, received, received_at, tax_code_id,))
             result = cur.fetchone()
             conn.commit()
         conn.close()
@@ -1347,10 +1347,10 @@ class Goods_receipt_items:
         self.tax_code_id = tax_code_id
 
     @staticmethod
-    def create(id: int, receipt_id: int, ingredient_id: int, qty: float, unit_price: float, tax_code_id: int) -> tuple | None:
+    def create(receipt_id: int, ingredient_id: int, qty: float, unit_price: float, tax_code_id: int) -> tuple | None:
         conn = connect()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO goods_receipt_items (id, receipt_id, ingredient_id, qty, unit_price, tax_code_id) VALUES (%s, %s, %s, %s, %s, %s) RETURNING *", (id, receipt_id, ingredient_id, qty, unit_price, tax_code_id,))
+            cur.execute("INSERT INTO goods_receipt_items (receipt_id, ingredient_id, qty, unit_price, tax_code_id) VALUES (%s, %s, %s, %s, %s) RETURNING *", (receipt_id, ingredient_id, qty, unit_price, tax_code_id,))
             result = cur.fetchone()
             conn.commit()
         conn.close()
@@ -1394,10 +1394,10 @@ class Supplier_invoice_items:
         self.tax_code_id = tax_code_id
 
     @staticmethod
-    def create(id: int, invoice_id: int, ingredient_id: int, qty: float, unit_price: float, tax_code_id: int) -> tuple | None:
+    def create(invoice_id: int, ingredient_id: int, qty: float, unit_price: float, tax_code_id: int) -> tuple | None:
         conn = connect()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO supplier_invoice_items (id, invoice_id, ingredient_id, qty, unit_price, tax_code_id) VALUES (%s, %s, %s, %s, %s, %s) RETURNING *", (id, invoice_id, ingredient_id, qty, unit_price, tax_code_id,))
+            cur.execute("INSERT INTO supplier_invoice_items (invoice_id, ingredient_id, qty, unit_price, tax_code_id) VALUES (%s, %s, %s, %s, %s) RETURNING *", (invoice_id, ingredient_id, qty, unit_price, tax_code_id,))
             result = cur.fetchone()
             conn.commit()
         conn.close()
@@ -1438,10 +1438,10 @@ class Refund_reasons:
         self.description = description
 
     @staticmethod
-    def create(id: int, code: str, description: str) -> tuple | None:
+    def create(code: str, description: str) -> tuple | None:
         conn = connect()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO refund_reasons (id, code, description) VALUES (%s, %s, %s) RETURNING *", (id, code, description,))
+            cur.execute("INSERT INTO refund_reasons (code, description) VALUES (%s, %s) RETURNING *", (code, description,))
             result = cur.fetchone()
             conn.commit()
         conn.close()
@@ -1487,10 +1487,10 @@ class Supplier_orders:
         self.total_amount = total_amount
 
     @staticmethod
-    def create(id: int, order_number: str, supplier_id: int, branch_id: int, order_date: str, status: str, expected_date: str, total_amount: float) -> tuple | None:
+    def create(order_number: str, supplier_id: int, branch_id: int, order_date: str, status: str, expected_date: str, total_amount: float) -> tuple | None:
         conn = connect()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO supplier_orders (id, order_number, supplier_id, branch_id, order_date, status, expected_date, total_amount) VALUES (%s, %s, %s, %s, %s, %s, %s, %s) RETURNING *", (id, order_number, supplier_id, branch_id, order_date, status, expected_date, total_amount,))
+            cur.execute("INSERT INTO supplier_orders (order_number, supplier_id, branch_id, order_date, status, expected_date, total_amount) VALUES (%s, %s, %s, %s, %s, %s, %s) RETURNING *", (order_number, supplier_id, branch_id, order_date, status, expected_date, total_amount,))
             result = cur.fetchone()
             conn.commit()
         conn.close()
@@ -1533,10 +1533,10 @@ class Pos_terminals:
         self.is_active = is_active
 
     @staticmethod
-    def create(id: int, branch_id: int, terminal_code: str, description: str, is_active: bool) -> tuple | None:
+    def create(branch_id: int, terminal_code: str, description: str, is_active: bool) -> tuple | None:
         conn = connect()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO pos_terminals (id, branch_id, terminal_code, description, is_active) VALUES (%s, %s, %s, %s, %s) RETURNING *", (id, branch_id, terminal_code, description, is_active,))
+            cur.execute("INSERT INTO pos_terminals (branch_id, terminal_code, description, is_active) VALUES (%s, %s, %s, %s) RETURNING *", (branch_id, terminal_code, description, is_active,))
             result = cur.fetchone()
             conn.commit()
         conn.close()
@@ -1579,10 +1579,10 @@ class Goods_receipts:
         self.created_at = created_at
 
     @staticmethod
-    def create(id: int, receipt_number: str, supplier_order_id: int, receipt_date: str, created_at: str) -> tuple | None:
+    def create(receipt_number: str, supplier_order_id: int, receipt_date: str, created_at: str) -> tuple | None:
         conn = connect()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO goods_receipts (id, receipt_number, supplier_order_id, receipt_date, created_at) VALUES (%s, %s, %s, %s, %s) RETURNING *", (id, receipt_number, supplier_order_id, receipt_date, created_at,))
+            cur.execute("INSERT INTO goods_receipts (receipt_number, supplier_order_id, receipt_date, created_at) VALUES (%s, %s, %s, %s) RETURNING *", (receipt_number, supplier_order_id, receipt_date, created_at,))
             result = cur.fetchone()
             conn.commit()
         conn.close()
@@ -1628,10 +1628,10 @@ class Supplier_invoices:
         self.payment_status = payment_status
 
     @staticmethod
-    def create(id: int, invoice_number: str, supplier_id: int, supplier_order_id: int, invoice_date: str, due_date: str, total_amount: float, payment_status: str) -> tuple | None:
+    def create(invoice_number: str, supplier_id: int, supplier_order_id: int, invoice_date: str, due_date: str, total_amount: float, payment_status: str) -> tuple | None:
         conn = connect()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO supplier_invoices (id, invoice_number, supplier_id, supplier_order_id, invoice_date, due_date, total_amount, payment_status) VALUES (%s, %s, %s, %s, %s, %s, %s, %s) RETURNING *", (id, invoice_number, supplier_id, supplier_order_id, invoice_date, due_date, total_amount, payment_status,))
+            cur.execute("INSERT INTO supplier_invoices (invoice_number, supplier_id, supplier_order_id, invoice_date, due_date, total_amount, payment_status) VALUES (%s, %s, %s, %s, %s, %s, %s) RETURNING *", (invoice_number, supplier_id, supplier_order_id, invoice_date, due_date, total_amount, payment_status,))
             result = cur.fetchone()
             conn.commit()
         conn.close()
@@ -1679,10 +1679,10 @@ class Payment_transactions:
         self.created_at = created_at
 
     @staticmethod
-    def create(id: int, account_id: int, payment_method_id: int, reference_type: str, reference_id: int, amount: float, currency: str, direction: str, transaction_date: str, created_at: str) -> tuple | None:
+    def create(account_id: int, payment_method_id: int, reference_type: str, reference_id: int, amount: float, currency: str, direction: str, transaction_date: str, created_at: str) -> tuple | None:
         conn = connect()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO payment_transactions (id, account_id, payment_method_id, reference_type, reference_id, amount, currency, direction, transaction_date, created_at) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING *", (id, account_id, payment_method_id, reference_type, reference_id, amount, currency, direction, transaction_date, created_at,))
+            cur.execute("INSERT INTO payment_transactions (account_id, payment_method_id, reference_type, reference_id, amount, currency, direction, transaction_date, created_at) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING *", (account_id, payment_method_id, reference_type, reference_id, amount, currency, direction, transaction_date, created_at,))
             result = cur.fetchone()
             conn.commit()
         conn.close()
@@ -1726,10 +1726,10 @@ class Machines:
         self.last_maintenance = last_maintenance
 
     @staticmethod
-    def create(id: int, branch_id: int, name: str, serial_number: str, purchase_date: str, last_maintenance: str) -> tuple | None:
+    def create(branch_id: int, name: str, serial_number: str, purchase_date: str, last_maintenance: str) -> tuple | None:
         conn = connect()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO machines (id, branch_id, name, serial_number, purchase_date, last_maintenance) VALUES (%s, %s, %s, %s, %s, %s) RETURNING *", (id, branch_id, name, serial_number, purchase_date, last_maintenance,))
+            cur.execute("INSERT INTO machines (branch_id, name, serial_number, purchase_date, last_maintenance) VALUES (%s, %s, %s, %s, %s) RETURNING *", (branch_id, name, serial_number, purchase_date, last_maintenance,))
             result = cur.fetchone()
             conn.commit()
         conn.close()
@@ -1772,10 +1772,10 @@ class Branch_opening_hours:
         self.closes = closes
 
     @staticmethod
-    def create(id: int, branch_id: int, weekday: int, opens: str, closes: str) -> tuple | None:
+    def create(branch_id: int, weekday: int, opens: str, closes: str) -> tuple | None:
         conn = connect()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO branch_opening_hours (id, branch_id, weekday, opens, closes) VALUES (%s, %s, %s, %s, %s) RETURNING *", (id, branch_id, weekday, opens, closes,))
+            cur.execute("INSERT INTO branch_opening_hours (branch_id, weekday, opens, closes) VALUES (%s, %s, %s, %s) RETURNING *", (branch_id, weekday, opens, closes,))
             result = cur.fetchone()
             conn.commit()
         conn.close()
@@ -1818,10 +1818,10 @@ class Tax_codes:
         self.valid_to = valid_to
 
     @staticmethod
-    def create(id: int, name: str, rate: float, valid_from: str, valid_to: str) -> tuple | None:
+    def create(name: str, rate: float, valid_from: str, valid_to: str) -> tuple | None:
         conn = connect()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO tax_codes (id, name, rate, valid_from, valid_to) VALUES (%s, %s, %s, %s, %s) RETURNING *", (id, name, rate, valid_from, valid_to,))
+            cur.execute("INSERT INTO tax_codes (name, rate, valid_from, valid_to) VALUES (%s, %s, %s, %s) RETURNING *", (name, rate, valid_from, valid_to,))
             result = cur.fetchone()
             conn.commit()
         conn.close()
@@ -1867,10 +1867,10 @@ class Ingredients:
         self.updated_at = updated_at
 
     @staticmethod
-    def create(id: int, name: str, unit: str, purchase_price: float, tax_code_id: int, is_active: bool, created_at: str, updated_at: str) -> tuple | None:
+    def create(name: str, unit: str, purchase_price: float, tax_code_id: int, is_active: bool, created_at: str, updated_at: str) -> tuple | None:
         conn = connect()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO ingredients (id, name, unit, purchase_price, tax_code_id, is_active, created_at, updated_at) VALUES (%s, %s, %s, %s, %s, %s, %s, %s) RETURNING *", (id, name, unit, purchase_price, tax_code_id, is_active, created_at, updated_at,))
+            cur.execute("INSERT INTO ingredients (name, unit, purchase_price, tax_code_id, is_active, created_at, updated_at) VALUES (%s, %s, %s, %s, %s, %s, %s) RETURNING *", (name, unit, purchase_price, tax_code_id, is_active, created_at, updated_at,))
             result = cur.fetchone()
             conn.commit()
         conn.close()
@@ -1913,10 +1913,10 @@ class Recipe_items:
         self.unit = unit
 
     @staticmethod
-    def create(id: int, recipe_id: int, ingredient_id: int, quantity: float, unit: str) -> tuple | None:
+    def create(recipe_id: int, ingredient_id: int, quantity: float, unit: str) -> tuple | None:
         conn = connect()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO recipe_items (id, recipe_id, ingredient_id, quantity, unit) VALUES (%s, %s, %s, %s, %s) RETURNING *", (id, recipe_id, ingredient_id, quantity, unit,))
+            cur.execute("INSERT INTO recipe_items (recipe_id, ingredient_id, quantity, unit) VALUES (%s, %s, %s, %s) RETURNING *", (recipe_id, ingredient_id, quantity, unit,))
             result = cur.fetchone()
             conn.commit()
         conn.close()
@@ -1967,10 +1967,10 @@ class Customer_orders:
         self.comment = comment
 
     @staticmethod
-    def create(id: int, order_number: str, customer_id: int, customer_name: str, branch_id: int, order_datetime: str, desired_datetime: str, serial: str, serial_end: str, status: str, total_amount: float, payment_status: str, comment: str) -> tuple | None:
+    def create(order_number: str, customer_id: int, customer_name: str, branch_id: int, order_datetime: str, desired_datetime: str, serial: str, serial_end: str, status: str, total_amount: float, payment_status: str, comment: str) -> tuple | None:
         conn = connect()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO customer_orders (id, order_number, customer_id, customer_name, branch_id, order_datetime, desired_datetime, serial, serial_end, status, total_amount, payment_status, comment) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING *", (id, order_number, customer_id, customer_name, branch_id, order_datetime, desired_datetime, serial, serial_end, status, total_amount, payment_status, comment,))
+            cur.execute("INSERT INTO customer_orders (order_number, customer_id, customer_name, branch_id, order_datetime, desired_datetime, serial, serial_end, status, total_amount, payment_status, comment) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING *", (order_number, customer_id, customer_name, branch_id, order_datetime, desired_datetime, serial, serial_end, status, total_amount, payment_status, comment,))
             result = cur.fetchone()
             conn.commit()
         conn.close()
@@ -2014,10 +2014,10 @@ class Production_plans:
         self.updated_at = updated_at
 
     @staticmethod
-    def create(id: int, branch_id: int, planned_date: str, status: str, created_at: str, updated_at: str) -> tuple | None:
+    def create(branch_id: int, planned_date: str, status: str, created_at: str, updated_at: str) -> tuple | None:
         conn = connect()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO production_plans (id, branch_id, planned_date, status, created_at, updated_at) VALUES (%s, %s, %s, %s, %s, %s) RETURNING *", (id, branch_id, planned_date, status, created_at, updated_at,))
+            cur.execute("INSERT INTO production_plans (branch_id, planned_date, status, created_at, updated_at) VALUES (%s, %s, %s, %s, %s) RETURNING *", (branch_id, planned_date, status, created_at, updated_at,))
             result = cur.fetchone()
             conn.commit()
         conn.close()
@@ -2060,10 +2060,10 @@ class Production_plan_items:
         self.produced_qty = produced_qty
 
     @staticmethod
-    def create(id: int, plan_id: int, product_id: int, planned_qty: float, produced_qty: float) -> tuple | None:
+    def create(plan_id: int, product_id: int, planned_qty: float, produced_qty: float) -> tuple | None:
         conn = connect()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO production_plan_items (id, plan_id, product_id, planned_qty, produced_qty) VALUES (%s, %s, %s, %s, %s) RETURNING *", (id, plan_id, product_id, planned_qty, produced_qty,))
+            cur.execute("INSERT INTO production_plan_items (plan_id, product_id, planned_qty, produced_qty) VALUES (%s, %s, %s, %s) RETURNING *", (plan_id, product_id, planned_qty, produced_qty,))
             result = cur.fetchone()
             conn.commit()
         conn.close()
@@ -2112,10 +2112,10 @@ class Refunds:
         self.created_at = created_at
 
     @staticmethod
-    def create(id: int, receipt_id: int, order_id: int, refund_datetime: str, total_refund_amount: float, payment_method_id: int, account_id: int, reason_id: int, created_by: int, note: str, created_at: str) -> tuple | None:
+    def create(receipt_id: int, order_id: int, refund_datetime: str, total_refund_amount: float, payment_method_id: int, account_id: int, reason_id: int, created_by: int, note: str, created_at: str) -> tuple | None:
         conn = connect()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO refunds (id, receipt_id, order_id, refund_datetime, total_refund_amount, payment_method_id, account_id, reason_id, created_by, note, created_at) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING *", (id, receipt_id, order_id, refund_datetime, total_refund_amount, payment_method_id, account_id, reason_id, created_by, note, created_at,))
+            cur.execute("INSERT INTO refunds (receipt_id, order_id, refund_datetime, total_refund_amount, payment_method_id, account_id, reason_id, created_by, note, created_at) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING *", (receipt_id, order_id, refund_datetime, total_refund_amount, payment_method_id, account_id, reason_id, created_by, note, created_at,))
             result = cur.fetchone()
             conn.commit()
         conn.close()
@@ -2159,10 +2159,10 @@ class Refund_items:
         self.tax_code_id = tax_code_id
 
     @staticmethod
-    def create(id: int, refund_id: int, product_id: int, qty: float, unit_price: float, tax_code_id: int) -> tuple | None:
+    def create(refund_id: int, product_id: int, qty: float, unit_price: float, tax_code_id: int) -> tuple | None:
         conn = connect()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO refund_items (id, refund_id, product_id, qty, unit_price, tax_code_id) VALUES (%s, %s, %s, %s, %s, %s) RETURNING *", (id, refund_id, product_id, qty, unit_price, tax_code_id,))
+            cur.execute("INSERT INTO refund_items (refund_id, product_id, qty, unit_price, tax_code_id) VALUES (%s, %s, %s, %s, %s) RETURNING *", (refund_id, product_id, qty, unit_price, tax_code_id,))
             result = cur.fetchone()
             conn.commit()
         conn.close()
