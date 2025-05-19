@@ -2,6 +2,8 @@
 from flask import Blueprint, jsonify, request
 from db import Employee_time_entries
 
+non_id_columns = ['employee_id', 'branch_id', 'clock_in', 'clock_out', 'break_minutes']
+
 employee_time_entries_bp = Blueprint('employee_time_entries', __name__, url_prefix='/employee_time_entries')
 
 @employee_time_entries_bp.route('/<int:id>', methods=['GET'])
@@ -14,14 +16,15 @@ def get_employee_time_entries(id):
 @employee_time_entries_bp.route('/', methods=['POST'])
 def create_employee_time_entries():
     # Logic to create employee_time_entries data
-    result = Employee_time_entries.create(request.values())
+    result = Employee_time_entries.create(employee_id=request.values.get('employee_id'), branch_id=request.values.get('branch_id'), clock_in=request.values.get('clock_in'), clock_out=request.values.get('clock_out'), break_minutes=request.values.get('break_minutes'))
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
 @employee_time_entries_bp.route('/<int:id>', methods=['PUT'])
 def update_employee_time_entries(id):
     # Logic to update employee_time_entries data
-    result = Employee_time_entries.update(request.values())
+    changes = {f'{col[0]}': request.values.get(f'{col[0]}') for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
+    result = Employee_time_entries.update(id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200

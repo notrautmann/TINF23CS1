@@ -1,5 +1,5 @@
 from pathlib import Path
-from create_db import get_table_names
+from create_db import get_table_names, get_columns_for_table
 def generate():
     
     tables = get_table_names()
@@ -10,12 +10,14 @@ def generate():
             f.write(generate_routes_file_for_table(table))
 
 def generate_routes_file_for_table(table):
-    open = "{"
-    close = "}"
 
+    columns = get_columns_for_table(table)
+    non_id_columns = [col for col in columns if col[0] != "id"]
     code = f"""
 from flask import Blueprint, jsonify, request
 from db import {table.capitalize()}
+
+non_id_columns = {[col[0] for col in non_id_columns]}
 
 {table}_bp = Blueprint('{table}', __name__, url_prefix='/{table}')
 
@@ -29,14 +31,15 @@ def get_{table}(id):
 @{table}_bp.route('/', methods=['POST'])
 def create_{table}():
     # Logic to create {table} data
-    result = {table.capitalize()}.create(request.values())
+    result = {table.capitalize()}.create({', '.join([f"{col[0]}=request.values.get('{col[0]}')" for col in non_id_columns])})
     if result is None:
         return jsonify({{'success': False, 'error': 'error when writing data'}}), 500
     return jsonify({{'success': True, 'data':result}}), 200
 @{table}_bp.route('/<int:id>', methods=['PUT'])
 def update_{table}(id):
     # Logic to update {table} data
-    result = {table.capitalize()}.update(request.values())
+    {get_changes_line()}
+    result = {table.capitalize()}.update(id, **changes)
     if result is None:
         return jsonify({{'success': False, 'error': 'error when writing data'}}), 500
     return jsonify({{'success': True, 'data':result}}), 200
@@ -49,6 +52,9 @@ def delete_{table}(id):
     return jsonify({{'success': True, 'data':result}}), 200
 """
     return code
+
+def get_changes_line():
+    return "changes = {f'{col[0]}': request.values.get(f'{col[0]}') for col in non_id_columns if request.values.get(f'{col[0]}') is not None}"
 
 def generate_result_check(function_call):
     return f"""

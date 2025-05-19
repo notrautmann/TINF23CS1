@@ -2,6 +2,8 @@
 from flask import Blueprint, jsonify, request
 from db import Ingredient_allergens
 
+non_id_columns = ['ingredient_id', 'allergen_id']
+
 ingredient_allergens_bp = Blueprint('ingredient_allergens', __name__, url_prefix='/ingredient_allergens')
 
 @ingredient_allergens_bp.route('/<int:id>', methods=['GET'])
@@ -14,14 +16,15 @@ def get_ingredient_allergens(id):
 @ingredient_allergens_bp.route('/', methods=['POST'])
 def create_ingredient_allergens():
     # Logic to create ingredient_allergens data
-    result = Ingredient_allergens.create(request.values())
+    result = Ingredient_allergens.create(ingredient_id=request.values.get('ingredient_id'), allergen_id=request.values.get('allergen_id'))
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
 @ingredient_allergens_bp.route('/<int:id>', methods=['PUT'])
 def update_ingredient_allergens(id):
     # Logic to update ingredient_allergens data
-    result = Ingredient_allergens.update(request.values())
+    changes = {f'{col[0]}': request.values.get(f'{col[0]}') for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
+    result = Ingredient_allergens.update(id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200

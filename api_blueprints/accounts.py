@@ -2,6 +2,8 @@
 from flask import Blueprint, jsonify, request
 from db import Accounts
 
+non_id_columns = ['name', 'account_number', 'iban', 'bic', 'description']
+
 accounts_bp = Blueprint('accounts', __name__, url_prefix='/accounts')
 
 @accounts_bp.route('/<int:id>', methods=['GET'])
@@ -14,14 +16,15 @@ def get_accounts(id):
 @accounts_bp.route('/', methods=['POST'])
 def create_accounts():
     # Logic to create accounts data
-    result = Accounts.create(request.values())
+    result = Accounts.create(name=request.values.get('name'), account_number=request.values.get('account_number'), iban=request.values.get('iban'), bic=request.values.get('bic'), description=request.values.get('description'))
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
 @accounts_bp.route('/<int:id>', methods=['PUT'])
 def update_accounts(id):
     # Logic to update accounts data
-    result = Accounts.update(request.values())
+    changes = {f'{col[0]}': request.values.get(f'{col[0]}') for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
+    result = Accounts.update(id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
