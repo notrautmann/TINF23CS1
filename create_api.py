@@ -15,6 +15,7 @@ def generate_routes_file_for_table(table):
     non_id_columns = [col for col in columns if col[0] != "id"]
     code = f"""
 from flask import Blueprint, jsonify, request
+from flask_jwt_extended import jwt_required
 from db import {table.capitalize()}
 
 non_id_columns = {[col[0] for col in non_id_columns]}
@@ -22,6 +23,7 @@ non_id_columns = {[col[0] for col in non_id_columns]}
 {table}_bp = Blueprint('{table}', __name__, url_prefix='/{table}')
 
 @{table}_bp.route('/<int:id>', methods=['GET'])
+@jwt_required()
 def get_{table}(id):
     # Logic to get {table} data
     result = {table.capitalize()}.read(id)
@@ -29,6 +31,7 @@ def get_{table}(id):
         return jsonify({{'success': False, 'error': 'Not found'}}), 404
     return jsonify({{'success': True, 'data': result}}), 200
 @{table}_bp.route('/', methods=['POST'])
+@jwt_required()
 def create_{table}():
     # Logic to create {table} data
     result = {table.capitalize()}.create({', '.join([f"{col[0]}=request.values.get('{col[0]}')" for col in non_id_columns])})
@@ -36,6 +39,7 @@ def create_{table}():
         return jsonify({{'success': False, 'error': 'error when writing data'}}), 500
     return jsonify({{'success': True, 'data':result}}), 200
 @{table}_bp.route('/<int:id>', methods=['PUT'])
+@jwt_required()
 def update_{table}(id):
     # Logic to update {table} data
     {get_changes_line()}
@@ -44,6 +48,7 @@ def update_{table}(id):
         return jsonify({{'success': False, 'error': 'error when writing data'}}), 500
     return jsonify({{'success': True, 'data':result}}), 200
 @{table}_bp.route('/<int:id>', methods=['DELETE'])
+@jwt_required()
 def delete_{table}(id):
     # Logic to delete {table} data
     result = {table.capitalize()}.delete(id)

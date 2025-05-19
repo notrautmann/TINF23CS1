@@ -1,5 +1,6 @@
 
 from flask import Blueprint, jsonify, request
+from flask_jwt_extended import jwt_required
 from db import Payment_methods
 
 non_id_columns = ['name', 'external_code', 'is_cash']
@@ -7,6 +8,7 @@ non_id_columns = ['name', 'external_code', 'is_cash']
 payment_methods_bp = Blueprint('payment_methods', __name__, url_prefix='/payment_methods')
 
 @payment_methods_bp.route('/<int:id>', methods=['GET'])
+@jwt_required()
 def get_payment_methods(id):
     # Logic to get payment_methods data
     result = Payment_methods.read(id)
@@ -14,6 +16,7 @@ def get_payment_methods(id):
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
 @payment_methods_bp.route('/', methods=['POST'])
+@jwt_required()
 def create_payment_methods():
     # Logic to create payment_methods data
     result = Payment_methods.create(name=request.values.get('name'), external_code=request.values.get('external_code'), is_cash=request.values.get('is_cash'))
@@ -21,6 +24,7 @@ def create_payment_methods():
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
 @payment_methods_bp.route('/<int:id>', methods=['PUT'])
+@jwt_required()
 def update_payment_methods(id):
     # Logic to update payment_methods data
     changes = {f'{col[0]}': request.values.get(f'{col[0]}') for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
@@ -29,6 +33,7 @@ def update_payment_methods(id):
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
 @payment_methods_bp.route('/<int:id>', methods=['DELETE'])
+@jwt_required()
 def delete_payment_methods(id):
     # Logic to delete payment_methods data
     result = Payment_methods.delete(id)

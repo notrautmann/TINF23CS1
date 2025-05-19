@@ -1,5 +1,6 @@
 
 from flask import Blueprint, jsonify, request
+from flask_jwt_extended import jwt_required
 from db import Refund_reasons
 
 non_id_columns = ['code', 'description']
@@ -7,6 +8,7 @@ non_id_columns = ['code', 'description']
 refund_reasons_bp = Blueprint('refund_reasons', __name__, url_prefix='/refund_reasons')
 
 @refund_reasons_bp.route('/<int:id>', methods=['GET'])
+@jwt_required()
 def get_refund_reasons(id):
     # Logic to get refund_reasons data
     result = Refund_reasons.read(id)
@@ -14,6 +16,7 @@ def get_refund_reasons(id):
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
 @refund_reasons_bp.route('/', methods=['POST'])
+@jwt_required()
 def create_refund_reasons():
     # Logic to create refund_reasons data
     result = Refund_reasons.create(code=request.values.get('code'), description=request.values.get('description'))
@@ -21,6 +24,7 @@ def create_refund_reasons():
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
 @refund_reasons_bp.route('/<int:id>', methods=['PUT'])
+@jwt_required()
 def update_refund_reasons(id):
     # Logic to update refund_reasons data
     changes = {f'{col[0]}': request.values.get(f'{col[0]}') for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
@@ -29,6 +33,7 @@ def update_refund_reasons(id):
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
 @refund_reasons_bp.route('/<int:id>', methods=['DELETE'])
+@jwt_required()
 def delete_refund_reasons(id):
     # Logic to delete refund_reasons data
     result = Refund_reasons.delete(id)

@@ -384,6 +384,15 @@ class Users:
             conn.commit()
         conn.close()
 
+    @staticmethod
+    def read_username(username: str) -> tuple | None:
+        conn = connect()
+        with conn.cursor() as cur:
+            cur.execute("SELECT id, username, password_hash, role_id, is_active FROM users WHERE username = %s", (username,))
+            row = cur.fetchone()
+        conn.close()
+        return row
+
 
 class Ingredient_allergens:
     def __init__(self, ingredient_id: int = None, allergen_id: int = None):
