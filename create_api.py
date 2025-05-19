@@ -1,36 +1,62 @@
+from pathlib import Path
 from create_db import get_table_names
 def generate():
     
     tables = get_table_names()
-    with open("app.py", "w") as f:
-        f.write("import db\n")
-        f.write("from flask import Flask, request, jsonify\n")
+    for table in tables:
+        output_path = Path(f"api_blueprints/{table}.py")
+        output_path.parent.mkdir(exist_ok=True, parents=True)
+        with open(output_path, "w") as f:
+            f.write(generate_routes_file_for_table(table))
 
-        f.write("app = Flask(__name__)\n\n")
-        f.write("# API routes\n")
+def generate_routes_file_for_table(table):
+    open = "{"
+    close = "}"
 
-        for table in tables:
-            f.write(f"# {table}\n")
-            f.write(f"@app.route('/{table}/<int:id>', methods=['GET'])\n")
-            f.write(f"def get_{table}(id):\n")
-            f.write(f"    # Logic to get {table} data\n")
-            f.write(f"    return jsonify(db.{table.capitalize()}.read(id), status=200, mimetype='application/json')\n\n")
-            f.write(f"@app.route('/{table}', methods=['POST'])\n")
-            f.write(f"def create_{table}():\n")
-            f.write(f"    # Logic to create {table} data\n")
-            f.write(f"    db.{table.capitalize()}.create(request.values())\n")
-            f.write("    return jsonify({'success': True}, status=200, mimetype='application/json')\n\n")
-            f.write(f"@app.route('/{table}/<int:id>', methods=['PUT'])\n")
-            f.write(f"def update_{table}(id):\n")
-            f.write(f"    # Logic to update {table} data\n")
-            f.write(f"    db.{table.capitalize()}.update(request.values())\n")
-            f.write("    return jsonify({'success': True}, status=200, mimetype='application/json')\n\n")
-            f.write(f"@app.route('/{table}/<int:id>', methods=['DELETE'])\n")
-            f.write(f"def delete_{table}(id):\n")
-            f.write(f"    # Logic to delete {table} data\n")
-            f.write(f"    db.{table.capitalize()}.delete(id)\n")
-            f.write("    return jsonify({'success': True}, status=200, mimetype='application/json')\n\n")
-        f.write("\n")
+    code = f"""
+from flask import Blueprint, jsonify, request
+from db import {table.capitalize()}
+
+{table}_bp = Blueprint('{table}', __name__, url_prefix='/{table}')
+
+@{table}_bp.route('/<int:id>', methods=['GET'])
+def get_{table}(id):
+    # Logic to get {table} data
+    result = {table.capitalize()}.read(id)
+    if result is None:
+        return jsonify({{'success': False, 'error': 'Not found'}}), 404
+    return jsonify({{'success': True, 'data': result}}), 200
+@{table}_bp.route('/', methods=['POST'])
+def create_{table}():
+    # Logic to create {table} data
+    result = {table.capitalize()}.create(request.values())
+    if result is None:
+        return jsonify({{'success': False, 'error': 'error when writing data'}}), 500
+    return jsonify({{'success': True, 'data':result}}), 200
+@{table}_bp.route('/<int:id>', methods=['PUT'])
+def update_{table}(id):
+    # Logic to update {table} data
+    result = {table.capitalize()}.update(request.values())
+    if result is None:
+        return jsonify({{'success': False, 'error': 'error when writing data'}}), 500
+    return jsonify({{'success': True, 'data':result}}), 200
+@{table}_bp.route('/<int:id>', methods=['DELETE'])
+def delete_{table}(id):
+    # Logic to delete {table} data
+    result = {table.capitalize()}.delete(id)
+    if result is None:
+        return jsonify({{'success': False, 'error': 'error when writing data'}}), 500
+    return jsonify({{'success': True, 'data':result}}), 200
+"""
+    return code
+
+def generate_result_check(function_call):
+    return f"""
+    result = {function_call}
+    if result is None:
+        return jsonify({{'error': 'Not found'}}, status=404, mimetype='application/json')
+    return jsonify(result, status=200, mimetype='application/json')
+"""
 
 if __name__ == "__main__":  
     generate()
