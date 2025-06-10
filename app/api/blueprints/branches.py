@@ -12,7 +12,6 @@ Misc variables:
 
     branches_id    
 """
-    
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.db import Branches
@@ -42,7 +41,8 @@ def get_branches(branches_id):
     branches_id (int): Id of the branches-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Branches.read(branches_id)
     if result is None:
@@ -56,7 +56,8 @@ def create_branches():
     Logic to create branches data
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Branches.create(name=request.values.get('name'),
 		address_line=request.values.get('address_line'),
@@ -82,7 +83,8 @@ def update_branches(branches_id):
         branches_id (int): Id of the branches-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
@@ -101,7 +103,8 @@ def delete_branches(branches_id):
         branches_id (int): Id of the branches-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Branches.delete(branches_id)
     if result is None:

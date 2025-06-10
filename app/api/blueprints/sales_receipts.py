@@ -12,7 +12,6 @@ Misc variables:
 
     sales_receipts_id    
 """
-    
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.db import Sales_receipts
@@ -40,7 +39,8 @@ def get_sales_receipts(sales_receipts_id):
     sales_receipts_id (int): Id of the sales_receipts-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Sales_receipts.read(sales_receipts_id)
     if result is None:
@@ -54,7 +54,8 @@ def create_sales_receipts():
     Logic to create sales_receipts data
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Sales_receipts.create(receipt_number=request.values.get('receipt_number'),
 		branch_id=request.values.get('branch_id'),
@@ -78,7 +79,8 @@ def update_sales_receipts(sales_receipts_id):
         sales_receipts_id (int): Id of the sales_receipts-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
@@ -97,7 +99,8 @@ def delete_sales_receipts(sales_receipts_id):
         sales_receipts_id (int): Id of the sales_receipts-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Sales_receipts.delete(sales_receipts_id)
     if result is None:

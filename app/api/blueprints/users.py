@@ -12,7 +12,6 @@ Misc variables:
 
     users_id    
 """
-    
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.db import Users
@@ -39,7 +38,8 @@ def get_users(users_id):
     users_id (int): Id of the users-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Users.read(users_id)
     if result is None:
@@ -53,7 +53,8 @@ def create_users():
     Logic to create users data
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Users.create(username=request.values.get('username'),
 		password_hash=request.values.get('password_hash'),
@@ -76,7 +77,8 @@ def update_users(users_id):
         users_id (int): Id of the users-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
@@ -95,7 +97,8 @@ def delete_users(users_id):
         users_id (int): Id of the users-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Users.delete(users_id)
     if result is None:

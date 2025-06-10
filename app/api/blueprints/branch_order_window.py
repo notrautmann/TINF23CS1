@@ -12,7 +12,6 @@ Misc variables:
 
     branch_order_window_id    
 """
-    
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.db import Branch_order_window
@@ -36,7 +35,8 @@ def get_branch_order_window(branch_order_window_id):
     branch_order_window_id (int): Id of the branch_order_window-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Branch_order_window.read(branch_order_window_id)
     if result is None:
@@ -50,7 +50,8 @@ def create_branch_order_window():
     Logic to create branch_order_window data
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Branch_order_window.create(branch_id=request.values.get('branch_id'),
 		weekday=request.values.get('weekday'),
@@ -70,7 +71,8 @@ def update_branch_order_window(branch_order_window_id):
         branch_order_window_id (int): Id of the branch_order_window-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
@@ -89,7 +91,8 @@ def delete_branch_order_window(branch_order_window_id):
         branch_order_window_id (int): Id of the branch_order_window-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Branch_order_window.delete(branch_order_window_id)
     if result is None:

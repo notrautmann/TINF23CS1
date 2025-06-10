@@ -12,7 +12,6 @@ Misc variables:
 
     goods_receipts_id    
 """
-    
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.db import Goods_receipts
@@ -36,7 +35,8 @@ def get_goods_receipts(goods_receipts_id):
     goods_receipts_id (int): Id of the goods_receipts-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Goods_receipts.read(goods_receipts_id)
     if result is None:
@@ -50,7 +50,8 @@ def create_goods_receipts():
     Logic to create goods_receipts data
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Goods_receipts.create(receipt_number=request.values.get('receipt_number'),
 		supplier_order_id=request.values.get('supplier_order_id'),
@@ -70,7 +71,8 @@ def update_goods_receipts(goods_receipts_id):
         goods_receipts_id (int): Id of the goods_receipts-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
@@ -89,7 +91,8 @@ def delete_goods_receipts(goods_receipts_id):
         goods_receipts_id (int): Id of the goods_receipts-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Goods_receipts.delete(goods_receipts_id)
     if result is None:

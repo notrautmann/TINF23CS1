@@ -12,7 +12,6 @@ Misc variables:
 
     payment_methods_id    
 """
-    
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.db import Payment_methods
@@ -35,7 +34,8 @@ def get_payment_methods(payment_methods_id):
     payment_methods_id (int): Id of the payment_methods-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Payment_methods.read(payment_methods_id)
     if result is None:
@@ -49,7 +49,8 @@ def create_payment_methods():
     Logic to create payment_methods data
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Payment_methods.create(name=request.values.get('name'),
 		external_code=request.values.get('external_code'),
@@ -68,7 +69,8 @@ def update_payment_methods(payment_methods_id):
         payment_methods_id (int): Id of the payment_methods-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
@@ -87,7 +89,8 @@ def delete_payment_methods(payment_methods_id):
         payment_methods_id (int): Id of the payment_methods-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Payment_methods.delete(payment_methods_id)
     if result is None:

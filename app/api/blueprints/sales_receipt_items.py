@@ -12,7 +12,6 @@ Misc variables:
 
     sales_receipt_items_id    
 """
-    
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.db import Sales_receipt_items
@@ -37,7 +36,8 @@ def get_sales_receipt_items(sales_receipt_items_id):
     sales_receipt_items_id (int): Id of the sales_receipt_items-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Sales_receipt_items.read(sales_receipt_items_id)
     if result is None:
@@ -51,7 +51,8 @@ def create_sales_receipt_items():
     Logic to create sales_receipt_items data
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Sales_receipt_items.create(receipt_id=request.values.get('receipt_id'),
 		product_id=request.values.get('product_id'),
@@ -72,7 +73,8 @@ def update_sales_receipt_items(sales_receipt_items_id):
         sales_receipt_items_id (int): Id of the sales_receipt_items-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
@@ -91,7 +93,8 @@ def delete_sales_receipt_items(sales_receipt_items_id):
         sales_receipt_items_id (int): Id of the sales_receipt_items-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Sales_receipt_items.delete(sales_receipt_items_id)
     if result is None:

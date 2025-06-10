@@ -12,7 +12,6 @@ Misc variables:
 
     supplier_orders_id    
 """
-    
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.db import Supplier_orders
@@ -39,7 +38,8 @@ def get_supplier_orders(supplier_orders_id):
     supplier_orders_id (int): Id of the supplier_orders-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Supplier_orders.read(supplier_orders_id)
     if result is None:
@@ -53,7 +53,8 @@ def create_supplier_orders():
     Logic to create supplier_orders data
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Supplier_orders.create(order_number=request.values.get('order_number'),
 		supplier_id=request.values.get('supplier_id'),
@@ -76,7 +77,8 @@ def update_supplier_orders(supplier_orders_id):
         supplier_orders_id (int): Id of the supplier_orders-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
@@ -95,7 +97,8 @@ def delete_supplier_orders(supplier_orders_id):
         supplier_orders_id (int): Id of the supplier_orders-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Supplier_orders.delete(supplier_orders_id)
     if result is None:

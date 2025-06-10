@@ -12,7 +12,6 @@ Misc variables:
 
     accounts_id    
 """
-    
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.db import Accounts
@@ -37,7 +36,8 @@ def get_accounts(accounts_id):
     accounts_id (int): Id of the accounts-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Accounts.read(accounts_id)
     if result is None:
@@ -51,7 +51,8 @@ def create_accounts():
     Logic to create accounts data
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Accounts.create(name=request.values.get('name'),
 		account_number=request.values.get('account_number'),
@@ -72,7 +73,8 @@ def update_accounts(accounts_id):
         accounts_id (int): Id of the accounts-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
@@ -91,7 +93,8 @@ def delete_accounts(accounts_id):
         accounts_id (int): Id of the accounts-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Accounts.delete(accounts_id)
     if result is None:

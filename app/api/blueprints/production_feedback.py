@@ -12,7 +12,6 @@ Misc variables:
 
     production_feedback_id    
 """
-    
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.db import Production_feedback
@@ -36,7 +35,8 @@ def get_production_feedback(production_feedback_id):
     production_feedback_id (int): Id of the production_feedback-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Production_feedback.read(production_feedback_id)
     if result is None:
@@ -50,7 +50,8 @@ def create_production_feedback():
     Logic to create production_feedback data
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Production_feedback.create(plan_item_id=request.values.get('plan_item_id'),
 		user_id=request.values.get('user_id'),
@@ -70,7 +71,8 @@ def update_production_feedback(production_feedback_id):
         production_feedback_id (int): Id of the production_feedback-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
@@ -89,7 +91,8 @@ def delete_production_feedback(production_feedback_id):
         production_feedback_id (int): Id of the production_feedback-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Production_feedback.delete(production_feedback_id)
     if result is None:

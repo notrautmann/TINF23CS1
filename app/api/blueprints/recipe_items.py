@@ -12,7 +12,6 @@ Misc variables:
 
     recipe_items_id    
 """
-    
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.db import Recipe_items
@@ -36,7 +35,8 @@ def get_recipe_items(recipe_items_id):
     recipe_items_id (int): Id of the recipe_items-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Recipe_items.read(recipe_items_id)
     if result is None:
@@ -50,7 +50,8 @@ def create_recipe_items():
     Logic to create recipe_items data
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Recipe_items.create(recipe_id=request.values.get('recipe_id'),
 		ingredient_id=request.values.get('ingredient_id'),
@@ -70,7 +71,8 @@ def update_recipe_items(recipe_items_id):
         recipe_items_id (int): Id of the recipe_items-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
@@ -89,7 +91,8 @@ def delete_recipe_items(recipe_items_id):
         recipe_items_id (int): Id of the recipe_items-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Recipe_items.delete(recipe_items_id)
     if result is None:

@@ -12,7 +12,6 @@ Misc variables:
 
     products_id    
 """
-    
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.db import Products
@@ -40,7 +39,8 @@ def get_products(products_id):
     products_id (int): Id of the products-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Products.read(products_id)
     if result is None:
@@ -54,7 +54,8 @@ def create_products():
     Logic to create products data
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Products.create(name=request.values.get('name'),
 		sku=request.values.get('sku'),
@@ -78,7 +79,8 @@ def update_products(products_id):
         products_id (int): Id of the products-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
@@ -97,7 +99,8 @@ def delete_products(products_id):
         products_id (int): Id of the products-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Products.delete(products_id)
     if result is None:

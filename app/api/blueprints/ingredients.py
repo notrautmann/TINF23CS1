@@ -12,7 +12,6 @@ Misc variables:
 
     ingredients_id    
 """
-    
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.db import Ingredients
@@ -39,7 +38,8 @@ def get_ingredients(ingredients_id):
     ingredients_id (int): Id of the ingredients-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Ingredients.read(ingredients_id)
     if result is None:
@@ -53,7 +53,8 @@ def create_ingredients():
     Logic to create ingredients data
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Ingredients.create(name=request.values.get('name'),
 		unit=request.values.get('unit'),
@@ -76,7 +77,8 @@ def update_ingredients(ingredients_id):
         ingredients_id (int): Id of the ingredients-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
@@ -95,7 +97,8 @@ def delete_ingredients(ingredients_id):
         ingredients_id (int): Id of the ingredients-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Ingredients.delete(ingredients_id)
     if result is None:

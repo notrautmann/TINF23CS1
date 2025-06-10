@@ -12,7 +12,6 @@ Misc variables:
 
     goods_receipt_items_id    
 """
-    
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.db import Goods_receipt_items
@@ -37,7 +36,8 @@ def get_goods_receipt_items(goods_receipt_items_id):
     goods_receipt_items_id (int): Id of the goods_receipt_items-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Goods_receipt_items.read(goods_receipt_items_id)
     if result is None:
@@ -51,7 +51,8 @@ def create_goods_receipt_items():
     Logic to create goods_receipt_items data
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Goods_receipt_items.create(receipt_id=request.values.get('receipt_id'),
 		ingredient_id=request.values.get('ingredient_id'),
@@ -72,7 +73,8 @@ def update_goods_receipt_items(goods_receipt_items_id):
         goods_receipt_items_id (int): Id of the goods_receipt_items-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
@@ -91,7 +93,8 @@ def delete_goods_receipt_items(goods_receipt_items_id):
         goods_receipt_items_id (int): Id of the goods_receipt_items-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Goods_receipt_items.delete(goods_receipt_items_id)
     if result is None:

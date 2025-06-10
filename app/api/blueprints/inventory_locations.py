@@ -12,7 +12,6 @@ Misc variables:
 
     inventory_locations_id    
 """
-    
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.db import Inventory_locations
@@ -35,7 +34,8 @@ def get_inventory_locations(inventory_locations_id):
     inventory_locations_id (int): Id of the inventory_locations-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Inventory_locations.read(inventory_locations_id)
     if result is None:
@@ -49,7 +49,8 @@ def create_inventory_locations():
     Logic to create inventory_locations data
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Inventory_locations.create(warehouse_id=request.values.get('warehouse_id'),
 		code=request.values.get('code'),
@@ -68,7 +69,8 @@ def update_inventory_locations(inventory_locations_id):
         inventory_locations_id (int): Id of the inventory_locations-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
@@ -87,7 +89,8 @@ def delete_inventory_locations(inventory_locations_id):
         inventory_locations_id (int): Id of the inventory_locations-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Inventory_locations.delete(inventory_locations_id)
     if result is None:

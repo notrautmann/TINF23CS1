@@ -12,7 +12,6 @@ Misc variables:
 
     allergens_id    
 """
-    
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.db import Allergens
@@ -35,7 +34,8 @@ def get_allergens(allergens_id):
     allergens_id (int): Id of the allergens-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Allergens.read(allergens_id)
     if result is None:
@@ -49,7 +49,8 @@ def create_allergens():
     Logic to create allergens data
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Allergens.create(code=request.values.get('code'),
 		name=request.values.get('name'),
@@ -68,7 +69,8 @@ def update_allergens(allergens_id):
         allergens_id (int): Id of the allergens-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
@@ -87,7 +89,8 @@ def delete_allergens(allergens_id):
         allergens_id (int): Id of the allergens-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Allergens.delete(allergens_id)
     if result is None:

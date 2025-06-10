@@ -12,7 +12,6 @@ Misc variables:
 
     employees_id    
 """
-    
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.db import Employees
@@ -42,7 +41,8 @@ def get_employees(employees_id):
     employees_id (int): Id of the employees-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Employees.read(employees_id)
     if result is None:
@@ -56,7 +56,8 @@ def create_employees():
     Logic to create employees data
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Employees.create(first_name=request.values.get('first_name'),
 		last_name=request.values.get('last_name'),
@@ -82,7 +83,8 @@ def update_employees(employees_id):
         employees_id (int): Id of the employees-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
@@ -101,7 +103,8 @@ def delete_employees(employees_id):
         employees_id (int): Id of the employees-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Employees.delete(employees_id)
     if result is None:

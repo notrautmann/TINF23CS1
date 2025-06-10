@@ -12,7 +12,6 @@ Misc variables:
 
     customer_feedback_id    
 """
-    
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.db import Customer_feedback
@@ -38,7 +37,8 @@ def get_customer_feedback(customer_feedback_id):
     customer_feedback_id (int): Id of the customer_feedback-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Customer_feedback.read(customer_feedback_id)
     if result is None:
@@ -52,7 +52,8 @@ def create_customer_feedback():
     Logic to create customer_feedback data
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Customer_feedback.create(customer_id=request.values.get('customer_id'),
 		branch_id=request.values.get('branch_id'),
@@ -74,7 +75,8 @@ def update_customer_feedback(customer_feedback_id):
         customer_feedback_id (int): Id of the customer_feedback-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
@@ -93,7 +95,8 @@ def delete_customer_feedback(customer_feedback_id):
         customer_feedback_id (int): Id of the customer_feedback-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Customer_feedback.delete(customer_feedback_id)
     if result is None:

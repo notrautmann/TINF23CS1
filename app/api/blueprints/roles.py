@@ -12,7 +12,6 @@ Misc variables:
 
     roles_id    
 """
-    
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.db import Roles
@@ -34,7 +33,8 @@ def get_roles(roles_id):
     roles_id (int): Id of the roles-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Roles.read(roles_id)
     if result is None:
@@ -48,7 +48,8 @@ def create_roles():
     Logic to create roles data
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Roles.create(name=request.values.get('name'),
 		description=request.values.get('description'))
@@ -66,7 +67,8 @@ def update_roles(roles_id):
         roles_id (int): Id of the roles-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
@@ -85,7 +87,8 @@ def delete_roles(roles_id):
         roles_id (int): Id of the roles-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Roles.delete(roles_id)
     if result is None:

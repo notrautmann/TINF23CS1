@@ -12,7 +12,6 @@ Misc variables:
 
     ingredient_allergens_id    
 """
-    
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.db import Ingredient_allergens
@@ -34,7 +33,8 @@ def get_ingredient_allergens(ingredient_allergens_id):
     ingredient_allergens_id (int): Id of the ingredient_allergens-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Ingredient_allergens.read(ingredient_allergens_id)
     if result is None:
@@ -48,7 +48,8 @@ def create_ingredient_allergens():
     Logic to create ingredient_allergens data
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Ingredient_allergens.create(ingredient_id=request.values.get('ingredient_id'),
 		allergen_id=request.values.get('allergen_id'))
@@ -66,7 +67,8 @@ def update_ingredient_allergens(ingredient_allergens_id):
         ingredient_allergens_id (int): Id of the ingredient_allergens-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
@@ -85,7 +87,8 @@ def delete_ingredient_allergens(ingredient_allergens_id):
         ingredient_allergens_id (int): Id of the ingredient_allergens-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Ingredient_allergens.delete(ingredient_allergens_id)
     if result is None:

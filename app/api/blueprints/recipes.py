@@ -12,7 +12,6 @@ Misc variables:
 
     recipes_id    
 """
-    
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.db import Recipes
@@ -36,7 +35,8 @@ def get_recipes(recipes_id):
     recipes_id (int): Id of the recipes-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Recipes.read(recipes_id)
     if result is None:
@@ -50,7 +50,8 @@ def create_recipes():
     Logic to create recipes data
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Recipes.create(name=request.values.get('name'),
 		description=request.values.get('description'),
@@ -70,7 +71,8 @@ def update_recipes(recipes_id):
         recipes_id (int): Id of the recipes-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
@@ -89,7 +91,8 @@ def delete_recipes(recipes_id):
         recipes_id (int): Id of the recipes-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Recipes.delete(recipes_id)
     if result is None:

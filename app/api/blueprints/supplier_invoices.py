@@ -12,7 +12,6 @@ Misc variables:
 
     supplier_invoices_id    
 """
-    
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.db import Supplier_invoices
@@ -39,7 +38,8 @@ def get_supplier_invoices(supplier_invoices_id):
     supplier_invoices_id (int): Id of the supplier_invoices-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Supplier_invoices.read(supplier_invoices_id)
     if result is None:
@@ -53,7 +53,8 @@ def create_supplier_invoices():
     Logic to create supplier_invoices data
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Supplier_invoices.create(invoice_number=request.values.get('invoice_number'),
 		supplier_id=request.values.get('supplier_id'),
@@ -76,7 +77,8 @@ def update_supplier_invoices(supplier_invoices_id):
         supplier_invoices_id (int): Id of the supplier_invoices-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
@@ -95,7 +97,8 @@ def delete_supplier_invoices(supplier_invoices_id):
         supplier_invoices_id (int): Id of the supplier_invoices-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Supplier_invoices.delete(supplier_invoices_id)
     if result is None:

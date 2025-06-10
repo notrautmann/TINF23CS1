@@ -12,7 +12,6 @@ Misc variables:
 
     machines_id    
 """
-    
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.db import Machines
@@ -37,7 +36,8 @@ def get_machines(machines_id):
     machines_id (int): Id of the machines-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Machines.read(machines_id)
     if result is None:
@@ -51,7 +51,8 @@ def create_machines():
     Logic to create machines data
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Machines.create(branch_id=request.values.get('branch_id'),
 		name=request.values.get('name'),
@@ -72,7 +73,8 @@ def update_machines(machines_id):
         machines_id (int): Id of the machines-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
@@ -91,7 +93,8 @@ def delete_machines(machines_id):
         machines_id (int): Id of the machines-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Machines.delete(machines_id)
     if result is None:

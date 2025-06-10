@@ -12,7 +12,6 @@ Misc variables:
 
     warehouses_id    
 """
-    
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.db import Warehouses
@@ -35,7 +34,8 @@ def get_warehouses(warehouses_id):
     warehouses_id (int): Id of the warehouses-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Warehouses.read(warehouses_id)
     if result is None:
@@ -49,7 +49,8 @@ def create_warehouses():
     Logic to create warehouses data
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Warehouses.create(branch_id=request.values.get('branch_id'),
 		name=request.values.get('name'),
@@ -68,7 +69,8 @@ def update_warehouses(warehouses_id):
         warehouses_id (int): Id of the warehouses-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
@@ -87,7 +89,8 @@ def delete_warehouses(warehouses_id):
         warehouses_id (int): Id of the warehouses-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Warehouses.delete(warehouses_id)
     if result is None:

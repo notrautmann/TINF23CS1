@@ -12,7 +12,6 @@ Misc variables:
 
     pos_terminals_id    
 """
-    
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.db import Pos_terminals
@@ -36,7 +35,8 @@ def get_pos_terminals(pos_terminals_id):
     pos_terminals_id (int): Id of the pos_terminals-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Pos_terminals.read(pos_terminals_id)
     if result is None:
@@ -50,7 +50,8 @@ def create_pos_terminals():
     Logic to create pos_terminals data
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Pos_terminals.create(branch_id=request.values.get('branch_id'),
 		terminal_code=request.values.get('terminal_code'),
@@ -70,7 +71,8 @@ def update_pos_terminals(pos_terminals_id):
         pos_terminals_id (int): Id of the pos_terminals-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
@@ -89,7 +91,8 @@ def delete_pos_terminals(pos_terminals_id):
         pos_terminals_id (int): Id of the pos_terminals-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Pos_terminals.delete(pos_terminals_id)
     if result is None:

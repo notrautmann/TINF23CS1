@@ -12,7 +12,6 @@ Misc variables:
 
     production_plans_id    
 """
-    
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.db import Production_plans
@@ -37,7 +36,8 @@ def get_production_plans(production_plans_id):
     production_plans_id (int): Id of the production_plans-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Production_plans.read(production_plans_id)
     if result is None:
@@ -51,7 +51,8 @@ def create_production_plans():
     Logic to create production_plans data
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Production_plans.create(branch_id=request.values.get('branch_id'),
 		planned_date=request.values.get('planned_date'),
@@ -72,7 +73,8 @@ def update_production_plans(production_plans_id):
         production_plans_id (int): Id of the production_plans-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
@@ -91,7 +93,8 @@ def delete_production_plans(production_plans_id):
         production_plans_id (int): Id of the production_plans-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Production_plans.delete(production_plans_id)
     if result is None:

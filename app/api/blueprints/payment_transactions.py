@@ -12,7 +12,6 @@ Misc variables:
 
     payment_transactions_id    
 """
-    
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.db import Payment_transactions
@@ -41,7 +40,8 @@ def get_payment_transactions(payment_transactions_id):
     payment_transactions_id (int): Id of the payment_transactions-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Payment_transactions.read(payment_transactions_id)
     if result is None:
@@ -55,7 +55,8 @@ def create_payment_transactions():
     Logic to create payment_transactions data
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Payment_transactions.create(account_id=request.values.get('account_id'),
 		payment_method_id=request.values.get('payment_method_id'),
@@ -80,7 +81,8 @@ def update_payment_transactions(payment_transactions_id):
         payment_transactions_id (int): Id of the payment_transactions-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
@@ -99,7 +101,8 @@ def delete_payment_transactions(payment_transactions_id):
         payment_transactions_id (int): Id of the payment_transactions-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Payment_transactions.delete(payment_transactions_id)
     if result is None:

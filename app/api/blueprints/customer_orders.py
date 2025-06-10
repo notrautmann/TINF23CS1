@@ -12,7 +12,6 @@ Misc variables:
 
     customer_orders_id    
 """
-    
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.db import Customer_orders
@@ -44,7 +43,8 @@ def get_customer_orders(customer_orders_id):
     customer_orders_id (int): Id of the customer_orders-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Customer_orders.read(customer_orders_id)
     if result is None:
@@ -58,7 +58,8 @@ def create_customer_orders():
     Logic to create customer_orders data
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Customer_orders.create(order_number=request.values.get('order_number'),
 		customer_id=request.values.get('customer_id'),
@@ -86,7 +87,8 @@ def update_customer_orders(customer_orders_id):
         customer_orders_id (int): Id of the customer_orders-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
@@ -105,7 +107,8 @@ def delete_customer_orders(customer_orders_id):
         customer_orders_id (int): Id of the customer_orders-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Customer_orders.delete(customer_orders_id)
     if result is None:

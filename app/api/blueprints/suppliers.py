@@ -12,7 +12,6 @@ Misc variables:
 
     suppliers_id    
 """
-    
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.db import Suppliers
@@ -42,7 +41,8 @@ def get_suppliers(suppliers_id):
     suppliers_id (int): Id of the suppliers-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Suppliers.read(suppliers_id)
     if result is None:
@@ -56,7 +56,8 @@ def create_suppliers():
     Logic to create suppliers data
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Suppliers.create(name=request.values.get('name'),
 		contact_name=request.values.get('contact_name'),
@@ -82,7 +83,8 @@ def update_suppliers(suppliers_id):
         suppliers_id (int): Id of the suppliers-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
@@ -101,7 +103,8 @@ def delete_suppliers(suppliers_id):
         suppliers_id (int): Id of the suppliers-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Suppliers.delete(suppliers_id)
     if result is None:

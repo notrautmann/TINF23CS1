@@ -12,7 +12,6 @@ Misc variables:
 
     production_plan_items_id    
 """
-    
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.db import Production_plan_items
@@ -36,7 +35,8 @@ def get_production_plan_items(production_plan_items_id):
     production_plan_items_id (int): Id of the production_plan_items-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Production_plan_items.read(production_plan_items_id)
     if result is None:
@@ -50,7 +50,8 @@ def create_production_plan_items():
     Logic to create production_plan_items data
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Production_plan_items.create(plan_id=request.values.get('plan_id'),
 		product_id=request.values.get('product_id'),
@@ -70,7 +71,8 @@ def update_production_plan_items(production_plan_items_id):
         production_plan_items_id (int): Id of the production_plan_items-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
@@ -89,7 +91,8 @@ def delete_production_plan_items(production_plan_items_id):
         production_plan_items_id (int): Id of the production_plan_items-object
 
     Return:
-        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data
+            otherwise an error message
     """
     result = Production_plan_items.delete(production_plan_items_id)
     if result is None:
