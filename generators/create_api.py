@@ -10,7 +10,9 @@ from environment_constants import API_BLUEPRINTS_PATH
 from create_db import get_table_names, get_columns_for_table
 
 def generate():
-    
+    """
+    Main function for generating the app/api/blueprint files.
+    """
     tables = get_table_names()
     for table in tables:
         output_path = Path.joinpath(API_BLUEPRINTS_PATH, f"{table}.py")
@@ -19,11 +21,17 @@ def generate():
             f.write(generate_routes_file_for_table(table))
 
 def generate_routes_file_for_table(table):
+    """
+    Main Code that includes CRUD-operations for all blueprint files/database tables.
 
+    Parameters:
+        table (any): The name of the table in the database
+    Return:
+        f-string: The code for the CRUD operations for every table
+    """
     columns = get_columns_for_table(table)
     non_id_columns = [col for col in columns if col[0] != "id"]
-    code = f"""
-\"\"\"
+    code = f"""\"\"\"
 Implements the CRUD-operations for the {table}-table.
 
 Functions:
@@ -56,7 +64,7 @@ def get_{table}({table}_id):
     {table}_id (int): Id of the {table}-object
 
     Return:
-    json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
     \"\"\"
     result = {table.capitalize()}.read({table}_id)
     if result is None:
@@ -68,12 +76,9 @@ def get_{table}({table}_id):
 def create_{table}():
     \"\"\"
     Logic to create {table} data
-    
-    Parameter:
-    {table}_id (int): Id of the {table}-object
 
     Return:
-    json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
     \"\"\"
     result = {table.capitalize()}.create({', '.join([f"{col[0]}=request.values.get('{col[0]}')" for col in non_id_columns])})
     if result is None:
@@ -87,10 +92,10 @@ def update_{table}({table}_id):
     Logic to update {table} data
     
     Parameter:
-    {table}_id (int): Id of the {table}-object
+        {table}_id (int): Id of the {table}-object
 
     Return:
-    json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
     \"\"\"
     {get_changes_line()}
     result = {table.capitalize()}.update({table}_id, **changes)
@@ -105,10 +110,10 @@ def delete_{table}({table}_id):
     Logic to delete {table} data
     
     Parameter:
-    {table}_id (int): Id of the {table}-object
+        {table}_id (int): Id of the {table}-object
 
     Return:
-    json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
     \"\"\"
     result = {table.capitalize()}.delete({table}_id)
     if result is None:
@@ -118,15 +123,13 @@ def delete_{table}({table}_id):
     return code
 
 def get_changes_line():
-    return "changes = {f'{col[0]}': request.values.get(f'{col[0]}') for col in non_id_columns if request.values.get(f'{col[0]}') is not None}"
+    """
+    Returns the line number where changes happened
 
-def generate_result_check(function_call):
-    return f"""
-    result = {function_call}
-    if result is None:
-        return jsonify({{'error': 'Not found'}}, status=404, mimetype='application/json')
-    return jsonify(result, status=200, mimetype='application/json')
-"""
+    Return:
+        string: changes line number
+    """
+    return "changes = {f'{col[0]}': request.values.get(f'{col[0]}') for col in non_id_columns if request.values.get(f'{col[0]}') is not None}"
 
 if __name__ == "__main__":  
     generate()
