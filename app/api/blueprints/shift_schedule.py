@@ -14,7 +14,7 @@ Misc variables:
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
-from app.db.db import Shift_schedule
+from app.db.records.shift_schedule import Shift_schedule
 
 non_id_columns = ['shift_id',
 	'employee_id',

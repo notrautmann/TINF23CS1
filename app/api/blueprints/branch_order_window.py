@@ -14,7 +14,7 @@ Misc variables:
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
-from app.db.db import Branch_order_window
+from app.db.records.branch_order_window import Branch_order_window
 
 non_id_columns = ['branch_id',
 	'weekday',

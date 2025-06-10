@@ -14,7 +14,7 @@ Misc variables:
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
-from app.db.db import Payment_transactions
+from app.db.records.payment_transactions import Payment_transactions
 
 non_id_columns = ['account_id',
 	'payment_method_id',

@@ -14,7 +14,7 @@ Misc variables:
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
-from app.db.db import Pos_terminals
+from app.db.records.pos_terminals import Pos_terminals
 
 non_id_columns = ['branch_id',
 	'terminal_code',

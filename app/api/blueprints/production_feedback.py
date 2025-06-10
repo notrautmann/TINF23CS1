@@ -14,7 +14,7 @@ Misc variables:
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
-from app.db.db import Production_feedback
+from app.db.records.production_feedback import Production_feedback
 
 non_id_columns = ['plan_item_id',
 	'user_id',

@@ -14,7 +14,7 @@ Misc variables:
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
-from app.db.db import Supplier_order_items
+from app.db.records.supplier_order_items import Supplier_order_items
 
 non_id_columns = ['order_id',
 	'ingredient_id',
