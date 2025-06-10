@@ -20,6 +20,8 @@ def generate():
 
 def generate_routes_file_for_table(table):
 
+    NEW_LINE = "\n"
+    TAB = "\t"
     columns = get_columns_for_table(table)
     non_id_columns = [col for col in columns if col[0] != "id"]
     code = f"""
@@ -27,7 +29,7 @@ from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.db import {table.capitalize()}
 
-non_id_columns = {"["+",\n\t".join([f"'{col[0]}'" for col in non_id_columns])+"]"}
+non_id_columns = {"["+f",{NEW_LINE}{TAB}".join([f"'{col[0]}'" for col in non_id_columns])+"]"}
 
 {table}_bp = Blueprint('{table}',
     __name__,
@@ -46,7 +48,7 @@ def get_{table}({table}_id):
 @jwt_required()
 def create_{table}():
     # Logic to create {table} data
-    result = {table.capitalize()}.create({',\n\t\t'.join([f"{col[0]}=request.values.get('{col[0]}')" for col in non_id_columns])})
+    result = {table.capitalize()}.create({f',{NEW_LINE}{TAB}{TAB}'.join([f"{col[0]}=request.values.get('{col[0]}')" for col in non_id_columns])})
     if result is None:
         return jsonify({{'success': False, 'error': 'error when writing data'}}), 500
     return jsonify({{'success': True, 'data':result}}), 200
