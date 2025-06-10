@@ -41,15 +41,16 @@ def create(obj) -> int:
     conn.close()
     return result[0]
 
-def read(cls, db_id):
+def read(cls, **kwargs):
     """
-    Retrieves a single record from the database by its ID.
+    Retrieves a single record from the database based on the provided filters.
 
     Args:
         cls: The class representing the entity type to retrieve.
              The class must have a `table_name` attribute (str)
              specifying the database table.
-        db_id: The unique identifier (ID) of the record to retrieve.
+        **kwargs: Keyword arguments where keys are column names and
+                  values are the values to filter by.
 
     Returns:
         tuple | None: A tuple representing the database row if found,
@@ -57,8 +58,11 @@ def read(cls, db_id):
     """
     conn = connect()
     with conn.cursor() as cur:
-        query = f"SELECT * FROM {cls.table_name} WHERE id = %s"
-        cur.execute(query, (db_id,))
+        # Build the WHERE clause dynamically
+        where_clause = ' AND '.join([f"{key} = %s" for key in kwargs])
+        values = tuple(kwargs.values())
+        query = f"SELECT * FROM {cls.table_name} WHERE {where_clause}"
+        cur.execute(query, values)
         result = cur.fetchone()
     conn.close()
     return result
