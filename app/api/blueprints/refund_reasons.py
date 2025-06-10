@@ -3,9 +3,12 @@ from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.db import Refund_reasons
 
-non_id_columns = ['code', 'description']
+non_id_columns = ['code',
+	'description']
 
-refund_reasons_bp = Blueprint('refund_reasons', __name__, url_prefix='/refund_reasons')
+refund_reasons_bp = Blueprint('refund_reasons',
+    __name__,
+    url_prefix='/refund_reasons')
 
 @refund_reasons_bp.route('/<int:refund_reasons_id>', methods=['GET'])
 @jwt_required()
@@ -20,7 +23,8 @@ def get_refund_reasons(refund_reasons_id):
 @jwt_required()
 def create_refund_reasons():
     # Logic to create refund_reasons data
-    result = Refund_reasons.create(code=request.values.get('code'), description=request.values.get('description'))
+    result = Refund_reasons.create(code=request.values.get('code'),
+		description=request.values.get('description'))
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
@@ -29,7 +33,8 @@ def create_refund_reasons():
 @jwt_required()
 def update_refund_reasons(refund_reasons_id):
     # Logic to update refund_reasons data
-    changes = {f'{col[0]}': request.values.get(f'{col[0]}') for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
+    changes = {f'{col[0]}': request.values.get(f'{col[0]}')
+        for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
     result = Refund_reasons.update(refund_reasons_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
