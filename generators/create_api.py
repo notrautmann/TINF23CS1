@@ -3,11 +3,11 @@ Generator Script for generating API routes and logic for all database tables
 """
 import sys
 # allow imports when running script from within project dir
-sys.path.append('.')
+#sys.path.append('.')
 
 from pathlib import Path
-from environment_constants import API_BLUEPRINTS_PATH
 from create_db import get_table_names, get_columns_for_table
+from environment_constants import API_BLUEPRINTS_PATH
 
 def generate():
     
@@ -27,9 +27,11 @@ from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.db import {table.capitalize()}
 
-non_id_columns = {[col[0] for col in non_id_columns]}
+non_id_columns = {"["+",\n\t".join([f"'{col[0]}'" for col in non_id_columns])+"]"}
 
-{table}_bp = Blueprint('{table}', __name__, url_prefix='/{table}')
+{table}_bp = Blueprint('{table}',
+    __name__,
+    url_prefix='/{table}')
 
 @{table}_bp.route('/<int:{table}_id>', methods=['GET'])
 @jwt_required()
@@ -44,7 +46,7 @@ def get_{table}({table}_id):
 @jwt_required()
 def create_{table}():
     # Logic to create {table} data
-    result = {table.capitalize()}.create({', '.join([f"{col[0]}=request.values.get('{col[0]}')" for col in non_id_columns])})
+    result = {table.capitalize()}.create({',\n\t\t'.join([f"{col[0]}=request.values.get('{col[0]}')" for col in non_id_columns])})
     if result is None:
         return jsonify({{'success': False, 'error': 'error when writing data'}}), 500
     return jsonify({{'success': True, 'data':result}}), 200
@@ -71,7 +73,8 @@ def delete_{table}({table}_id):
     return code
 
 def get_changes_line():
-    return "changes = {f'{col[0]}': request.values.get(f'{col[0]}') for col in non_id_columns if request.values.get(f'{col[0]}') is not None}"
+    return """changes = {f'{col[0]}': request.values.get(f'{col[0]}')
+        for col in non_id_columns if request.values.get(f'{col[0]}') is not None}"""
 
 def generate_result_check(function_call):
     return f"""
