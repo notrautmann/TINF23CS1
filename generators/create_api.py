@@ -3,11 +3,11 @@ Generator Script for generating API routes and logic for all database tables
 """
 import sys
 # allow imports when running script from within project dir
-sys.path.append('.')
+#sys.path.append('.')
 
 from pathlib import Path
-from environment_constants import API_BLUEPRINTS_PATH
 from create_db import get_table_names, get_columns_for_table
+from environment_constants import API_BLUEPRINTS_PATH
 
 def generate():
     """
@@ -29,6 +29,8 @@ def generate_routes_file_for_table(table):
     Return:
         f-string: The code for the CRUD operations for every table
     """
+    new_line = "\n"
+    tab = "\t"
     columns = get_columns_for_table(table)
     non_id_columns = [col for col in columns if col[0] != "id"]
     code = f"""\"\"\"
@@ -50,9 +52,11 @@ from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.db import {table.capitalize()}
 
-non_id_columns = {[col[0] for col in non_id_columns]}
+non_id_columns = {"["+f",{new_line}{tab}".join([f"'{col[0]}'" for col in non_id_columns])+"]"}
 
-{table}_bp = Blueprint('{table}', __name__, url_prefix='/{table}')
+{table}_bp = Blueprint('{table}',
+    __name__,
+    url_prefix='/{table}')
 
 @{table}_bp.route('/<int:{table}_id>', methods=['GET'])
 @jwt_required()
@@ -80,7 +84,7 @@ def create_{table}():
     Return:
         json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
     \"\"\"
-    result = {table.capitalize()}.create({', '.join([f"{col[0]}=request.values.get('{col[0]}')" for col in non_id_columns])})
+    result = {table.capitalize()}.create({f',{new_line}{tab}{tab}'.join([f"{col[0]}=request.values.get('{col[0]}')" for col in non_id_columns])})
     if result is None:
         return jsonify({{'success': False, 'error': 'error when writing data'}}), 500
     return jsonify({{'success': True, 'data':result}}), 200
