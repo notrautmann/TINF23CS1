@@ -23,6 +23,21 @@ def generate_routes_file_for_table(table):
     columns = get_columns_for_table(table)
     non_id_columns = [col for col in columns if col[0] != "id"]
     code = f"""
+\"\"\"
+Implements the CRUD-operations for the {table}-table.
+
+Functions:
+
+    get_{table}({table}_id)
+    create_{table}()
+    update_{table}({table}_id)
+    delete_{table}({table}_id)
+
+Misc variables:
+
+    {table}_id    
+\"\"\"
+    
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.db import {table.capitalize()}
@@ -34,7 +49,15 @@ non_id_columns = {[col[0] for col in non_id_columns]}
 @{table}_bp.route('/<int:{table}_id>', methods=['GET'])
 @jwt_required()
 def get_{table}({table}_id):
-    # Logic to get {table} data
+    \"\"\"
+    Logic to get {table} data
+    
+    Parameter:
+    {table}_id (int): Id of the {table}-object
+
+    Return:
+    json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+    \"\"\"
     result = {table.capitalize()}.read({table}_id)
     if result is None:
         return jsonify({{'success': False, 'error': 'Not found'}}), 404
@@ -43,7 +66,15 @@ def get_{table}({table}_id):
 @{table}_bp.route('/', methods=['POST'])
 @jwt_required()
 def create_{table}():
-    # Logic to create {table} data
+    \"\"\"
+    Logic to create {table} data
+    
+    Parameter:
+    {table}_id (int): Id of the {table}-object
+
+    Return:
+    json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+    \"\"\"
     result = {table.capitalize()}.create({', '.join([f"{col[0]}=request.values.get('{col[0]}')" for col in non_id_columns])})
     if result is None:
         return jsonify({{'success': False, 'error': 'error when writing data'}}), 500
@@ -52,7 +83,15 @@ def create_{table}():
 @{table}_bp.route('/<int:{table}_id>', methods=['PUT'])
 @jwt_required()
 def update_{table}({table}_id):
-    # Logic to update {table} data
+    \"\"\"
+    Logic to update {table} data
+    
+    Parameter:
+    {table}_id (int): Id of the {table}-object
+
+    Return:
+    json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+    \"\"\"
     {get_changes_line()}
     result = {table.capitalize()}.update({table}_id, **changes)
     if result is None:
@@ -62,7 +101,15 @@ def update_{table}({table}_id):
 @{table}_bp.route('/<int:{table}_id>', methods=['DELETE'])
 @jwt_required()
 def delete_{table}({table}_id):
-    # Logic to delete {table} data
+    \"\"\"
+    Logic to delete {table} data
+    
+    Parameter:
+    {table}_id (int): Id of the {table}-object
+
+    Return:
+    json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+    \"\"\"
     result = {table.capitalize()}.delete({table}_id)
     if result is None:
         return jsonify({{'success': False, 'error': 'error when writing data'}}), 500
