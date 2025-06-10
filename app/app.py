@@ -38,6 +38,7 @@ def login():
     username = request.json.get("username", "")
     password = request.json.get("password", "").encode("utf-8")
 
+    # fixme: move to new db function
     user_rec = db.Users.read_username(username)
     if not user_rec:
         return jsonify({"msg": "Bad credentials"}), 401
@@ -50,6 +51,7 @@ def login():
     if not bcrypt.checkpw(password, pw_hash_db.encode("utf-8")):
         return jsonify({"msg": "Bad credentials"}), 401
 
+    # fixme: move to new db function
     role_rec = db.Roles.read(role_id_db)
     role_name = role_rec[1] if role_rec else "unknown"
 
