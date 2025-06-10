@@ -10,7 +10,9 @@ from flask_jwt_extended import (
 import bcrypt
 from dotenv import load_dotenv
 
-from app.db import db
+from app.db.crud import read
+from app.db.records.roles import Roles
+from app.db.records.users import Users
 from environment_constants import API_BLUEPRINTS_PATH
 
 
@@ -38,8 +40,7 @@ def login():
     username = request.json.get("username", "")
     password = request.json.get("password", "").encode("utf-8")
 
-    # fixme: move to new db function
-    user_rec = db.Users.read_username(username)
+    user_rec = read(Users, username=username)
     if not user_rec:
         return jsonify({"msg": "Bad credentials"}), 401
 
@@ -51,8 +52,7 @@ def login():
     if not bcrypt.checkpw(password, pw_hash_db.encode("utf-8")):
         return jsonify({"msg": "Bad credentials"}), 401
 
-    # fixme: move to new db function
-    role_rec = db.Roles.read(role_id_db)
+    role_rec = read(Roles, id=role_id_db)
     role_name = role_rec[1] if role_rec else "unknown"
 
     additional_claims = {"role": role_name}
