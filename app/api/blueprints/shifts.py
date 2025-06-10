@@ -1,4 +1,18 @@
+"""
+Implements the CRUD-operations for the shifts-table.
 
+Functions:
+
+    get_shifts(shifts_id)
+    create_shifts()
+    update_shifts(shifts_id)
+    delete_shifts(shifts_id)
+
+Misc variables:
+
+    shifts_id    
+"""
+    
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.db import Shifts
@@ -15,7 +29,15 @@ shifts_bp = Blueprint('shifts',
 @shifts_bp.route('/<int:shifts_id>', methods=['GET'])
 @jwt_required()
 def get_shifts(shifts_id):
-    # Logic to get shifts data
+    """
+    Logic to get shifts data
+    
+    Parameter:
+    shifts_id (int): Id of the shifts-object
+
+    Return:
+        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+    """
     result = Shifts.read(shifts_id)
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
@@ -24,7 +46,12 @@ def get_shifts(shifts_id):
 @shifts_bp.route('/', methods=['POST'])
 @jwt_required()
 def create_shifts():
-    # Logic to create shifts data
+    """
+    Logic to create shifts data
+
+    Return:
+        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+    """
     result = Shifts.create(branch_id=request.values.get('branch_id'),
 		name=request.values.get('name'),
 		start_time=request.values.get('start_time'),
@@ -36,7 +63,15 @@ def create_shifts():
 @shifts_bp.route('/<int:shifts_id>', methods=['PUT'])
 @jwt_required()
 def update_shifts(shifts_id):
-    # Logic to update shifts data
+    """
+    Logic to update shifts data
+    
+    Parameter:
+        shifts_id (int): Id of the shifts-object
+
+    Return:
+        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+    """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
     result = Shifts.update(shifts_id, **changes)
@@ -47,7 +82,15 @@ def update_shifts(shifts_id):
 @shifts_bp.route('/<int:shifts_id>', methods=['DELETE'])
 @jwt_required()
 def delete_shifts(shifts_id):
-    # Logic to delete shifts data
+    """
+    Logic to delete shifts data
+    
+    Parameter:
+        shifts_id (int): Id of the shifts-object
+
+    Return:
+        json-structure: Returns status code and if operation succeeded the returned data otherwise an error message
+    """
     result = Shifts.delete(shifts_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
