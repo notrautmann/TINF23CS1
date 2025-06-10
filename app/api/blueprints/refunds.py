@@ -15,6 +15,7 @@ def get_refunds(refunds_id):
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
+
 @refunds_bp.route('/', methods=['POST'])
 @jwt_required()
 def create_refunds():
@@ -23,20 +24,22 @@ def create_refunds():
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
-@refunds_bp.route('/<int:id>', methods=['PUT'])
+
+@refunds_bp.route('/<int:refunds_id>', methods=['PUT'])
 @jwt_required()
-def update_refunds(id):
+def update_refunds(refunds_id):
     # Logic to update refunds data
     changes = {f'{col[0]}': request.values.get(f'{col[0]}') for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
-    result = Refunds.update(id, **changes)
+    result = Refunds.update(refunds_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
-@refunds_bp.route('/<int:id>', methods=['DELETE'])
+
+@refunds_bp.route('/<int:refunds_id>', methods=['DELETE'])
 @jwt_required()
-def delete_refunds(id):
+def delete_refunds(refunds_id):
     # Logic to delete refunds data
-    result = Refunds.delete(id)
+    result = Refunds.delete(refunds_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200

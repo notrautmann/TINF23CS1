@@ -39,6 +39,7 @@ def get_{table}({table}_id):
     if result is None:
         return jsonify({{'success': False, 'error': 'Not found'}}), 404
     return jsonify({{'success': True, 'data': result}}), 200
+
 @{table}_bp.route('/', methods=['POST'])
 @jwt_required()
 def create_{table}():
@@ -47,20 +48,22 @@ def create_{table}():
     if result is None:
         return jsonify({{'success': False, 'error': 'error when writing data'}}), 500
     return jsonify({{'success': True, 'data':result}}), 200
-@{table}_bp.route('/<int:id>', methods=['PUT'])
+
+@{table}_bp.route('/<int:{table}_id>', methods=['PUT'])
 @jwt_required()
-def update_{table}(id):
+def update_{table}({table}_id):
     # Logic to update {table} data
     {get_changes_line()}
-    result = {table.capitalize()}.update(id, **changes)
+    result = {table.capitalize()}.update({table}_id, **changes)
     if result is None:
         return jsonify({{'success': False, 'error': 'error when writing data'}}), 500
     return jsonify({{'success': True, 'data':result}}), 200
-@{table}_bp.route('/<int:id>', methods=['DELETE'])
+
+@{table}_bp.route('/<int:{table}_id>', methods=['DELETE'])
 @jwt_required()
-def delete_{table}(id):
+def delete_{table}({table}_id):
     # Logic to delete {table} data
-    result = {table.capitalize()}.delete(id)
+    result = {table.capitalize()}.delete({table}_id)
     if result is None:
         return jsonify({{'success': False, 'error': 'error when writing data'}}), 500
     return jsonify({{'success': True, 'data':result}}), 200

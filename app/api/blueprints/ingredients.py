@@ -15,6 +15,7 @@ def get_ingredients(ingredients_id):
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
+
 @ingredients_bp.route('/', methods=['POST'])
 @jwt_required()
 def create_ingredients():
@@ -23,20 +24,22 @@ def create_ingredients():
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
-@ingredients_bp.route('/<int:id>', methods=['PUT'])
+
+@ingredients_bp.route('/<int:ingredients_id>', methods=['PUT'])
 @jwt_required()
-def update_ingredients(id):
+def update_ingredients(ingredients_id):
     # Logic to update ingredients data
     changes = {f'{col[0]}': request.values.get(f'{col[0]}') for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
-    result = Ingredients.update(id, **changes)
+    result = Ingredients.update(ingredients_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
-@ingredients_bp.route('/<int:id>', methods=['DELETE'])
+
+@ingredients_bp.route('/<int:ingredients_id>', methods=['DELETE'])
 @jwt_required()
-def delete_ingredients(id):
+def delete_ingredients(ingredients_id):
     # Logic to delete ingredients data
-    result = Ingredients.delete(id)
+    result = Ingredients.delete(ingredients_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200

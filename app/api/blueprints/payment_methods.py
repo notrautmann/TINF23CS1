@@ -15,6 +15,7 @@ def get_payment_methods(payment_methods_id):
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
+
 @payment_methods_bp.route('/', methods=['POST'])
 @jwt_required()
 def create_payment_methods():
@@ -23,20 +24,22 @@ def create_payment_methods():
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
-@payment_methods_bp.route('/<int:id>', methods=['PUT'])
+
+@payment_methods_bp.route('/<int:payment_methods_id>', methods=['PUT'])
 @jwt_required()
-def update_payment_methods(id):
+def update_payment_methods(payment_methods_id):
     # Logic to update payment_methods data
     changes = {f'{col[0]}': request.values.get(f'{col[0]}') for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
-    result = Payment_methods.update(id, **changes)
+    result = Payment_methods.update(payment_methods_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
-@payment_methods_bp.route('/<int:id>', methods=['DELETE'])
+
+@payment_methods_bp.route('/<int:payment_methods_id>', methods=['DELETE'])
 @jwt_required()
-def delete_payment_methods(id):
+def delete_payment_methods(payment_methods_id):
     # Logic to delete payment_methods data
-    result = Payment_methods.delete(id)
+    result = Payment_methods.delete(payment_methods_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200

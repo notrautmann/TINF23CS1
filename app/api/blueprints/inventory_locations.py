@@ -15,6 +15,7 @@ def get_inventory_locations(inventory_locations_id):
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
+
 @inventory_locations_bp.route('/', methods=['POST'])
 @jwt_required()
 def create_inventory_locations():
@@ -23,20 +24,22 @@ def create_inventory_locations():
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
-@inventory_locations_bp.route('/<int:id>', methods=['PUT'])
+
+@inventory_locations_bp.route('/<int:inventory_locations_id>', methods=['PUT'])
 @jwt_required()
-def update_inventory_locations(id):
+def update_inventory_locations(inventory_locations_id):
     # Logic to update inventory_locations data
     changes = {f'{col[0]}': request.values.get(f'{col[0]}') for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
-    result = Inventory_locations.update(id, **changes)
+    result = Inventory_locations.update(inventory_locations_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
-@inventory_locations_bp.route('/<int:id>', methods=['DELETE'])
+
+@inventory_locations_bp.route('/<int:inventory_locations_id>', methods=['DELETE'])
 @jwt_required()
-def delete_inventory_locations(id):
+def delete_inventory_locations(inventory_locations_id):
     # Logic to delete inventory_locations data
-    result = Inventory_locations.delete(id)
+    result = Inventory_locations.delete(inventory_locations_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200

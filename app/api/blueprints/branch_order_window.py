@@ -15,6 +15,7 @@ def get_branch_order_window(branch_order_window_id):
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
+
 @branch_order_window_bp.route('/', methods=['POST'])
 @jwt_required()
 def create_branch_order_window():
@@ -23,20 +24,22 @@ def create_branch_order_window():
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
-@branch_order_window_bp.route('/<int:id>', methods=['PUT'])
+
+@branch_order_window_bp.route('/<int:branch_order_window_id>', methods=['PUT'])
 @jwt_required()
-def update_branch_order_window(id):
+def update_branch_order_window(branch_order_window_id):
     # Logic to update branch_order_window data
     changes = {f'{col[0]}': request.values.get(f'{col[0]}') for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
-    result = Branch_order_window.update(id, **changes)
+    result = Branch_order_window.update(branch_order_window_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
-@branch_order_window_bp.route('/<int:id>', methods=['DELETE'])
+
+@branch_order_window_bp.route('/<int:branch_order_window_id>', methods=['DELETE'])
 @jwt_required()
-def delete_branch_order_window(id):
+def delete_branch_order_window(branch_order_window_id):
     # Logic to delete branch_order_window data
-    result = Branch_order_window.delete(id)
+    result = Branch_order_window.delete(branch_order_window_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200

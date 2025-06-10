@@ -15,6 +15,7 @@ def get_sales_receipt_items(sales_receipt_items_id):
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
+
 @sales_receipt_items_bp.route('/', methods=['POST'])
 @jwt_required()
 def create_sales_receipt_items():
@@ -23,20 +24,22 @@ def create_sales_receipt_items():
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
-@sales_receipt_items_bp.route('/<int:id>', methods=['PUT'])
+
+@sales_receipt_items_bp.route('/<int:sales_receipt_items_id>', methods=['PUT'])
 @jwt_required()
-def update_sales_receipt_items(id):
+def update_sales_receipt_items(sales_receipt_items_id):
     # Logic to update sales_receipt_items data
     changes = {f'{col[0]}': request.values.get(f'{col[0]}') for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
-    result = Sales_receipt_items.update(id, **changes)
+    result = Sales_receipt_items.update(sales_receipt_items_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
-@sales_receipt_items_bp.route('/<int:id>', methods=['DELETE'])
+
+@sales_receipt_items_bp.route('/<int:sales_receipt_items_id>', methods=['DELETE'])
 @jwt_required()
-def delete_sales_receipt_items(id):
+def delete_sales_receipt_items(sales_receipt_items_id):
     # Logic to delete sales_receipt_items data
-    result = Sales_receipt_items.delete(id)
+    result = Sales_receipt_items.delete(sales_receipt_items_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200

@@ -15,6 +15,7 @@ def get_customers(customers_id):
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
+
 @customers_bp.route('/', methods=['POST'])
 @jwt_required()
 def create_customers():
@@ -23,20 +24,22 @@ def create_customers():
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
-@customers_bp.route('/<int:id>', methods=['PUT'])
+
+@customers_bp.route('/<int:customers_id>', methods=['PUT'])
 @jwt_required()
-def update_customers(id):
+def update_customers(customers_id):
     # Logic to update customers data
     changes = {f'{col[0]}': request.values.get(f'{col[0]}') for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
-    result = Customers.update(id, **changes)
+    result = Customers.update(customers_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
-@customers_bp.route('/<int:id>', methods=['DELETE'])
+
+@customers_bp.route('/<int:customers_id>', methods=['DELETE'])
 @jwt_required()
-def delete_customers(id):
+def delete_customers(customers_id):
     # Logic to delete customers data
-    result = Customers.delete(id)
+    result = Customers.delete(customers_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200

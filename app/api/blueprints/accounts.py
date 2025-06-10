@@ -15,6 +15,7 @@ def get_accounts(accounts_id):
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
+
 @accounts_bp.route('/', methods=['POST'])
 @jwt_required()
 def create_accounts():
@@ -23,20 +24,22 @@ def create_accounts():
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
-@accounts_bp.route('/<int:id>', methods=['PUT'])
+
+@accounts_bp.route('/<int:accounts_id>', methods=['PUT'])
 @jwt_required()
-def update_accounts(id):
+def update_accounts(accounts_id):
     # Logic to update accounts data
     changes = {f'{col[0]}': request.values.get(f'{col[0]}') for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
-    result = Accounts.update(id, **changes)
+    result = Accounts.update(accounts_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
-@accounts_bp.route('/<int:id>', methods=['DELETE'])
+
+@accounts_bp.route('/<int:accounts_id>', methods=['DELETE'])
 @jwt_required()
-def delete_accounts(id):
+def delete_accounts(accounts_id):
     # Logic to delete accounts data
-    result = Accounts.delete(id)
+    result = Accounts.delete(accounts_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200

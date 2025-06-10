@@ -15,6 +15,7 @@ def get_machines(machines_id):
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
+
 @machines_bp.route('/', methods=['POST'])
 @jwt_required()
 def create_machines():
@@ -23,20 +24,22 @@ def create_machines():
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
-@machines_bp.route('/<int:id>', methods=['PUT'])
+
+@machines_bp.route('/<int:machines_id>', methods=['PUT'])
 @jwt_required()
-def update_machines(id):
+def update_machines(machines_id):
     # Logic to update machines data
     changes = {f'{col[0]}': request.values.get(f'{col[0]}') for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
-    result = Machines.update(id, **changes)
+    result = Machines.update(machines_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
-@machines_bp.route('/<int:id>', methods=['DELETE'])
+
+@machines_bp.route('/<int:machines_id>', methods=['DELETE'])
 @jwt_required()
-def delete_machines(id):
+def delete_machines(machines_id):
     # Logic to delete machines data
-    result = Machines.delete(id)
+    result = Machines.delete(machines_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200

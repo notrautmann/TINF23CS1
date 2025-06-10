@@ -15,6 +15,7 @@ def get_shift_schedule(shift_schedule_id):
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
+
 @shift_schedule_bp.route('/', methods=['POST'])
 @jwt_required()
 def create_shift_schedule():
@@ -23,20 +24,22 @@ def create_shift_schedule():
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
-@shift_schedule_bp.route('/<int:id>', methods=['PUT'])
+
+@shift_schedule_bp.route('/<int:shift_schedule_id>', methods=['PUT'])
 @jwt_required()
-def update_shift_schedule(id):
+def update_shift_schedule(shift_schedule_id):
     # Logic to update shift_schedule data
     changes = {f'{col[0]}': request.values.get(f'{col[0]}') for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
-    result = Shift_schedule.update(id, **changes)
+    result = Shift_schedule.update(shift_schedule_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
-@shift_schedule_bp.route('/<int:id>', methods=['DELETE'])
+
+@shift_schedule_bp.route('/<int:shift_schedule_id>', methods=['DELETE'])
 @jwt_required()
-def delete_shift_schedule(id):
+def delete_shift_schedule(shift_schedule_id):
     # Logic to delete shift_schedule data
-    result = Shift_schedule.delete(id)
+    result = Shift_schedule.delete(shift_schedule_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200

@@ -15,6 +15,7 @@ def get_employee_time_entries(employee_time_entries_id):
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
+
 @employee_time_entries_bp.route('/', methods=['POST'])
 @jwt_required()
 def create_employee_time_entries():
@@ -23,20 +24,22 @@ def create_employee_time_entries():
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
-@employee_time_entries_bp.route('/<int:id>', methods=['PUT'])
+
+@employee_time_entries_bp.route('/<int:employee_time_entries_id>', methods=['PUT'])
 @jwt_required()
-def update_employee_time_entries(id):
+def update_employee_time_entries(employee_time_entries_id):
     # Logic to update employee_time_entries data
     changes = {f'{col[0]}': request.values.get(f'{col[0]}') for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
-    result = Employee_time_entries.update(id, **changes)
+    result = Employee_time_entries.update(employee_time_entries_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
-@employee_time_entries_bp.route('/<int:id>', methods=['DELETE'])
+
+@employee_time_entries_bp.route('/<int:employee_time_entries_id>', methods=['DELETE'])
 @jwt_required()
-def delete_employee_time_entries(id):
+def delete_employee_time_entries(employee_time_entries_id):
     # Logic to delete employee_time_entries data
-    result = Employee_time_entries.delete(id)
+    result = Employee_time_entries.delete(employee_time_entries_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200

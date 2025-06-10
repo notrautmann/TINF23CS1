@@ -15,6 +15,7 @@ def get_product_allergens(product_allergens_id):
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
+
 @product_allergens_bp.route('/', methods=['POST'])
 @jwt_required()
 def create_product_allergens():
@@ -23,20 +24,22 @@ def create_product_allergens():
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
-@product_allergens_bp.route('/<int:id>', methods=['PUT'])
+
+@product_allergens_bp.route('/<int:product_allergens_id>', methods=['PUT'])
 @jwt_required()
-def update_product_allergens(id):
+def update_product_allergens(product_allergens_id):
     # Logic to update product_allergens data
     changes = {f'{col[0]}': request.values.get(f'{col[0]}') for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
-    result = Product_allergens.update(id, **changes)
+    result = Product_allergens.update(product_allergens_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
-@product_allergens_bp.route('/<int:id>', methods=['DELETE'])
+
+@product_allergens_bp.route('/<int:product_allergens_id>', methods=['DELETE'])
 @jwt_required()
-def delete_product_allergens(id):
+def delete_product_allergens(product_allergens_id):
     # Logic to delete product_allergens data
-    result = Product_allergens.delete(id)
+    result = Product_allergens.delete(product_allergens_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200

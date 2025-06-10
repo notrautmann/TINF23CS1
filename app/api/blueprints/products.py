@@ -15,6 +15,7 @@ def get_products(products_id):
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
+
 @products_bp.route('/', methods=['POST'])
 @jwt_required()
 def create_products():
@@ -23,20 +24,22 @@ def create_products():
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
-@products_bp.route('/<int:id>', methods=['PUT'])
+
+@products_bp.route('/<int:products_id>', methods=['PUT'])
 @jwt_required()
-def update_products(id):
+def update_products(products_id):
     # Logic to update products data
     changes = {f'{col[0]}': request.values.get(f'{col[0]}') for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
-    result = Products.update(id, **changes)
+    result = Products.update(products_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
-@products_bp.route('/<int:id>', methods=['DELETE'])
+
+@products_bp.route('/<int:products_id>', methods=['DELETE'])
 @jwt_required()
-def delete_products(id):
+def delete_products(products_id):
     # Logic to delete products data
-    result = Products.delete(id)
+    result = Products.delete(products_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200

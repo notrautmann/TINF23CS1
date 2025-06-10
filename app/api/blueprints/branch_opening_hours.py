@@ -15,6 +15,7 @@ def get_branch_opening_hours(branch_opening_hours_id):
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
+
 @branch_opening_hours_bp.route('/', methods=['POST'])
 @jwt_required()
 def create_branch_opening_hours():
@@ -23,20 +24,22 @@ def create_branch_opening_hours():
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
-@branch_opening_hours_bp.route('/<int:id>', methods=['PUT'])
+
+@branch_opening_hours_bp.route('/<int:branch_opening_hours_id>', methods=['PUT'])
 @jwt_required()
-def update_branch_opening_hours(id):
+def update_branch_opening_hours(branch_opening_hours_id):
     # Logic to update branch_opening_hours data
     changes = {f'{col[0]}': request.values.get(f'{col[0]}') for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
-    result = Branch_opening_hours.update(id, **changes)
+    result = Branch_opening_hours.update(branch_opening_hours_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
-@branch_opening_hours_bp.route('/<int:id>', methods=['DELETE'])
+
+@branch_opening_hours_bp.route('/<int:branch_opening_hours_id>', methods=['DELETE'])
 @jwt_required()
-def delete_branch_opening_hours(id):
+def delete_branch_opening_hours(branch_opening_hours_id):
     # Logic to delete branch_opening_hours data
-    result = Branch_opening_hours.delete(id)
+    result = Branch_opening_hours.delete(branch_opening_hours_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200

@@ -15,6 +15,7 @@ def get_branches(branches_id):
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
+
 @branches_bp.route('/', methods=['POST'])
 @jwt_required()
 def create_branches():
@@ -23,20 +24,22 @@ def create_branches():
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
-@branches_bp.route('/<int:id>', methods=['PUT'])
+
+@branches_bp.route('/<int:branches_id>', methods=['PUT'])
 @jwt_required()
-def update_branches(id):
+def update_branches(branches_id):
     # Logic to update branches data
     changes = {f'{col[0]}': request.values.get(f'{col[0]}') for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
-    result = Branches.update(id, **changes)
+    result = Branches.update(branches_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
-@branches_bp.route('/<int:id>', methods=['DELETE'])
+
+@branches_bp.route('/<int:branches_id>', methods=['DELETE'])
 @jwt_required()
-def delete_branches(id):
+def delete_branches(branches_id):
     # Logic to delete branches data
-    result = Branches.delete(id)
+    result = Branches.delete(branches_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200

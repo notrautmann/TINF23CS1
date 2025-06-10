@@ -15,6 +15,7 @@ def get_complaints(complaints_id):
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
+
 @complaints_bp.route('/', methods=['POST'])
 @jwt_required()
 def create_complaints():
@@ -23,20 +24,22 @@ def create_complaints():
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
-@complaints_bp.route('/<int:id>', methods=['PUT'])
+
+@complaints_bp.route('/<int:complaints_id>', methods=['PUT'])
 @jwt_required()
-def update_complaints(id):
+def update_complaints(complaints_id):
     # Logic to update complaints data
     changes = {f'{col[0]}': request.values.get(f'{col[0]}') for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
-    result = Complaints.update(id, **changes)
+    result = Complaints.update(complaints_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
-@complaints_bp.route('/<int:id>', methods=['DELETE'])
+
+@complaints_bp.route('/<int:complaints_id>', methods=['DELETE'])
 @jwt_required()
-def delete_complaints(id):
+def delete_complaints(complaints_id):
     # Logic to delete complaints data
-    result = Complaints.delete(id)
+    result = Complaints.delete(complaints_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200

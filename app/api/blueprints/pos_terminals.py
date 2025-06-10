@@ -15,6 +15,7 @@ def get_pos_terminals(pos_terminals_id):
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
+
 @pos_terminals_bp.route('/', methods=['POST'])
 @jwt_required()
 def create_pos_terminals():
@@ -23,20 +24,22 @@ def create_pos_terminals():
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
-@pos_terminals_bp.route('/<int:id>', methods=['PUT'])
+
+@pos_terminals_bp.route('/<int:pos_terminals_id>', methods=['PUT'])
 @jwt_required()
-def update_pos_terminals(id):
+def update_pos_terminals(pos_terminals_id):
     # Logic to update pos_terminals data
     changes = {f'{col[0]}': request.values.get(f'{col[0]}') for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
-    result = Pos_terminals.update(id, **changes)
+    result = Pos_terminals.update(pos_terminals_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
-@pos_terminals_bp.route('/<int:id>', methods=['DELETE'])
+
+@pos_terminals_bp.route('/<int:pos_terminals_id>', methods=['DELETE'])
 @jwt_required()
-def delete_pos_terminals(id):
+def delete_pos_terminals(pos_terminals_id):
     # Logic to delete pos_terminals data
-    result = Pos_terminals.delete(id)
+    result = Pos_terminals.delete(pos_terminals_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200

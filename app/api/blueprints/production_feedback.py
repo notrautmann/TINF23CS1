@@ -15,6 +15,7 @@ def get_production_feedback(production_feedback_id):
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
+
 @production_feedback_bp.route('/', methods=['POST'])
 @jwt_required()
 def create_production_feedback():
@@ -23,20 +24,22 @@ def create_production_feedback():
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
-@production_feedback_bp.route('/<int:id>', methods=['PUT'])
+
+@production_feedback_bp.route('/<int:production_feedback_id>', methods=['PUT'])
 @jwt_required()
-def update_production_feedback(id):
+def update_production_feedback(production_feedback_id):
     # Logic to update production_feedback data
     changes = {f'{col[0]}': request.values.get(f'{col[0]}') for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
-    result = Production_feedback.update(id, **changes)
+    result = Production_feedback.update(production_feedback_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
-@production_feedback_bp.route('/<int:id>', methods=['DELETE'])
+
+@production_feedback_bp.route('/<int:production_feedback_id>', methods=['DELETE'])
 @jwt_required()
-def delete_production_feedback(id):
+def delete_production_feedback(production_feedback_id):
     # Logic to delete production_feedback data
-    result = Production_feedback.delete(id)
+    result = Production_feedback.delete(production_feedback_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200

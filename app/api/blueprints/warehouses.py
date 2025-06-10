@@ -15,6 +15,7 @@ def get_warehouses(warehouses_id):
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
+
 @warehouses_bp.route('/', methods=['POST'])
 @jwt_required()
 def create_warehouses():
@@ -23,20 +24,22 @@ def create_warehouses():
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
-@warehouses_bp.route('/<int:id>', methods=['PUT'])
+
+@warehouses_bp.route('/<int:warehouses_id>', methods=['PUT'])
 @jwt_required()
-def update_warehouses(id):
+def update_warehouses(warehouses_id):
     # Logic to update warehouses data
     changes = {f'{col[0]}': request.values.get(f'{col[0]}') for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
-    result = Warehouses.update(id, **changes)
+    result = Warehouses.update(warehouses_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
-@warehouses_bp.route('/<int:id>', methods=['DELETE'])
+
+@warehouses_bp.route('/<int:warehouses_id>', methods=['DELETE'])
 @jwt_required()
-def delete_warehouses(id):
+def delete_warehouses(warehouses_id):
     # Logic to delete warehouses data
-    result = Warehouses.delete(id)
+    result = Warehouses.delete(warehouses_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200

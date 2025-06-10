@@ -15,6 +15,7 @@ def get_production_plans(production_plans_id):
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
+
 @production_plans_bp.route('/', methods=['POST'])
 @jwt_required()
 def create_production_plans():
@@ -23,20 +24,22 @@ def create_production_plans():
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
-@production_plans_bp.route('/<int:id>', methods=['PUT'])
+
+@production_plans_bp.route('/<int:production_plans_id>', methods=['PUT'])
 @jwt_required()
-def update_production_plans(id):
+def update_production_plans(production_plans_id):
     # Logic to update production_plans data
     changes = {f'{col[0]}': request.values.get(f'{col[0]}') for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
-    result = Production_plans.update(id, **changes)
+    result = Production_plans.update(production_plans_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
-@production_plans_bp.route('/<int:id>', methods=['DELETE'])
+
+@production_plans_bp.route('/<int:production_plans_id>', methods=['DELETE'])
 @jwt_required()
-def delete_production_plans(id):
+def delete_production_plans(production_plans_id):
     # Logic to delete production_plans data
-    result = Production_plans.delete(id)
+    result = Production_plans.delete(production_plans_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200

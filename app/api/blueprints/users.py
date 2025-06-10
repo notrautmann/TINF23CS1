@@ -15,6 +15,7 @@ def get_users(users_id):
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
+
 @users_bp.route('/', methods=['POST'])
 @jwt_required()
 def create_users():
@@ -23,20 +24,22 @@ def create_users():
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
-@users_bp.route('/<int:id>', methods=['PUT'])
+
+@users_bp.route('/<int:users_id>', methods=['PUT'])
 @jwt_required()
-def update_users(id):
+def update_users(users_id):
     # Logic to update users data
     changes = {f'{col[0]}': request.values.get(f'{col[0]}') for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
-    result = Users.update(id, **changes)
+    result = Users.update(users_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
-@users_bp.route('/<int:id>', methods=['DELETE'])
+
+@users_bp.route('/<int:users_id>', methods=['DELETE'])
 @jwt_required()
-def delete_users(id):
+def delete_users(users_id):
     # Logic to delete users data
-    result = Users.delete(id)
+    result = Users.delete(users_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200

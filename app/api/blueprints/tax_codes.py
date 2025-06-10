@@ -15,6 +15,7 @@ def get_tax_codes(tax_codes_id):
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
+
 @tax_codes_bp.route('/', methods=['POST'])
 @jwt_required()
 def create_tax_codes():
@@ -23,20 +24,22 @@ def create_tax_codes():
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
-@tax_codes_bp.route('/<int:id>', methods=['PUT'])
+
+@tax_codes_bp.route('/<int:tax_codes_id>', methods=['PUT'])
 @jwt_required()
-def update_tax_codes(id):
+def update_tax_codes(tax_codes_id):
     # Logic to update tax_codes data
     changes = {f'{col[0]}': request.values.get(f'{col[0]}') for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
-    result = Tax_codes.update(id, **changes)
+    result = Tax_codes.update(tax_codes_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
-@tax_codes_bp.route('/<int:id>', methods=['DELETE'])
+
+@tax_codes_bp.route('/<int:tax_codes_id>', methods=['DELETE'])
 @jwt_required()
-def delete_tax_codes(id):
+def delete_tax_codes(tax_codes_id):
     # Logic to delete tax_codes data
-    result = Tax_codes.delete(id)
+    result = Tax_codes.delete(tax_codes_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data':result}), 200
