@@ -129,7 +129,8 @@ def get_changes_line():
     Return:
         string: changes line number
     """
-    return "changes = {f'{col[0]}': request.values.get(f'{col[0]}') for col in non_id_columns if request.values.get(f'{col[0]}') is not None}"
+    return """changes = {f'{col[0]}': request.values.get(f'{col[0]}')
+        for col in non_id_columns if request.values.get(f'{col[0]}') is not None}"""
 
 if __name__ == "__main__":  
     generate()
