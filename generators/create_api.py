@@ -49,7 +49,7 @@ Misc variables:
 \"\"\"
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
-from app.db.db import {table.capitalize()}
+from app.db.records.{table} import {table.capitalize()}
 
 non_id_columns = {"["+f",{new_line}{tab}".join([f"'{col[0]}'" for col in non_id_columns])+"]"}
 
