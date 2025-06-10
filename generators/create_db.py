@@ -1,14 +1,12 @@
-import psycopg
-
 import sys
 import os
 
-#from environment_constants import PROJECT_ROOT
-
-# allow imports when running script from within project dir
+# Allow imports when running script from within the project directory
 [sys.path.append(i) for i in ['.', '..']]
 
 from app.db.db_connection import connect
+
+OUTPUT_DIR = "../app/db/records"  # Specify the directory to store the generated files
 
 def get_table_names():
     conn = connect()
@@ -16,7 +14,7 @@ def get_table_names():
         return []
     with conn.cursor() as cur:
         cur.execute("""
-            SELECT table_name FROM information_schema.tables 
+            SELECT table_name FROM information_schema.tables
             WHERE table_schema = 'public' AND table_type = 'BASE TABLE';
         """)
         tables = [row[0] for row in cur.fetchall()]
@@ -29,7 +27,7 @@ def get_columns_for_table(table_name):
         return []
     with conn.cursor() as cur:
         cur.execute("""
-            SELECT column_name, data_type FROM information_schema.columns 
+            SELECT column_name, data_type FROM information_schema.columns
             WHERE table_name = %s AND table_schema = 'public';
         """, (table_name,))
         columns = cur.fetchall()
@@ -37,7 +35,7 @@ def get_columns_for_table(table_name):
     return columns
 
 def generate_crud_class(table_name, columns):
-    # Hilfsfunktion zur Typzuordnung
+    # Helper function to map PostgreSQL types to Python types
     def pg_type_to_py(pg_type: str) -> str:
         mapping = {
             'integer': 'int',
@@ -62,77 +60,35 @@ def generate_crud_class(table_name, columns):
         return mapping.get(pg_type, 'str')
 
     class_name = table_name.capitalize()
-    # Typannotationen für __init__ und create
     init_args = ', '.join([
         f"{col[0]}: {pg_type_to_py(col[1])} = None" for col in columns
     ])
-    fields = ', '.join([col[0] for col in columns])
-    # Spalten ohne ID für create
-    non_id_columns = [col for col in columns if col[0].lower() != 'id']
-    create_args = ', '.join([
-        f"{col[0]}: {pg_type_to_py(col[1])}" for col in non_id_columns
-    ])
-    create_fields = ', '.join([col[0] for col in non_id_columns])
-    create_values = ', '.join(['%s'] * len(non_id_columns))
-    create_params = ', '.join([col[0] for col in non_id_columns])
     assignments = '\n        '.join([f"self.{col[0]} = {col[0]}" for col in columns])
-    code = f"""
-class {class_name}:
+    code = f"""class {class_name}:
+    table_name = "{table_name}"
+
     def __init__(self, {init_args}):
         {assignments}
 
-    @staticmethod
-    def create({create_args}) -> tuple | None:
-        conn = connect()
-        with conn.cursor() as cur:
-            cur.execute(\"INSERT INTO {table_name} ({create_fields}) VALUES ({create_values}) RETURNING *\", ({create_params},))
-            result = cur.fetchone()
-            conn.commit()
-        conn.close()
-        return result
-
-    @staticmethod
-    def read(id: int) -> tuple | None:
-        conn = connect()
-        with conn.cursor() as cur:
-            cur.execute(\"SELECT * FROM {table_name} WHERE id = %s\", (id,))
-            row = cur.fetchone()
-        conn.close()
-        return row
-
-    @staticmethod
-    def update(id: int, **kwargs) -> None:
-        conn = connect()
-        set_clause = ', '.join([f"{{k}} = %s" for k in kwargs.keys()])
-        values = list(kwargs.values()) + [id]
-        with conn.cursor() as cur:
-            cur.execute(f\"UPDATE {table_name} SET {{set_clause}} WHERE id = %s\", values)
-            conn.commit()
-        conn.close()
-
-    @staticmethod
-    def delete(id: int) -> None:
-        conn = connect()
-        with conn.cursor() as cur:
-            cur.execute(\"DELETE FROM {table_name} WHERE id = %s\", (id,))
-            conn.commit()
-        conn.close()
+    def to_dict(self):
+        return {{
+            {', '.join([f'"{col[0]}": self.{col[0]}' for col in columns])}
+        }}
 """
     return code
 
 def main():
+    # Ensure the output directory exists
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
+
     tables = get_table_names()
-    all_code = [
-        "import psycopg\n\nfrom main import connect\n"
-    ]
     for table in tables:
         columns = get_columns_for_table(table)
         crud_code = generate_crud_class(table, columns)
-        all_code.append(crud_code)
-    with open("db.py", "w", encoding="utf-8") as f:
-        f.write("\n".join(all_code))
-    print("CRUD-Klassen wurden in db.py geschrieben.")
+        file_path = os.path.join(OUTPUT_DIR, f"{table}.py")
+        with open(file_path, "w", encoding="utf-8") as f:
+            f.write(crud_code)
+    print(f"CRUD classes have been written to `{OUTPUT_DIR}`.")
 
 if __name__ == "__main__":
     main()
-
