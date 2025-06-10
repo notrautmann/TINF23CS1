@@ -1,10 +1,6 @@
 """
 Generator Script for generating API routes and logic for all database tables
 """
-import sys
-# allow imports when running script from within project dir
-#sys.path.append('.')
-
 from pathlib import Path
 from create_db import get_table_names, get_columns_for_table
 from environment_constants import API_BLUEPRINTS_PATH
@@ -45,7 +41,7 @@ Functions:
 
 Misc variables:
 
-    {table}_id    
+    {table}_id
 \"\"\"
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
@@ -139,6 +135,6 @@ def get_changes_line():
     return """changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}"""
 
-if __name__ == "__main__":  
+if __name__ == "__main__":
     generate()
     print("API routes generated successfully.")

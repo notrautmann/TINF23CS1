@@ -57,8 +57,8 @@ def login():
 
     additional_claims = {"role": role_name}
     access_token = create_access_token(
-        identity=user_name_db,                  
-        additional_claims=additional_claims     
+        identity=user_name_db,
+        additional_claims=additional_claims
     )
 
     return jsonify(access_token=access_token), 200
@@ -78,7 +78,7 @@ def missing_token(err_str):
 def load_and_register_api_blueprints():
     """
     Dynamically loads and registers the blueprints from the api/blueprints directory
-    """         
+    """
     for filename in os.listdir(API_BLUEPRINTS_PATH):
         if filename.endswith('.py'):
             module_name = filename[:-3]  # Remove the .py extension
