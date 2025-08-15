@@ -1,7 +1,12 @@
 class Inventory_movements:
     table_name = "inventory_movements"
 
-    def __init__(self, id: int = None, movement_type: str = None, ingredient_id: int = None, qty: float = None, unit: str = None, from_location_id: int = None, to_location_id: int = None, reference_type: str = None, reference_id: int = None, created_at: str = None, user_id: int = None):
+    def __init__(self, id: int = None, movement_type: str = None,
+                 ingredient_id: int = None, qty: float = None,
+                 unit: str = None, from_location_id: int = None,
+                 to_location_id: int = None, reference_type: str = None,
+                 reference_id: int = None, created_at: str = None,
+                 user_id: int = None):
         self.id = id
         self.movement_type = movement_type
         self.ingredient_id = ingredient_id

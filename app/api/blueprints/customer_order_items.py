@@ -10,17 +10,17 @@ Functions:
 
 Misc variables:
 
-    customer_order_items_id    
+    customer_order_items_id
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.records.customer_order_items import Customer_order_items
 
 non_id_columns = ['order_id',
-	'product_id',
-	'quantity',
-	'unit_price',
-	'tax_code_id']
+    'product_id',
+    'quantity',
+    'unit_price',
+    'tax_code_id']
 
 customer_order_items_bp = Blueprint('customer_order_items',
     __name__,
@@ -31,7 +31,7 @@ customer_order_items_bp = Blueprint('customer_order_items',
 def get_customer_order_items(customer_order_items_id):
     """
     Logic to get customer_order_items data
-    
+
     Parameter:
     customer_order_items_id (int): Id of the customer_order_items-object
 
@@ -55,20 +55,20 @@ def create_customer_order_items():
             otherwise an error message
     """
     result = Customer_order_items.create(order_id=request.values.get('order_id'),
-		product_id=request.values.get('product_id'),
-		quantity=request.values.get('quantity'),
-		unit_price=request.values.get('unit_price'),
-		tax_code_id=request.values.get('tax_code_id'))
+        product_id=request.values.get('product_id'),
+        quantity=request.values.get('quantity'),
+        unit_price=request.values.get('unit_price'),
+        tax_code_id=request.values.get('tax_code_id'))
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200
 
 @customer_order_items_bp.route('/<int:customer_order_items_id>', methods=['PUT'])
 @jwt_required()
 def update_customer_order_items(customer_order_items_id):
     """
     Logic to update customer_order_items data
-    
+
     Parameter:
         customer_order_items_id (int): Id of the customer_order_items-object
 
@@ -81,14 +81,14 @@ def update_customer_order_items(customer_order_items_id):
     result = Customer_order_items.update(customer_order_items_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200
 
 @customer_order_items_bp.route('/<int:customer_order_items_id>', methods=['DELETE'])
 @jwt_required()
 def delete_customer_order_items(customer_order_items_id):
     """
     Logic to delete customer_order_items data
-    
+
     Parameter:
         customer_order_items_id (int): Id of the customer_order_items-object
 
@@ -99,4 +99,4 @@ def delete_customer_order_items(customer_order_items_id):
     result = Customer_order_items.delete(customer_order_items_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200

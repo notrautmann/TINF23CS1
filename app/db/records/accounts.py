@@ -1,7 +1,9 @@
 class Accounts:
     table_name = "accounts"
 
-    def __init__(self, id: int = None, name: str = None, account_number: str = None, iban: str = None, bic: str = None, description: str = None):
+    def __init__(self, id: int = None, name: str = None,
+                 account_number: str = None, iban: str = None,
+                 bic: str = None, description: str = None):
         self.id = id
         self.name = name
         self.account_number = account_number

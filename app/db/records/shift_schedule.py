@@ -1,7 +1,9 @@
 class Shift_schedule:
     table_name = "shift_schedule"
 
-    def __init__(self, id: int = None, shift_id: int = None, employee_id: int = None, schedule_date: str = None, assigned_hours: float = None):
+    def __init__(self, id: int = None, shift_id: int = None,
+                 employee_id: int = None, schedule_date: str = None,
+                 assigned_hours: float = None):
         self.id = id
         self.shift_id = shift_id
         self.employee_id = employee_id

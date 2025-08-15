@@ -20,11 +20,12 @@ import sys
 import os
 
 # Allow imports when running script from within the project directory
-[sys.path.append(i) for i in ['.', '..']]  #pylint: disable=expression-not-assigned
+[sys.path.append(i) for i in ['.', '..']]  # pylint: disable=expression-not-assigned
 
 from app.db.db_connection import connect  # pylint: disable=wrong-import-position
 
 OUTPUT_DIR = "../app/db/records"  # Specify the directory to store the generated files
+
 
 def get_table_names():
     """
@@ -48,6 +49,7 @@ def get_table_names():
         tables = [row[0] for row in cur.fetchall()]
     conn.close()
     return tables
+
 
 def get_columns_for_table(table_name):
     """
@@ -75,6 +77,7 @@ def get_columns_for_table(table_name):
         columns = cur.fetchall()
     conn.close()
     return columns
+
 
 def generate_crud_class(table_name, columns):
     """
@@ -146,6 +149,7 @@ def generate_crud_class(table_name, columns):
 """
     return code
 
+
 def main():
     """
     Main execution function for this script.
@@ -161,6 +165,7 @@ def main():
         with open(file_path, "w", encoding="utf-8") as f:
             f.write(crud_code)
     print(f"CRUD classes have been written to `{OUTPUT_DIR}`.")
+
 
 if __name__ == "__main__":
     main()

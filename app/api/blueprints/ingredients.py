@@ -10,19 +10,19 @@ Functions:
 
 Misc variables:
 
-    ingredients_id    
+    ingredients_id
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.records.ingredients import Ingredients
 
 non_id_columns = ['name',
-	'unit',
-	'purchase_price',
-	'tax_code_id',
-	'is_active',
-	'created_at',
-	'updated_at']
+    'unit',
+    'purchase_price',
+    'tax_code_id',
+    'is_active',
+    'created_at',
+    'updated_at']
 
 ingredients_bp = Blueprint('ingredients',
     __name__,
@@ -33,7 +33,7 @@ ingredients_bp = Blueprint('ingredients',
 def get_ingredients(ingredients_id):
     """
     Logic to get ingredients data
-    
+
     Parameter:
     ingredients_id (int): Id of the ingredients-object
 
@@ -57,22 +57,22 @@ def create_ingredients():
             otherwise an error message
     """
     result = Ingredients.create(name=request.values.get('name'),
-		unit=request.values.get('unit'),
-		purchase_price=request.values.get('purchase_price'),
-		tax_code_id=request.values.get('tax_code_id'),
-		is_active=request.values.get('is_active'),
-		created_at=request.values.get('created_at'),
-		updated_at=request.values.get('updated_at'))
+        unit=request.values.get('unit'),
+        purchase_price=request.values.get('purchase_price'),
+        tax_code_id=request.values.get('tax_code_id'),
+        is_active=request.values.get('is_active'),
+        created_at=request.values.get('created_at'),
+        updated_at=request.values.get('updated_at'))
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200
 
 @ingredients_bp.route('/<int:ingredients_id>', methods=['PUT'])
 @jwt_required()
 def update_ingredients(ingredients_id):
     """
     Logic to update ingredients data
-    
+
     Parameter:
         ingredients_id (int): Id of the ingredients-object
 
@@ -85,14 +85,14 @@ def update_ingredients(ingredients_id):
     result = Ingredients.update(ingredients_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200
 
 @ingredients_bp.route('/<int:ingredients_id>', methods=['DELETE'])
 @jwt_required()
 def delete_ingredients(ingredients_id):
     """
     Logic to delete ingredients data
-    
+
     Parameter:
         ingredients_id (int): Id of the ingredients-object
 
@@ -103,4 +103,4 @@ def delete_ingredients(ingredients_id):
     result = Ingredients.delete(ingredients_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200

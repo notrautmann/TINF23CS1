@@ -1,7 +1,9 @@
 class Employee_time_entries:
     table_name = "employee_time_entries"
 
-    def __init__(self, id: int = None, employee_id: int = None, branch_id: int = None, clock_in: str = None, clock_out: str = None, break_minutes: int = None):
+    def __init__(self, id: int = None, employee_id: int = None,
+                 branch_id: int = None, clock_in: str = None,
+                 clock_out: str = None, break_minutes: int = None):
         self.id = id
         self.employee_id = employee_id
         self.branch_id = branch_id

@@ -10,15 +10,15 @@ Functions:
 
 Misc variables:
 
-    payment_methods_id    
+    payment_methods_id
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.records.payment_methods import Payment_methods
 
 non_id_columns = ['name',
-	'external_code',
-	'is_cash']
+    'external_code',
+    'is_cash']
 
 payment_methods_bp = Blueprint('payment_methods',
     __name__,
@@ -29,7 +29,7 @@ payment_methods_bp = Blueprint('payment_methods',
 def get_payment_methods(payment_methods_id):
     """
     Logic to get payment_methods data
-    
+
     Parameter:
     payment_methods_id (int): Id of the payment_methods-object
 
@@ -53,18 +53,18 @@ def create_payment_methods():
             otherwise an error message
     """
     result = Payment_methods.create(name=request.values.get('name'),
-		external_code=request.values.get('external_code'),
-		is_cash=request.values.get('is_cash'))
+        external_code=request.values.get('external_code'),
+        is_cash=request.values.get('is_cash'))
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200
 
 @payment_methods_bp.route('/<int:payment_methods_id>', methods=['PUT'])
 @jwt_required()
 def update_payment_methods(payment_methods_id):
     """
     Logic to update payment_methods data
-    
+
     Parameter:
         payment_methods_id (int): Id of the payment_methods-object
 
@@ -77,14 +77,14 @@ def update_payment_methods(payment_methods_id):
     result = Payment_methods.update(payment_methods_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200
 
 @payment_methods_bp.route('/<int:payment_methods_id>', methods=['DELETE'])
 @jwt_required()
 def delete_payment_methods(payment_methods_id):
     """
     Logic to delete payment_methods data
-    
+
     Parameter:
         payment_methods_id (int): Id of the payment_methods-object
 
@@ -95,4 +95,4 @@ def delete_payment_methods(payment_methods_id):
     result = Payment_methods.delete(payment_methods_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200

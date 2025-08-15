@@ -1,7 +1,9 @@
 class Customer_order_items:
     table_name = "customer_order_items"
 
-    def __init__(self, id: int = None, order_id: int = None, product_id: int = None, quantity: int = None, unit_price: float = None, tax_code_id: int = None):
+    def __init__(self, id: int = None, order_id: int = None,
+                 product_id: int = None, quantity: int = None,
+                 unit_price: float = None, tax_code_id: int = None):
         self.id = id
         self.order_id = order_id
         self.product_id = product_id

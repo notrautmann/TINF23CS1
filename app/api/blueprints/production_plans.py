@@ -10,17 +10,17 @@ Functions:
 
 Misc variables:
 
-    production_plans_id    
+    production_plans_id
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.records.production_plans import Production_plans
 
 non_id_columns = ['branch_id',
-	'planned_date',
-	'status',
-	'created_at',
-	'updated_at']
+    'planned_date',
+    'status',
+    'created_at',
+    'updated_at']
 
 production_plans_bp = Blueprint('production_plans',
     __name__,
@@ -31,7 +31,7 @@ production_plans_bp = Blueprint('production_plans',
 def get_production_plans(production_plans_id):
     """
     Logic to get production_plans data
-    
+
     Parameter:
     production_plans_id (int): Id of the production_plans-object
 
@@ -55,20 +55,20 @@ def create_production_plans():
             otherwise an error message
     """
     result = Production_plans.create(branch_id=request.values.get('branch_id'),
-		planned_date=request.values.get('planned_date'),
-		status=request.values.get('status'),
-		created_at=request.values.get('created_at'),
-		updated_at=request.values.get('updated_at'))
+        planned_date=request.values.get('planned_date'),
+        status=request.values.get('status'),
+        created_at=request.values.get('created_at'),
+        updated_at=request.values.get('updated_at'))
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200
 
 @production_plans_bp.route('/<int:production_plans_id>', methods=['PUT'])
 @jwt_required()
 def update_production_plans(production_plans_id):
     """
     Logic to update production_plans data
-    
+
     Parameter:
         production_plans_id (int): Id of the production_plans-object
 
@@ -81,14 +81,14 @@ def update_production_plans(production_plans_id):
     result = Production_plans.update(production_plans_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200
 
 @production_plans_bp.route('/<int:production_plans_id>', methods=['DELETE'])
 @jwt_required()
 def delete_production_plans(production_plans_id):
     """
     Logic to delete production_plans data
-    
+
     Parameter:
         production_plans_id (int): Id of the production_plans-object
 
@@ -99,4 +99,4 @@ def delete_production_plans(production_plans_id):
     result = Production_plans.delete(production_plans_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200

@@ -10,14 +10,14 @@ Functions:
 
 Misc variables:
 
-    roles_id    
+    roles_id
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.records.roles import Roles
 
 non_id_columns = ['name',
-	'description']
+    'description']
 
 roles_bp = Blueprint('roles',
     __name__,
@@ -28,7 +28,7 @@ roles_bp = Blueprint('roles',
 def get_roles(roles_id):
     """
     Logic to get roles data
-    
+
     Parameter:
     roles_id (int): Id of the roles-object
 
@@ -52,17 +52,17 @@ def create_roles():
             otherwise an error message
     """
     result = Roles.create(name=request.values.get('name'),
-		description=request.values.get('description'))
+        description=request.values.get('description'))
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200
 
 @roles_bp.route('/<int:roles_id>', methods=['PUT'])
 @jwt_required()
 def update_roles(roles_id):
     """
     Logic to update roles data
-    
+
     Parameter:
         roles_id (int): Id of the roles-object
 
@@ -75,14 +75,14 @@ def update_roles(roles_id):
     result = Roles.update(roles_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200
 
 @roles_bp.route('/<int:roles_id>', methods=['DELETE'])
 @jwt_required()
 def delete_roles(roles_id):
     """
     Logic to delete roles data
-    
+
     Parameter:
         roles_id (int): Id of the roles-object
 
@@ -93,4 +93,4 @@ def delete_roles(roles_id):
     result = Roles.delete(roles_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200

@@ -1,7 +1,11 @@
 class Sales_receipts:
     table_name = "sales_receipts"
 
-    def __init__(self, id: int = None, receipt_number: str = None, branch_id: int = None, pos_terminal_id: int = None, sale_datetime: str = None, customer_id: int = None, total_amount: float = None, payment_method_id: int = None, payment_reference: str = None):
+    def __init__(self, id: int = None, receipt_number: str = None,
+                 branch_id: int = None, pos_terminal_id: int = None,
+                 sale_datetime: str = None, customer_id: int = None,
+                 total_amount: float = None, payment_method_id: int = None,
+                 payment_reference: str = None):
         self.id = id
         self.receipt_number = receipt_number
         self.branch_id = branch_id

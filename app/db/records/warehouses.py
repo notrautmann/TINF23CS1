@@ -1,7 +1,8 @@
 class Warehouses:
     table_name = "warehouses"
 
-    def __init__(self, id: int = None, branch_id: int = None, name: str = None, description: str = None):
+    def __init__(self, id: int = None, branch_id: int = None,
+                 name: str = None, description: str = None):
         self.id = id
         self.branch_id = branch_id
         self.name = name

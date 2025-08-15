@@ -10,17 +10,17 @@ Functions:
 
 Misc variables:
 
-    machines_id    
+    machines_id
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.records.machines import Machines
 
 non_id_columns = ['branch_id',
-	'name',
-	'serial_number',
-	'purchase_date',
-	'last_maintenance']
+    'name',
+    'serial_number',
+    'purchase_date',
+    'last_maintenance']
 
 machines_bp = Blueprint('machines',
     __name__,
@@ -31,7 +31,7 @@ machines_bp = Blueprint('machines',
 def get_machines(machines_id):
     """
     Logic to get machines data
-    
+
     Parameter:
     machines_id (int): Id of the machines-object
 
@@ -55,20 +55,20 @@ def create_machines():
             otherwise an error message
     """
     result = Machines.create(branch_id=request.values.get('branch_id'),
-		name=request.values.get('name'),
-		serial_number=request.values.get('serial_number'),
-		purchase_date=request.values.get('purchase_date'),
-		last_maintenance=request.values.get('last_maintenance'))
+        name=request.values.get('name'),
+        serial_number=request.values.get('serial_number'),
+        purchase_date=request.values.get('purchase_date'),
+        last_maintenance=request.values.get('last_maintenance'))
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200
 
 @machines_bp.route('/<int:machines_id>', methods=['PUT'])
 @jwt_required()
 def update_machines(machines_id):
     """
     Logic to update machines data
-    
+
     Parameter:
         machines_id (int): Id of the machines-object
 
@@ -81,14 +81,14 @@ def update_machines(machines_id):
     result = Machines.update(machines_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200
 
 @machines_bp.route('/<int:machines_id>', methods=['DELETE'])
 @jwt_required()
 def delete_machines(machines_id):
     """
     Logic to delete machines data
-    
+
     Parameter:
         machines_id (int): Id of the machines-object
 
@@ -99,4 +99,4 @@ def delete_machines(machines_id):
     result = Machines.delete(machines_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200

@@ -1,7 +1,11 @@
 class Branches:
     table_name = "branches"
 
-    def __init__(self, id: int = None, name: str = None, address_line: str = None, postal_code: str = None, city: str = None, country: str = None, phone: str = None, email: str = None, opening_note: str = None, created_at: str = None, updated_at: str = None):
+    def __init__(self, id: int = None, name: str = None,
+                 address_line: str = None, postal_code: str = None,
+                 city: str = None, country: str = None, phone: str = None,
+                 email: str = None, opening_note: str = None,
+                 created_at: str = None, updated_at: str = None):
         self.id = id
         self.name = name
         self.address_line = address_line

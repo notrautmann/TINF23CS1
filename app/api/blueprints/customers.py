@@ -10,24 +10,24 @@ Functions:
 
 Misc variables:
 
-    customers_id    
+    customers_id
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.records.customers import Customers
 
 non_id_columns = ['type',
-	'company_name',
-	'first_name',
-	'last_name',
-	'email',
-	'phone',
-	'address_line',
-	'postal_code',
-	'city',
-	'country',
-	'created_at',
-	'updated_at']
+    'company_name',
+    'first_name',
+    'last_name',
+    'email',
+    'phone',
+    'address_line',
+    'postal_code',
+    'city',
+    'country',
+    'created_at',
+    'updated_at']
 
 customers_bp = Blueprint('customers',
     __name__,
@@ -38,7 +38,7 @@ customers_bp = Blueprint('customers',
 def get_customers(customers_id):
     """
     Logic to get customers data
-    
+
     Parameter:
     customers_id (int): Id of the customers-object
 
@@ -62,27 +62,27 @@ def create_customers():
             otherwise an error message
     """
     result = Customers.create(type=request.values.get('type'),
-		company_name=request.values.get('company_name'),
-		first_name=request.values.get('first_name'),
-		last_name=request.values.get('last_name'),
-		email=request.values.get('email'),
-		phone=request.values.get('phone'),
-		address_line=request.values.get('address_line'),
-		postal_code=request.values.get('postal_code'),
-		city=request.values.get('city'),
-		country=request.values.get('country'),
-		created_at=request.values.get('created_at'),
-		updated_at=request.values.get('updated_at'))
+        company_name=request.values.get('company_name'),
+        first_name=request.values.get('first_name'),
+        last_name=request.values.get('last_name'),
+        email=request.values.get('email'),
+        phone=request.values.get('phone'),
+        address_line=request.values.get('address_line'),
+        postal_code=request.values.get('postal_code'),
+        city=request.values.get('city'),
+        country=request.values.get('country'),
+        created_at=request.values.get('created_at'),
+        updated_at=request.values.get('updated_at'))
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200
 
 @customers_bp.route('/<int:customers_id>', methods=['PUT'])
 @jwt_required()
 def update_customers(customers_id):
     """
     Logic to update customers data
-    
+
     Parameter:
         customers_id (int): Id of the customers-object
 
@@ -95,14 +95,14 @@ def update_customers(customers_id):
     result = Customers.update(customers_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200
 
 @customers_bp.route('/<int:customers_id>', methods=['DELETE'])
 @jwt_required()
 def delete_customers(customers_id):
     """
     Logic to delete customers data
-    
+
     Parameter:
         customers_id (int): Id of the customers-object
 
@@ -113,4 +113,4 @@ def delete_customers(customers_id):
     result = Customers.delete(customers_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200

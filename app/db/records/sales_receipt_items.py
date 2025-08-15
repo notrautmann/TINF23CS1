@@ -1,7 +1,9 @@
 class Sales_receipt_items:
     table_name = "sales_receipt_items"
 
-    def __init__(self, id: int = None, receipt_id: int = None, product_id: int = None, qty: float = None, unit_price: float = None, tax_code_id: int = None):
+    def __init__(self, id: int = None, receipt_id: int = None,
+                 product_id: int = None, qty: float = None,
+                 unit_price: float = None, tax_code_id: int = None):
         self.id = id
         self.receipt_id = receipt_id
         self.product_id = product_id

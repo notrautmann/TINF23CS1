@@ -10,14 +10,14 @@ Functions:
 
 Misc variables:
 
-    product_allergens_id    
+    product_allergens_id
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.records.product_allergens import Product_allergens
 
 non_id_columns = ['product_id',
-	'allergen_id']
+    'allergen_id']
 
 product_allergens_bp = Blueprint('product_allergens',
     __name__,
@@ -28,7 +28,7 @@ product_allergens_bp = Blueprint('product_allergens',
 def get_product_allergens(product_allergens_id):
     """
     Logic to get product_allergens data
-    
+
     Parameter:
     product_allergens_id (int): Id of the product_allergens-object
 
@@ -52,17 +52,17 @@ def create_product_allergens():
             otherwise an error message
     """
     result = Product_allergens.create(product_id=request.values.get('product_id'),
-		allergen_id=request.values.get('allergen_id'))
+        allergen_id=request.values.get('allergen_id'))
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200
 
 @product_allergens_bp.route('/<int:product_allergens_id>', methods=['PUT'])
 @jwt_required()
 def update_product_allergens(product_allergens_id):
     """
     Logic to update product_allergens data
-    
+
     Parameter:
         product_allergens_id (int): Id of the product_allergens-object
 
@@ -75,14 +75,14 @@ def update_product_allergens(product_allergens_id):
     result = Product_allergens.update(product_allergens_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200
 
 @product_allergens_bp.route('/<int:product_allergens_id>', methods=['DELETE'])
 @jwt_required()
 def delete_product_allergens(product_allergens_id):
     """
     Logic to delete product_allergens data
-    
+
     Parameter:
         product_allergens_id (int): Id of the product_allergens-object
 
@@ -93,4 +93,4 @@ def delete_product_allergens(product_allergens_id):
     result = Product_allergens.delete(product_allergens_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200

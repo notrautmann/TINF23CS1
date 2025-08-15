@@ -1,7 +1,8 @@
 class Allergens:
     table_name = "allergens"
 
-    def __init__(self, id: int = None, code: str = None, name: str = None, description: str = None):
+    def __init__(self, id: int = None, code: str = None,
+                 name: str = None, description: str = None):
         self.id = id
         self.code = code
         self.name = name

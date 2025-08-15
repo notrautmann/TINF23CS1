@@ -10,22 +10,22 @@ Functions:
 
 Misc variables:
 
-    employees_id    
+    employees_id
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.records.employees import Employees
 
 non_id_columns = ['first_name',
-	'last_name',
-	'email',
-	'phone',
-	'hire_date',
-	'termination_date',
-	'hourly_wage',
-	'monthly_salary',
-	'created_at',
-	'updated_at']
+    'last_name',
+    'email',
+    'phone',
+    'hire_date',
+    'termination_date',
+    'hourly_wage',
+    'monthly_salary',
+    'created_at',
+    'updated_at']
 
 employees_bp = Blueprint('employees',
     __name__,
@@ -36,7 +36,7 @@ employees_bp = Blueprint('employees',
 def get_employees(employees_id):
     """
     Logic to get employees data
-    
+
     Parameter:
     employees_id (int): Id of the employees-object
 
@@ -60,25 +60,25 @@ def create_employees():
             otherwise an error message
     """
     result = Employees.create(first_name=request.values.get('first_name'),
-		last_name=request.values.get('last_name'),
-		email=request.values.get('email'),
-		phone=request.values.get('phone'),
-		hire_date=request.values.get('hire_date'),
-		termination_date=request.values.get('termination_date'),
-		hourly_wage=request.values.get('hourly_wage'),
-		monthly_salary=request.values.get('monthly_salary'),
-		created_at=request.values.get('created_at'),
-		updated_at=request.values.get('updated_at'))
+        last_name=request.values.get('last_name'),
+        email=request.values.get('email'),
+        phone=request.values.get('phone'),
+        hire_date=request.values.get('hire_date'),
+        termination_date=request.values.get('termination_date'),
+        hourly_wage=request.values.get('hourly_wage'),
+        monthly_salary=request.values.get('monthly_salary'),
+        created_at=request.values.get('created_at'),
+        updated_at=request.values.get('updated_at'))
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200
 
 @employees_bp.route('/<int:employees_id>', methods=['PUT'])
 @jwt_required()
 def update_employees(employees_id):
     """
     Logic to update employees data
-    
+
     Parameter:
         employees_id (int): Id of the employees-object
 
@@ -91,14 +91,14 @@ def update_employees(employees_id):
     result = Employees.update(employees_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200
 
 @employees_bp.route('/<int:employees_id>', methods=['DELETE'])
 @jwt_required()
 def delete_employees(employees_id):
     """
     Logic to delete employees data
-    
+
     Parameter:
         employees_id (int): Id of the employees-object
 
@@ -109,4 +109,4 @@ def delete_employees(employees_id):
     result = Employees.delete(employees_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200

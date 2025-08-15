@@ -1,7 +1,12 @@
 class Refunds:
     table_name = "refunds"
 
-    def __init__(self, id: int = None, receipt_id: int = None, order_id: int = None, refund_datetime: str = None, total_refund_amount: float = None, payment_method_id: int = None, account_id: int = None, reason_id: int = None, created_by: int = None, note: str = None, created_at: str = None):
+    def __init__(self, id: int = None, receipt_id: int = None,
+                 order_id: int = None, refund_datetime: str = None,
+                 total_refund_amount: float = None, payment_method_id: int = None,
+                 account_id: int = None, reason_id: int = None,
+                 created_by: int = None, note: str = None,
+                 created_at: str = None):
         self.id = id
         self.receipt_id = receipt_id
         self.order_id = order_id

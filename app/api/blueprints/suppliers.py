@@ -10,22 +10,22 @@ Functions:
 
 Misc variables:
 
-    suppliers_id    
+    suppliers_id
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.records.suppliers import Suppliers
 
 non_id_columns = ['name',
-	'contact_name',
-	'email',
-	'phone',
-	'address_line',
-	'postal_code',
-	'city',
-	'country',
-	'created_at',
-	'updated_at']
+    'contact_name',
+    'email',
+    'phone',
+    'address_line',
+    'postal_code',
+    'city',
+    'country',
+    'created_at',
+    'updated_at']
 
 suppliers_bp = Blueprint('suppliers',
     __name__,
@@ -36,7 +36,7 @@ suppliers_bp = Blueprint('suppliers',
 def get_suppliers(suppliers_id):
     """
     Logic to get suppliers data
-    
+
     Parameter:
     suppliers_id (int): Id of the suppliers-object
 
@@ -60,25 +60,25 @@ def create_suppliers():
             otherwise an error message
     """
     result = Suppliers.create(name=request.values.get('name'),
-		contact_name=request.values.get('contact_name'),
-		email=request.values.get('email'),
-		phone=request.values.get('phone'),
-		address_line=request.values.get('address_line'),
-		postal_code=request.values.get('postal_code'),
-		city=request.values.get('city'),
-		country=request.values.get('country'),
-		created_at=request.values.get('created_at'),
-		updated_at=request.values.get('updated_at'))
+        contact_name=request.values.get('contact_name'),
+        email=request.values.get('email'),
+        phone=request.values.get('phone'),
+        address_line=request.values.get('address_line'),
+        postal_code=request.values.get('postal_code'),
+        city=request.values.get('city'),
+        country=request.values.get('country'),
+        created_at=request.values.get('created_at'),
+        updated_at=request.values.get('updated_at'))
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200
 
 @suppliers_bp.route('/<int:suppliers_id>', methods=['PUT'])
 @jwt_required()
 def update_suppliers(suppliers_id):
     """
     Logic to update suppliers data
-    
+
     Parameter:
         suppliers_id (int): Id of the suppliers-object
 
@@ -91,14 +91,14 @@ def update_suppliers(suppliers_id):
     result = Suppliers.update(suppliers_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200
 
 @suppliers_bp.route('/<int:suppliers_id>', methods=['DELETE'])
 @jwt_required()
 def delete_suppliers(suppliers_id):
     """
     Logic to delete suppliers data
-    
+
     Parameter:
         suppliers_id (int): Id of the suppliers-object
 
@@ -109,4 +109,4 @@ def delete_suppliers(suppliers_id):
     result = Suppliers.delete(suppliers_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200

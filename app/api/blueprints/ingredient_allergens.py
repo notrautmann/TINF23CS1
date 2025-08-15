@@ -10,14 +10,14 @@ Functions:
 
 Misc variables:
 
-    ingredient_allergens_id    
+    ingredient_allergens_id
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.records.ingredient_allergens import Ingredient_allergens
 
 non_id_columns = ['ingredient_id',
-	'allergen_id']
+    'allergen_id']
 
 ingredient_allergens_bp = Blueprint('ingredient_allergens',
     __name__,
@@ -28,7 +28,7 @@ ingredient_allergens_bp = Blueprint('ingredient_allergens',
 def get_ingredient_allergens(ingredient_allergens_id):
     """
     Logic to get ingredient_allergens data
-    
+
     Parameter:
     ingredient_allergens_id (int): Id of the ingredient_allergens-object
 
@@ -52,17 +52,17 @@ def create_ingredient_allergens():
             otherwise an error message
     """
     result = Ingredient_allergens.create(ingredient_id=request.values.get('ingredient_id'),
-		allergen_id=request.values.get('allergen_id'))
+        allergen_id=request.values.get('allergen_id'))
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200
 
 @ingredient_allergens_bp.route('/<int:ingredient_allergens_id>', methods=['PUT'])
 @jwt_required()
 def update_ingredient_allergens(ingredient_allergens_id):
     """
     Logic to update ingredient_allergens data
-    
+
     Parameter:
         ingredient_allergens_id (int): Id of the ingredient_allergens-object
 
@@ -75,14 +75,14 @@ def update_ingredient_allergens(ingredient_allergens_id):
     result = Ingredient_allergens.update(ingredient_allergens_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200
 
 @ingredient_allergens_bp.route('/<int:ingredient_allergens_id>', methods=['DELETE'])
 @jwt_required()
 def delete_ingredient_allergens(ingredient_allergens_id):
     """
     Logic to delete ingredient_allergens data
-    
+
     Parameter:
         ingredient_allergens_id (int): Id of the ingredient_allergens-object
 
@@ -93,4 +93,4 @@ def delete_ingredient_allergens(ingredient_allergens_id):
     result = Ingredient_allergens.delete(ingredient_allergens_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200

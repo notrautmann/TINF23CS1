@@ -1,7 +1,12 @@
 class Employees:
     table_name = "employees"
 
-    def __init__(self, id: int = None, first_name: str = None, last_name: str = None, email: str = None, phone: str = None, hire_date: str = None, termination_date: str = None, hourly_wage: float = None, monthly_salary: float = None, created_at: str = None, updated_at: str = None):
+    def __init__(self, id: int = None, first_name: str = None,
+                 last_name: str = None, email: str = None,
+                 phone: str = None, hire_date: str = None,
+                 termination_date: str = None, hourly_wage: float = None,
+                 monthly_salary: float = None, created_at: str = None,
+                 updated_at: str = None):
         self.id = id
         self.first_name = first_name
         self.last_name = last_name

@@ -1,7 +1,9 @@
 class Branch_order_window:
     table_name = "branch_order_window"
 
-    def __init__(self, id: int = None, branch_id: int = None, weekday: int = None, order_start: str = None, order_end: str = None):
+    def __init__(self, id: int = None, branch_id: int = None,
+                 weekday: int = None, order_start: str = None,
+                 order_end: str = None):
         self.id = id
         self.branch_id = branch_id
         self.weekday = weekday
