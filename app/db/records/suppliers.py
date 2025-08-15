@@ -1,7 +1,12 @@
 class Suppliers:
     table_name = "suppliers"
 
-    def __init__(self, id: int = None, name: str = None, contact_name: str = None, email: str = None, phone: str = None, address_line: str = None, postal_code: str = None, city: str = None, country: str = None, created_at: str = None, updated_at: str = None):
+    def __init__(self, id: int = None, name: str = None,
+                 contact_name: str = None, email: str = None,
+                 phone: str = None, address_line: str = None,
+                 postal_code: str = None, city: str = None,
+                 country: str = None, created_at: str = None,
+                 updated_at: str = None):
         self.id = id
         self.name = name
         self.contact_name = contact_name

@@ -1,7 +1,10 @@
 class Complaints:
     table_name = "complaints"
 
-    def __init__(self, id: int = None, customer_id: int = None, order_id: int = None, product_id: int = None, description: str = None, resolved: bool = None, created_at: str = None, resolved_at: str = None):
+    def __init__(self, id: int = None, customer_id: int = None,
+                 order_id: int = None, product_id: int = None,
+                 description: str = None, resolved: bool = None,
+                 created_at: str = None, resolved_at: str = None):
         self.id = id
         self.customer_id = customer_id
         self.order_id = order_id

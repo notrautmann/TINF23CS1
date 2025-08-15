@@ -1,7 +1,9 @@
 class Production_plans:
     table_name = "production_plans"
 
-    def __init__(self, id: int = None, branch_id: int = None, planned_date: str = None, status: str = None, created_at: str = None, updated_at: str = None):
+    def __init__(self, id: int = None, branch_id: int = None,
+                 planned_date: str = None, status: str = None,
+                 created_at: str = None, updated_at: str = None):
         self.id = id
         self.branch_id = branch_id
         self.planned_date = planned_date

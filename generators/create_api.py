@@ -5,6 +5,7 @@ from pathlib import Path
 from create_db import get_table_names, get_columns_for_table
 from environment_constants import API_BLUEPRINTS_PATH
 
+
 def generate():
     """
     Main function for generating the app/api/blueprint files.
@@ -15,6 +16,7 @@ def generate():
         output_path.parent.mkdir(exist_ok=True, parents=True)
         with open(output_path, "w") as f:
             f.write(generate_routes_file_for_table(table))
+
 
 def generate_routes_file_for_table(table):
     """
@@ -81,7 +83,8 @@ def create_{table}():
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     \"\"\"
-    result = {table.capitalize()}.create({f',{new_line}{tab}{tab}'.join([f"{col[0]}=request.values.get('{col[0]}')" for col in non_id_columns])})
+    result = {table.capitalize()}.create(
+        {f',{new_line}{tab}{tab}'.join([f"{col[0]}=request.values.get('{col[0]}')" for col in non_id_columns])})
     if result is None:
         return jsonify({{'success': False, 'error': 'error when writing data'}}), 500
     return jsonify({{'success': True, 'data':result}}), 200
@@ -91,7 +94,7 @@ def create_{table}():
 def update_{table}({table}_id):
     \"\"\"
     Logic to update {table} data
-    
+
     Parameter:
         {table}_id (int): Id of the {table}-object
 
@@ -110,7 +113,7 @@ def update_{table}({table}_id):
 def delete_{table}({table}_id):
     \"\"\"
     Logic to delete {table} data
-    
+
     Parameter:
         {table}_id (int): Id of the {table}-object
 
@@ -125,6 +128,7 @@ def delete_{table}({table}_id):
 """
     return code
 
+
 def get_changes_line():
     """
     Returns the line number where changes happened
@@ -134,6 +138,7 @@ def get_changes_line():
     """
     return """changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}"""
+
 
 if __name__ == "__main__":
     generate()

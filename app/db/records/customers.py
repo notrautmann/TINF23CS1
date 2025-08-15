@@ -1,7 +1,13 @@
 class Customers:
     table_name = "customers"
 
-    def __init__(self, id: int = None, type: str = None, company_name: str = None, first_name: str = None, last_name: str = None, email: str = None, phone: str = None, address_line: str = None, postal_code: str = None, city: str = None, country: str = None, created_at: str = None, updated_at: str = None):
+    def __init__(self, id: int = None, type: str = None,
+                 company_name: str = None, first_name: str = None,
+                 last_name: str = None, email: str = None,
+                 phone: str = None, address_line: str = None,
+                 postal_code: str = None, city: str = None,
+                 country: str = None, created_at: str = None,
+                 updated_at: str = None):
         self.id = id
         self.type = type
         self.company_name = company_name

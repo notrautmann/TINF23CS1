@@ -10,20 +10,20 @@ Functions:
 
 Misc variables:
 
-    products_id    
+    products_id
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.records.products import Products
 
 non_id_columns = ['name',
-	'sku',
-	'recipe_id',
-	'sales_price',
-	'tax_code_id',
-	'is_active',
-	'created_at',
-	'updated_at']
+    'sku',
+    'recipe_id',
+    'sales_price',
+    'tax_code_id',
+    'is_active',
+    'created_at',
+    'updated_at']
 
 products_bp = Blueprint('products',
     __name__,
@@ -34,7 +34,7 @@ products_bp = Blueprint('products',
 def get_products(products_id):
     """
     Logic to get products data
-    
+
     Parameter:
     products_id (int): Id of the products-object
 
@@ -58,23 +58,23 @@ def create_products():
             otherwise an error message
     """
     result = Products.create(name=request.values.get('name'),
-		sku=request.values.get('sku'),
-		recipe_id=request.values.get('recipe_id'),
-		sales_price=request.values.get('sales_price'),
-		tax_code_id=request.values.get('tax_code_id'),
-		is_active=request.values.get('is_active'),
-		created_at=request.values.get('created_at'),
-		updated_at=request.values.get('updated_at'))
+        sku=request.values.get('sku'),
+        recipe_id=request.values.get('recipe_id'),
+        sales_price=request.values.get('sales_price'),
+        tax_code_id=request.values.get('tax_code_id'),
+        is_active=request.values.get('is_active'),
+        created_at=request.values.get('created_at'),
+        updated_at=request.values.get('updated_at'))
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200
 
 @products_bp.route('/<int:products_id>', methods=['PUT'])
 @jwt_required()
 def update_products(products_id):
     """
     Logic to update products data
-    
+
     Parameter:
         products_id (int): Id of the products-object
 
@@ -87,14 +87,14 @@ def update_products(products_id):
     result = Products.update(products_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200
 
 @products_bp.route('/<int:products_id>', methods=['DELETE'])
 @jwt_required()
 def delete_products(products_id):
     """
     Logic to delete products data
-    
+
     Parameter:
         products_id (int): Id of the products-object
 
@@ -105,4 +105,4 @@ def delete_products(products_id):
     result = Products.delete(products_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200

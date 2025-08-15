@@ -1,10 +1,11 @@
 import sys
 import os
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
-
 import pytest
 from flask import Flask
-from api_blueprints.users import users_bp
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
+from app.api.blueprints.users import users_bp
+
 
 @pytest.fixture
 def app():
@@ -17,9 +18,11 @@ def app():
     JWTManager(app)
     yield app
 
+
 @pytest.fixture
 def client(app):
     return app.test_client()
+
 
 @pytest.fixture
 def auth_header(app):
@@ -27,6 +30,7 @@ def auth_header(app):
     with app.app_context():
         token = create_access_token(identity="1")
         return {'Authorization': f'Bearer {token}'}
+
 
 class TestUsersAPI:
     def test_get_users_success(self, client, auth_header, mocker):
@@ -43,7 +47,9 @@ class TestUsersAPI:
 
     def test_create_users_success(self, client, auth_header, mocker):
         mocker.patch('db.Users.create', return_value={'id': 1, 'username': 'test'})
-        data = {'username': 'test', 'password_hash': 'pw', 'role_id': 1, 'employee_id': 1, 'is_active': True, 'created_at': '2024-01-01', 'updated_at': '2024-01-01'}
+        data = {'username': 'test', 'password_hash': 'pw', 'role_id': 1,
+                'employee_id': 1, 'is_active': True, 'created_at': '2024-01-01',
+                'updated_at': '2024-01-01'}
         resp = client.post('/users/', data=data, headers=auth_header)
         assert resp.status_code == 200
         assert resp.json['success'] is True

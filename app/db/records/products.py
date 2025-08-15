@@ -1,7 +1,10 @@
 class Products:
     table_name = "products"
 
-    def __init__(self, id: int = None, name: str = None, sku: str = None, recipe_id: int = None, sales_price: float = None, tax_code_id: int = None, is_active: bool = None, created_at: str = None, updated_at: str = None):
+    def __init__(self, id: int = None, name: str = None, sku: str = None,
+                 recipe_id: int = None, sales_price: float = None,
+                 tax_code_id: int = None, is_active: bool = None,
+                 created_at: str = None, updated_at: str = None):
         self.id = id
         self.name = name
         self.sku = sku

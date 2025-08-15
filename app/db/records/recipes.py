@@ -1,7 +1,9 @@
 class Recipes:
     table_name = "recipes"
 
-    def __init__(self, id: int = None, name: str = None, description: str = None, created_at: str = None, updated_at: str = None):
+    def __init__(self, id: int = None, name: str = None,
+                 description: str = None, created_at: str = None,
+                 updated_at: str = None):
         self.id = id
         self.name = name
         self.description = description

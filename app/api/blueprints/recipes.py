@@ -10,16 +10,16 @@ Functions:
 
 Misc variables:
 
-    recipes_id    
+    recipes_id
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.records.recipes import Recipes
 
 non_id_columns = ['name',
-	'description',
-	'created_at',
-	'updated_at']
+    'description',
+    'created_at',
+    'updated_at']
 
 recipes_bp = Blueprint('recipes',
     __name__,
@@ -30,7 +30,7 @@ recipes_bp = Blueprint('recipes',
 def get_recipes(recipes_id):
     """
     Logic to get recipes data
-    
+
     Parameter:
     recipes_id (int): Id of the recipes-object
 
@@ -54,19 +54,19 @@ def create_recipes():
             otherwise an error message
     """
     result = Recipes.create(name=request.values.get('name'),
-		description=request.values.get('description'),
-		created_at=request.values.get('created_at'),
-		updated_at=request.values.get('updated_at'))
+        description=request.values.get('description'),
+        created_at=request.values.get('created_at'),
+        updated_at=request.values.get('updated_at'))
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200
 
 @recipes_bp.route('/<int:recipes_id>', methods=['PUT'])
 @jwt_required()
 def update_recipes(recipes_id):
     """
     Logic to update recipes data
-    
+
     Parameter:
         recipes_id (int): Id of the recipes-object
 
@@ -79,14 +79,14 @@ def update_recipes(recipes_id):
     result = Recipes.update(recipes_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200
 
 @recipes_bp.route('/<int:recipes_id>', methods=['DELETE'])
 @jwt_required()
 def delete_recipes(recipes_id):
     """
     Logic to delete recipes data
-    
+
     Parameter:
         recipes_id (int): Id of the recipes-object
 
@@ -97,4 +97,4 @@ def delete_recipes(recipes_id):
     result = Recipes.delete(recipes_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200

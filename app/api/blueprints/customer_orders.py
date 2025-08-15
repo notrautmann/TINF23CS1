@@ -10,24 +10,24 @@ Functions:
 
 Misc variables:
 
-    customer_orders_id    
+    customer_orders_id
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.records.customer_orders import Customer_orders
 
 non_id_columns = ['order_number',
-	'customer_id',
-	'customer_name',
-	'branch_id',
-	'order_datetime',
-	'desired_datetime',
-	'serial',
-	'serial_end',
-	'status',
-	'total_amount',
-	'payment_status',
-	'comment']
+    'customer_id',
+    'customer_name',
+    'branch_id',
+    'order_datetime',
+    'desired_datetime',
+    'serial',
+    'serial_end',
+    'status',
+    'total_amount',
+    'payment_status',
+    'comment']
 
 customer_orders_bp = Blueprint('customer_orders',
     __name__,
@@ -38,7 +38,7 @@ customer_orders_bp = Blueprint('customer_orders',
 def get_customer_orders(customer_orders_id):
     """
     Logic to get customer_orders data
-    
+
     Parameter:
     customer_orders_id (int): Id of the customer_orders-object
 
@@ -62,27 +62,27 @@ def create_customer_orders():
             otherwise an error message
     """
     result = Customer_orders.create(order_number=request.values.get('order_number'),
-		customer_id=request.values.get('customer_id'),
-		customer_name=request.values.get('customer_name'),
-		branch_id=request.values.get('branch_id'),
-		order_datetime=request.values.get('order_datetime'),
-		desired_datetime=request.values.get('desired_datetime'),
-		serial=request.values.get('serial'),
-		serial_end=request.values.get('serial_end'),
-		status=request.values.get('status'),
-		total_amount=request.values.get('total_amount'),
-		payment_status=request.values.get('payment_status'),
-		comment=request.values.get('comment'))
+        customer_id=request.values.get('customer_id'),
+        customer_name=request.values.get('customer_name'),
+        branch_id=request.values.get('branch_id'),
+        order_datetime=request.values.get('order_datetime'),
+        desired_datetime=request.values.get('desired_datetime'),
+        serial=request.values.get('serial'),
+        serial_end=request.values.get('serial_end'),
+        status=request.values.get('status'),
+        total_amount=request.values.get('total_amount'),
+        payment_status=request.values.get('payment_status'),
+        comment=request.values.get('comment'))
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200
 
 @customer_orders_bp.route('/<int:customer_orders_id>', methods=['PUT'])
 @jwt_required()
 def update_customer_orders(customer_orders_id):
     """
     Logic to update customer_orders data
-    
+
     Parameter:
         customer_orders_id (int): Id of the customer_orders-object
 
@@ -95,14 +95,14 @@ def update_customer_orders(customer_orders_id):
     result = Customer_orders.update(customer_orders_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200
 
 @customer_orders_bp.route('/<int:customer_orders_id>', methods=['DELETE'])
 @jwt_required()
 def delete_customer_orders(customer_orders_id):
     """
     Logic to delete customer_orders data
-    
+
     Parameter:
         customer_orders_id (int): Id of the customer_orders-object
 
@@ -113,4 +113,4 @@ def delete_customer_orders(customer_orders_id):
     result = Customer_orders.delete(customer_orders_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200

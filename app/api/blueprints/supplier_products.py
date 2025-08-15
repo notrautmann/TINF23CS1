@@ -10,18 +10,18 @@ Functions:
 
 Misc variables:
 
-    supplier_products_id    
+    supplier_products_id
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.records.supplier_products import Supplier_products
 
 non_id_columns = ['supplier_id',
-	'ingredient_id',
-	'supplier_sku',
-	'purchase_price',
-	'min_order_qty',
-	'lead_time_days']
+    'ingredient_id',
+    'supplier_sku',
+    'purchase_price',
+    'min_order_qty',
+    'lead_time_days']
 
 supplier_products_bp = Blueprint('supplier_products',
     __name__,
@@ -32,7 +32,7 @@ supplier_products_bp = Blueprint('supplier_products',
 def get_supplier_products(supplier_products_id):
     """
     Logic to get supplier_products data
-    
+
     Parameter:
     supplier_products_id (int): Id of the supplier_products-object
 
@@ -56,21 +56,21 @@ def create_supplier_products():
             otherwise an error message
     """
     result = Supplier_products.create(supplier_id=request.values.get('supplier_id'),
-		ingredient_id=request.values.get('ingredient_id'),
-		supplier_sku=request.values.get('supplier_sku'),
-		purchase_price=request.values.get('purchase_price'),
-		min_order_qty=request.values.get('min_order_qty'),
-		lead_time_days=request.values.get('lead_time_days'))
+        ingredient_id=request.values.get('ingredient_id'),
+        supplier_sku=request.values.get('supplier_sku'),
+        purchase_price=request.values.get('purchase_price'),
+        min_order_qty=request.values.get('min_order_qty'),
+        lead_time_days=request.values.get('lead_time_days'))
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200
 
 @supplier_products_bp.route('/<int:supplier_products_id>', methods=['PUT'])
 @jwt_required()
 def update_supplier_products(supplier_products_id):
     """
     Logic to update supplier_products data
-    
+
     Parameter:
         supplier_products_id (int): Id of the supplier_products-object
 
@@ -83,14 +83,14 @@ def update_supplier_products(supplier_products_id):
     result = Supplier_products.update(supplier_products_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200
 
 @supplier_products_bp.route('/<int:supplier_products_id>', methods=['DELETE'])
 @jwt_required()
 def delete_supplier_products(supplier_products_id):
     """
     Logic to delete supplier_products data
-    
+
     Parameter:
         supplier_products_id (int): Id of the supplier_products-object
 
@@ -101,4 +101,4 @@ def delete_supplier_products(supplier_products_id):
     result = Supplier_products.delete(supplier_products_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200

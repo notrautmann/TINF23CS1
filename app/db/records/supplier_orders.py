@@ -1,7 +1,10 @@
 class Supplier_orders:
     table_name = "supplier_orders"
 
-    def __init__(self, id: int = None, order_number: str = None, supplier_id: int = None, branch_id: int = None, order_date: str = None, status: str = None, expected_date: str = None, total_amount: float = None):
+    def __init__(self, id: int = None, order_number: str = None,
+                 supplier_id: int = None, branch_id: int = None,
+                 order_date: str = None, status: str = None,
+                 expected_date: str = None, total_amount: float = None):
         self.id = id
         self.order_number = order_number
         self.supplier_id = supplier_id

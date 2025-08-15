@@ -10,22 +10,22 @@ Functions:
 
 Misc variables:
 
-    refunds_id    
+    refunds_id
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.records.refunds import Refunds
 
 non_id_columns = ['receipt_id',
-	'order_id',
-	'refund_datetime',
-	'total_refund_amount',
-	'payment_method_id',
-	'account_id',
-	'reason_id',
-	'created_by',
-	'note',
-	'created_at']
+    'order_id',
+    'refund_datetime',
+    'total_refund_amount',
+    'payment_method_id',
+    'account_id',
+    'reason_id',
+    'created_by',
+    'note',
+    'created_at']
 
 refunds_bp = Blueprint('refunds',
     __name__,
@@ -36,7 +36,7 @@ refunds_bp = Blueprint('refunds',
 def get_refunds(refunds_id):
     """
     Logic to get refunds data
-    
+
     Parameter:
     refunds_id (int): Id of the refunds-object
 
@@ -60,25 +60,25 @@ def create_refunds():
             otherwise an error message
     """
     result = Refunds.create(receipt_id=request.values.get('receipt_id'),
-		order_id=request.values.get('order_id'),
-		refund_datetime=request.values.get('refund_datetime'),
-		total_refund_amount=request.values.get('total_refund_amount'),
-		payment_method_id=request.values.get('payment_method_id'),
-		account_id=request.values.get('account_id'),
-		reason_id=request.values.get('reason_id'),
-		created_by=request.values.get('created_by'),
-		note=request.values.get('note'),
-		created_at=request.values.get('created_at'))
+        order_id=request.values.get('order_id'),
+        refund_datetime=request.values.get('refund_datetime'),
+        total_refund_amount=request.values.get('total_refund_amount'),
+        payment_method_id=request.values.get('payment_method_id'),
+        account_id=request.values.get('account_id'),
+        reason_id=request.values.get('reason_id'),
+        created_by=request.values.get('created_by'),
+        note=request.values.get('note'),
+        created_at=request.values.get('created_at'))
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200
 
 @refunds_bp.route('/<int:refunds_id>', methods=['PUT'])
 @jwt_required()
 def update_refunds(refunds_id):
     """
     Logic to update refunds data
-    
+
     Parameter:
         refunds_id (int): Id of the refunds-object
 
@@ -91,14 +91,14 @@ def update_refunds(refunds_id):
     result = Refunds.update(refunds_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200
 
 @refunds_bp.route('/<int:refunds_id>', methods=['DELETE'])
 @jwt_required()
 def delete_refunds(refunds_id):
     """
     Logic to delete refunds data
-    
+
     Parameter:
         refunds_id (int): Id of the refunds-object
 
@@ -109,4 +109,4 @@ def delete_refunds(refunds_id):
     result = Refunds.delete(refunds_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200

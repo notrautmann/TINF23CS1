@@ -10,17 +10,17 @@ Functions:
 
 Misc variables:
 
-    sales_receipt_items_id    
+    sales_receipt_items_id
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.records.sales_receipt_items import Sales_receipt_items
 
 non_id_columns = ['receipt_id',
-	'product_id',
-	'qty',
-	'unit_price',
-	'tax_code_id']
+    'product_id',
+    'qty',
+    'unit_price',
+    'tax_code_id']
 
 sales_receipt_items_bp = Blueprint('sales_receipt_items',
     __name__,
@@ -31,7 +31,7 @@ sales_receipt_items_bp = Blueprint('sales_receipt_items',
 def get_sales_receipt_items(sales_receipt_items_id):
     """
     Logic to get sales_receipt_items data
-    
+
     Parameter:
     sales_receipt_items_id (int): Id of the sales_receipt_items-object
 
@@ -55,20 +55,20 @@ def create_sales_receipt_items():
             otherwise an error message
     """
     result = Sales_receipt_items.create(receipt_id=request.values.get('receipt_id'),
-		product_id=request.values.get('product_id'),
-		qty=request.values.get('qty'),
-		unit_price=request.values.get('unit_price'),
-		tax_code_id=request.values.get('tax_code_id'))
+        product_id=request.values.get('product_id'),
+        qty=request.values.get('qty'),
+        unit_price=request.values.get('unit_price'),
+        tax_code_id=request.values.get('tax_code_id'))
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200
 
 @sales_receipt_items_bp.route('/<int:sales_receipt_items_id>', methods=['PUT'])
 @jwt_required()
 def update_sales_receipt_items(sales_receipt_items_id):
     """
     Logic to update sales_receipt_items data
-    
+
     Parameter:
         sales_receipt_items_id (int): Id of the sales_receipt_items-object
 
@@ -81,14 +81,14 @@ def update_sales_receipt_items(sales_receipt_items_id):
     result = Sales_receipt_items.update(sales_receipt_items_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200
 
 @sales_receipt_items_bp.route('/<int:sales_receipt_items_id>', methods=['DELETE'])
 @jwt_required()
 def delete_sales_receipt_items(sales_receipt_items_id):
     """
     Logic to delete sales_receipt_items data
-    
+
     Parameter:
         sales_receipt_items_id (int): Id of the sales_receipt_items-object
 
@@ -99,4 +99,4 @@ def delete_sales_receipt_items(sales_receipt_items_id):
     result = Sales_receipt_items.delete(sales_receipt_items_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200

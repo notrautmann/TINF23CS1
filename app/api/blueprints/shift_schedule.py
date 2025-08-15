@@ -10,16 +10,16 @@ Functions:
 
 Misc variables:
 
-    shift_schedule_id    
+    shift_schedule_id
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.records.shift_schedule import Shift_schedule
 
 non_id_columns = ['shift_id',
-	'employee_id',
-	'schedule_date',
-	'assigned_hours']
+    'employee_id',
+    'schedule_date',
+    'assigned_hours']
 
 shift_schedule_bp = Blueprint('shift_schedule',
     __name__,
@@ -30,7 +30,7 @@ shift_schedule_bp = Blueprint('shift_schedule',
 def get_shift_schedule(shift_schedule_id):
     """
     Logic to get shift_schedule data
-    
+
     Parameter:
     shift_schedule_id (int): Id of the shift_schedule-object
 
@@ -54,19 +54,19 @@ def create_shift_schedule():
             otherwise an error message
     """
     result = Shift_schedule.create(shift_id=request.values.get('shift_id'),
-		employee_id=request.values.get('employee_id'),
-		schedule_date=request.values.get('schedule_date'),
-		assigned_hours=request.values.get('assigned_hours'))
+        employee_id=request.values.get('employee_id'),
+        schedule_date=request.values.get('schedule_date'),
+        assigned_hours=request.values.get('assigned_hours'))
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200
 
 @shift_schedule_bp.route('/<int:shift_schedule_id>', methods=['PUT'])
 @jwt_required()
 def update_shift_schedule(shift_schedule_id):
     """
     Logic to update shift_schedule data
-    
+
     Parameter:
         shift_schedule_id (int): Id of the shift_schedule-object
 
@@ -79,14 +79,14 @@ def update_shift_schedule(shift_schedule_id):
     result = Shift_schedule.update(shift_schedule_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200
 
 @shift_schedule_bp.route('/<int:shift_schedule_id>', methods=['DELETE'])
 @jwt_required()
 def delete_shift_schedule(shift_schedule_id):
     """
     Logic to delete shift_schedule data
-    
+
     Parameter:
         shift_schedule_id (int): Id of the shift_schedule-object
 
@@ -97,4 +97,4 @@ def delete_shift_schedule(shift_schedule_id):
     result = Shift_schedule.delete(shift_schedule_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200

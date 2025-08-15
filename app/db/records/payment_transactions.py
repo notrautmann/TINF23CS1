@@ -1,7 +1,11 @@
 class Payment_transactions:
     table_name = "payment_transactions"
 
-    def __init__(self, id: int = None, account_id: int = None, payment_method_id: int = None, reference_type: str = None, reference_id: int = None, amount: float = None, currency: str = None, direction: str = None, transaction_date: str = None, created_at: str = None):
+    def __init__(self, id: int = None, account_id: int = None,
+                 payment_method_id: int = None, reference_type: str = None,
+                 reference_id: int = None, amount: float = None,
+                 currency: str = None, direction: str = None,
+                 transaction_date: str = None, created_at: str = None):
         self.id = id
         self.account_id = account_id
         self.payment_method_id = payment_method_id

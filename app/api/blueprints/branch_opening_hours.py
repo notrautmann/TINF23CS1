@@ -10,16 +10,16 @@ Functions:
 
 Misc variables:
 
-    branch_opening_hours_id    
+    branch_opening_hours_id
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.records.branch_opening_hours import Branch_opening_hours
 
 non_id_columns = ['branch_id',
-	'weekday',
-	'opens',
-	'closes']
+    'weekday',
+    'opens',
+    'closes']
 
 branch_opening_hours_bp = Blueprint('branch_opening_hours',
     __name__,
@@ -30,7 +30,7 @@ branch_opening_hours_bp = Blueprint('branch_opening_hours',
 def get_branch_opening_hours(branch_opening_hours_id):
     """
     Logic to get branch_opening_hours data
-    
+
     Parameter:
     branch_opening_hours_id (int): Id of the branch_opening_hours-object
 
@@ -54,19 +54,19 @@ def create_branch_opening_hours():
             otherwise an error message
     """
     result = Branch_opening_hours.create(branch_id=request.values.get('branch_id'),
-		weekday=request.values.get('weekday'),
-		opens=request.values.get('opens'),
-		closes=request.values.get('closes'))
+        weekday=request.values.get('weekday'),
+        opens=request.values.get('opens'),
+        closes=request.values.get('closes'))
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200
 
 @branch_opening_hours_bp.route('/<int:branch_opening_hours_id>', methods=['PUT'])
 @jwt_required()
 def update_branch_opening_hours(branch_opening_hours_id):
     """
     Logic to update branch_opening_hours data
-    
+
     Parameter:
         branch_opening_hours_id (int): Id of the branch_opening_hours-object
 
@@ -79,14 +79,14 @@ def update_branch_opening_hours(branch_opening_hours_id):
     result = Branch_opening_hours.update(branch_opening_hours_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200
 
 @branch_opening_hours_bp.route('/<int:branch_opening_hours_id>', methods=['DELETE'])
 @jwt_required()
 def delete_branch_opening_hours(branch_opening_hours_id):
     """
     Logic to delete branch_opening_hours data
-    
+
     Parameter:
         branch_opening_hours_id (int): Id of the branch_opening_hours-object
 
@@ -97,4 +97,4 @@ def delete_branch_opening_hours(branch_opening_hours_id):
     result = Branch_opening_hours.delete(branch_opening_hours_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200

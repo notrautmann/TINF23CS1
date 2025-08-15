@@ -10,15 +10,15 @@ Functions:
 
 Misc variables:
 
-    allergens_id    
+    allergens_id
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from app.db.records.allergens import Allergens
 
 non_id_columns = ['code',
-	'name',
-	'description']
+    'name',
+    'description']
 
 allergens_bp = Blueprint('allergens',
     __name__,
@@ -29,7 +29,7 @@ allergens_bp = Blueprint('allergens',
 def get_allergens(allergens_id):
     """
     Logic to get allergens data
-    
+
     Parameter:
     allergens_id (int): Id of the allergens-object
 
@@ -53,18 +53,18 @@ def create_allergens():
             otherwise an error message
     """
     result = Allergens.create(code=request.values.get('code'),
-		name=request.values.get('name'),
-		description=request.values.get('description'))
+        name=request.values.get('name'),
+        description=request.values.get('description'))
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200
 
 @allergens_bp.route('/<int:allergens_id>', methods=['PUT'])
 @jwt_required()
 def update_allergens(allergens_id):
     """
     Logic to update allergens data
-    
+
     Parameter:
         allergens_id (int): Id of the allergens-object
 
@@ -77,14 +77,14 @@ def update_allergens(allergens_id):
     result = Allergens.update(allergens_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200
 
 @allergens_bp.route('/<int:allergens_id>', methods=['DELETE'])
 @jwt_required()
 def delete_allergens(allergens_id):
     """
     Logic to delete allergens data
-    
+
     Parameter:
         allergens_id (int): Id of the allergens-object
 
@@ -95,4 +95,4 @@ def delete_allergens(allergens_id):
     result = Allergens.delete(allergens_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
-    return jsonify({'success': True, 'data':result}), 200
+    return jsonify({'success': True, 'data': result}), 200

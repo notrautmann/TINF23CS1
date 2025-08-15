@@ -1,7 +1,8 @@
 class Payment_methods:
     table_name = "payment_methods"
 
-    def __init__(self, id: int = None, name: str = None, external_code: str = None, is_cash: bool = None):
+    def __init__(self, id: int = None, name: str = None,
+                 external_code: str = None, is_cash: bool = None):
         self.id = id
         self.name = name
         self.external_code = external_code

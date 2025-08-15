@@ -1,7 +1,8 @@
 class Tax_codes:
     table_name = "tax_codes"
 
-    def __init__(self, id: int = None, name: str = None, rate: float = None, valid_from: str = None, valid_to: str = None):
+    def __init__(self, id: int = None, name: str = None, rate: float = None,
+                 valid_from: str = None, valid_to: str = None):
         self.id = id
         self.name = name
         self.rate = rate

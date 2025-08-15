@@ -1,7 +1,9 @@
 class Shifts:
     table_name = "shifts"
 
-    def __init__(self, id: int = None, branch_id: int = None, name: str = None, start_time: str = None, end_time: str = None):
+    def __init__(self, id: int = None, branch_id: int = None,
+                 name: str = None, start_time: str = None,
+                 end_time: str = None):
         self.id = id
         self.branch_id = branch_id
         self.name = name

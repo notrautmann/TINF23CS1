@@ -1,7 +1,9 @@
 class Machines:
     table_name = "machines"
 
-    def __init__(self, id: int = None, branch_id: int = None, name: str = None, serial_number: str = None, purchase_date: str = None, last_maintenance: str = None):
+    def __init__(self, id: int = None, branch_id: int = None,
+                 name: str = None, serial_number: str = None,
+                 purchase_date: str = None, last_maintenance: str = None):
         self.id = id
         self.branch_id = branch_id
         self.name = name
