@@ -14,6 +14,7 @@ Misc variables:
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
+from app.db.crud import read, create, update, delete
 from app.db.records.sales_receipt_items import Sales_receipt_items
 
 non_id_columns = ['receipt_id',
@@ -39,7 +40,7 @@ def get_sales_receipt_items(sales_receipt_items_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Sales_receipt_items.read(sales_receipt_items_id)
+    result = read(Sales_receipt_items, id=sales_receipt_items_id)
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
@@ -54,11 +55,12 @@ def create_sales_receipt_items():
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Sales_receipt_items.create(receipt_id=request.values.get('receipt_id'),
+    obj = Sales_receipt_items(receipt_id=request.values.get('receipt_id'),
         product_id=request.values.get('product_id'),
         qty=request.values.get('qty'),
         unit_price=request.values.get('unit_price'),
         tax_code_id=request.values.get('tax_code_id'))
+    result = create(obj)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -78,7 +80,7 @@ def update_sales_receipt_items(sales_receipt_items_id):
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
-    result = Sales_receipt_items.update(sales_receipt_items_id, **changes)
+    result = update(Sales_receipt_items, sales_receipt_items_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -96,7 +98,7 @@ def delete_sales_receipt_items(sales_receipt_items_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Sales_receipt_items.delete(sales_receipt_items_id)
+    result = delete(Sales_receipt_items, sales_receipt_items_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200

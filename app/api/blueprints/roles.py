@@ -14,6 +14,7 @@ Misc variables:
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
+from app.db.crud import read, create, update, delete
 from app.db.records.roles import Roles
 
 non_id_columns = ['name',
@@ -36,7 +37,7 @@ def get_roles(roles_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Roles.read(roles_id)
+    result = read(Roles, id=roles_id)
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
@@ -51,8 +52,9 @@ def create_roles():
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Roles.create(name=request.values.get('name'),
+    role_obj = Roles(name=request.values.get('name'),
         description=request.values.get('description'))
+    result = create(role_obj)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -72,7 +74,7 @@ def update_roles(roles_id):
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
-    result = Roles.update(roles_id, **changes)
+    result = update(Roles, roles_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -90,7 +92,7 @@ def delete_roles(roles_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Roles.delete(roles_id)
+    result = delete(Roles, roles_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200

@@ -14,6 +14,7 @@ Misc variables:
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
+from app.db.crud import read, create, update, delete
 from app.db.records.product_allergens import Product_allergens
 
 non_id_columns = ['product_id',
@@ -36,7 +37,7 @@ def get_product_allergens(product_allergens_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Product_allergens.read(product_allergens_id)
+    result = read(Product_allergens, id=product_allergens_id)
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
@@ -51,8 +52,9 @@ def create_product_allergens():
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Product_allergens.create(product_id=request.values.get('product_id'),
+    product_allergen_obj = Product_allergens(product_id=request.values.get('product_id'),
         allergen_id=request.values.get('allergen_id'))
+    result = create(product_allergen_obj)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -72,7 +74,7 @@ def update_product_allergens(product_allergens_id):
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
-    result = Product_allergens.update(product_allergens_id, **changes)
+    result = update(Product_allergens, product_allergens_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -90,7 +92,7 @@ def delete_product_allergens(product_allergens_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Product_allergens.delete(product_allergens_id)
+    result = delete(Product_allergens, product_allergens_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200

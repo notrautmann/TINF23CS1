@@ -14,6 +14,7 @@ Misc variables:
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
+from app.db.crud import read, create, update, delete
 from app.db.records.machines import Machines
 
 non_id_columns = ['branch_id',
@@ -39,7 +40,7 @@ def get_machines(machines_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Machines.read(machines_id)
+    result = read(Machines, id=machines_id)
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
@@ -54,11 +55,12 @@ def create_machines():
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Machines.create(branch_id=request.values.get('branch_id'),
+    machine_obj = Machines(branch_id=request.values.get('branch_id'),
         name=request.values.get('name'),
         serial_number=request.values.get('serial_number'),
         purchase_date=request.values.get('purchase_date'),
         last_maintenance=request.values.get('last_maintenance'))
+    result = create(machine_obj)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -78,7 +80,7 @@ def update_machines(machines_id):
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
-    result = Machines.update(machines_id, **changes)
+    result = update(Machines, machines_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -96,7 +98,7 @@ def delete_machines(machines_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Machines.delete(machines_id)
+    result = delete(Machines, machines_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200

@@ -14,6 +14,7 @@ Misc variables:
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
+from app.db.crud import read, create, update, delete
 from app.db.records.pos_terminals import Pos_terminals
 
 non_id_columns = ['branch_id',
@@ -38,7 +39,7 @@ def get_pos_terminals(pos_terminals_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Pos_terminals.read(pos_terminals_id)
+    result = read(Pos_terminals, id=pos_terminals_id)
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
@@ -53,10 +54,11 @@ def create_pos_terminals():
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Pos_terminals.create(branch_id=request.values.get('branch_id'),
+    pos_terminal_obj = Pos_terminals(branch_id=request.values.get('branch_id'),
         terminal_code=request.values.get('terminal_code'),
         description=request.values.get('description'),
         is_active=request.values.get('is_active'))
+    result = create(pos_terminal_obj)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -76,7 +78,7 @@ def update_pos_terminals(pos_terminals_id):
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
-    result = Pos_terminals.update(pos_terminals_id, **changes)
+    result = update(Pos_terminals, pos_terminals_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -94,7 +96,7 @@ def delete_pos_terminals(pos_terminals_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Pos_terminals.delete(pos_terminals_id)
+    result = delete(Pos_terminals, pos_terminals_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200

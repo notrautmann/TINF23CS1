@@ -14,6 +14,7 @@ Misc variables:
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
+from app.db.crud import read, create, update, delete
 from app.db.records.recipe_items import Recipe_items
 
 non_id_columns = ['recipe_id',
@@ -38,7 +39,7 @@ def get_recipe_items(recipe_items_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Recipe_items.read(recipe_items_id)
+    result = read(Recipe_items, id=recipe_items_id)
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
@@ -53,10 +54,11 @@ def create_recipe_items():
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Recipe_items.create(recipe_id=request.values.get('recipe_id'),
+    recipe_item_obj = Recipe_items(recipe_id=request.values.get('recipe_id'),
         ingredient_id=request.values.get('ingredient_id'),
         quantity=request.values.get('quantity'),
         unit=request.values.get('unit'))
+    result = create(recipe_item_obj)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -76,7 +78,7 @@ def update_recipe_items(recipe_items_id):
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
-    result = Recipe_items.update(recipe_items_id, **changes)
+    result = update(Recipe_items, recipe_items_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -94,7 +96,7 @@ def delete_recipe_items(recipe_items_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Recipe_items.delete(recipe_items_id)
+    result = delete(Recipe_items, recipe_items_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200

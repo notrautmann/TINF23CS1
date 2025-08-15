@@ -14,6 +14,7 @@ Misc variables:
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
+from app.db.crud import read, create, update, delete
 from app.db.records.warehouses import Warehouses
 
 non_id_columns = ['branch_id',
@@ -37,7 +38,7 @@ def get_warehouses(warehouses_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Warehouses.read(warehouses_id)
+    result = read(Warehouses, id=warehouses_id)
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
@@ -52,9 +53,10 @@ def create_warehouses():
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Warehouses.create(branch_id=request.values.get('branch_id'),
+    warehouse_obj = Warehouses(branch_id=request.values.get('branch_id'),
         name=request.values.get('name'),
         description=request.values.get('description'))
+    result = create(warehouse_obj)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -74,7 +76,7 @@ def update_warehouses(warehouses_id):
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
-    result = Warehouses.update(warehouses_id, **changes)
+    result = update(Warehouses, warehouses_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -92,7 +94,7 @@ def delete_warehouses(warehouses_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Warehouses.delete(warehouses_id)
+    result = delete(Warehouses, warehouses_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200

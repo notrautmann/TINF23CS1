@@ -14,6 +14,7 @@ Misc variables:
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
+from app.db.crud import read, create, update, delete
 from app.db.records.inventory_movements import Inventory_movements
 
 non_id_columns = ['movement_type',
@@ -44,7 +45,7 @@ def get_inventory_movements(inventory_movements_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Inventory_movements.read(inventory_movements_id)
+    result = read(Inventory_movements, id=inventory_movements_id)
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
@@ -59,7 +60,7 @@ def create_inventory_movements():
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Inventory_movements.create(movement_type=request.values.get('movement_type'),
+    inventory_obj = Inventory_movements(movement_type=request.values.get('movement_type'),
         ingredient_id=request.values.get('ingredient_id'),
         qty=request.values.get('qty'),
         unit=request.values.get('unit'),
@@ -69,6 +70,7 @@ def create_inventory_movements():
         reference_id=request.values.get('reference_id'),
         created_at=request.values.get('created_at'),
         user_id=request.values.get('user_id'))
+    result = create(inventory_obj)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -88,7 +90,7 @@ def update_inventory_movements(inventory_movements_id):
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
-    result = Inventory_movements.update(inventory_movements_id, **changes)
+    result = update(Inventory_movements, inventory_movements_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -106,7 +108,7 @@ def delete_inventory_movements(inventory_movements_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Inventory_movements.delete(inventory_movements_id)
+    result = delete(Inventory_movements, inventory_movements_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200

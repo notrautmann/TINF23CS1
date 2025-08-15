@@ -14,6 +14,7 @@ Misc variables:
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
+from app.db.crud import read, create, update, delete
 from app.db.records.accounts import Accounts
 
 non_id_columns = ['name',
@@ -39,7 +40,7 @@ def get_accounts(accounts_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Accounts.read(accounts_id)
+    result = read(Accounts, id=accounts_id)
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
@@ -54,11 +55,12 @@ def create_accounts():
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Accounts.create(name=request.values.get('name'),
+    account_obj = Accounts(name=request.values.get('name'),
         account_number=request.values.get('account_number'),
         iban=request.values.get('iban'),
         bic=request.values.get('bic'),
         description=request.values.get('description'))
+    result = create(account_obj)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -78,7 +80,7 @@ def update_accounts(accounts_id):
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
-    result = Accounts.update(accounts_id, **changes)
+    result = update(Accounts, accounts_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -96,7 +98,7 @@ def delete_accounts(accounts_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Accounts.delete(accounts_id)
+    result = delete(Accounts, accounts_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200

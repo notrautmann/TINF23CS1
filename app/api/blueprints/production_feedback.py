@@ -14,6 +14,7 @@ Misc variables:
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
+from app.db.crud import read, create, update, delete
 from app.db.records.production_feedback import Production_feedback
 
 non_id_columns = ['plan_item_id',
@@ -38,7 +39,7 @@ def get_production_feedback(production_feedback_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Production_feedback.read(production_feedback_id)
+    result = read(Production_feedback, id=production_feedback_id)
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
@@ -53,10 +54,11 @@ def create_production_feedback():
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Production_feedback.create(plan_item_id=request.values.get('plan_item_id'),
+    feedback_obj = Production_feedback(plan_item_id=request.values.get('plan_item_id'),
         user_id=request.values.get('user_id'),
         produced_qty=request.values.get('produced_qty'),
         timestamp=request.values.get('timestamp'))
+    result = create(feedback_obj)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -76,7 +78,7 @@ def update_production_feedback(production_feedback_id):
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
-    result = Production_feedback.update(production_feedback_id, **changes)
+    result = update(Production_feedback, production_feedback_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -94,7 +96,7 @@ def delete_production_feedback(production_feedback_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Production_feedback.delete(production_feedback_id)
+    result = delete(Production_feedback, production_feedback_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200

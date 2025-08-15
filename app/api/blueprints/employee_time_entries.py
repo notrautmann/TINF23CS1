@@ -14,6 +14,7 @@ Misc variables:
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
+from app.db.crud import read, create, update, delete
 from app.db.records.employee_time_entries import Employee_time_entries
 
 non_id_columns = ['employee_id',
@@ -39,7 +40,7 @@ def get_employee_time_entries(employee_time_entries_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Employee_time_entries.read(employee_time_entries_id)
+    result = read(Employee_time_entries, id=employee_time_entries_id)
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
@@ -54,11 +55,12 @@ def create_employee_time_entries():
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Employee_time_entries.create(employee_id=request.values.get('employee_id'),
+    obj = Employee_time_entries(employee_id=request.values.get('employee_id'),
         branch_id=request.values.get('branch_id'),
         clock_in=request.values.get('clock_in'),
         clock_out=request.values.get('clock_out'),
         break_minutes=request.values.get('break_minutes'))
+    result = create(obj)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -78,7 +80,7 @@ def update_employee_time_entries(employee_time_entries_id):
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
-    result = Employee_time_entries.update(employee_time_entries_id, **changes)
+    result = update(Employee_time_entries, employee_time_entries_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -96,7 +98,7 @@ def delete_employee_time_entries(employee_time_entries_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Employee_time_entries.delete(employee_time_entries_id)
+    result = delete(Employee_time_entries, employee_time_entries_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200

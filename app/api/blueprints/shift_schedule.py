@@ -14,6 +14,7 @@ Misc variables:
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
+from app.db.crud import read, create, update, delete
 from app.db.records.shift_schedule import Shift_schedule
 
 non_id_columns = ['shift_id',
@@ -38,7 +39,7 @@ def get_shift_schedule(shift_schedule_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Shift_schedule.read(shift_schedule_id)
+    result = read(Shift_schedule, id=shift_schedule_id)
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
@@ -53,10 +54,11 @@ def create_shift_schedule():
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Shift_schedule.create(shift_id=request.values.get('shift_id'),
+    shift_schedule_obj = Shift_schedule(shift_id=request.values.get('shift_id'),
         employee_id=request.values.get('employee_id'),
         schedule_date=request.values.get('schedule_date'),
         assigned_hours=request.values.get('assigned_hours'))
+    result = create(shift_schedule_obj)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -76,7 +78,7 @@ def update_shift_schedule(shift_schedule_id):
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
-    result = Shift_schedule.update(shift_schedule_id, **changes)
+    result = update(Shift_schedule, shift_schedule_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -94,7 +96,7 @@ def delete_shift_schedule(shift_schedule_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Shift_schedule.delete(shift_schedule_id)
+    result = delete(Shift_schedule, shift_schedule_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
