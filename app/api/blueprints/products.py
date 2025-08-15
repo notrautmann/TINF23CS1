@@ -14,6 +14,7 @@ Misc variables:
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
+from app.db.crud import read, create, update, delete
 from app.db.records.products import Products
 
 non_id_columns = ['name',
@@ -42,7 +43,7 @@ def get_products(products_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Products.read(products_id)
+    result = read(Products, id=products_id)
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
@@ -57,7 +58,7 @@ def create_products():
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Products.create(name=request.values.get('name'),
+    product_obj = Products(name=request.values.get('name'),
         sku=request.values.get('sku'),
         recipe_id=request.values.get('recipe_id'),
         sales_price=request.values.get('sales_price'),
@@ -65,6 +66,7 @@ def create_products():
         is_active=request.values.get('is_active'),
         created_at=request.values.get('created_at'),
         updated_at=request.values.get('updated_at'))
+    result = create(product_obj)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -84,7 +86,7 @@ def update_products(products_id):
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
-    result = Products.update(products_id, **changes)
+    result = update(Products, products_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -102,7 +104,7 @@ def delete_products(products_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Products.delete(products_id)
+    result = delete(Products, products_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200

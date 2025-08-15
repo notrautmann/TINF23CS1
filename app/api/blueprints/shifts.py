@@ -14,6 +14,7 @@ Misc variables:
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
+from app.db.crud import read, create, update, delete
 from app.db.records.shifts import Shifts
 
 non_id_columns = ['branch_id',
@@ -38,7 +39,7 @@ def get_shifts(shifts_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Shifts.read(shifts_id)
+    result = read(Shifts, id=shifts_id)
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
@@ -53,10 +54,11 @@ def create_shifts():
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Shifts.create(branch_id=request.values.get('branch_id'),
+    shift_obj = Shifts(branch_id=request.values.get('branch_id'),
         name=request.values.get('name'),
         start_time=request.values.get('start_time'),
         end_time=request.values.get('end_time'))
+    result = create(shift_obj)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -76,7 +78,7 @@ def update_shifts(shifts_id):
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
-    result = Shifts.update(shifts_id, **changes)
+    result = update(Shifts, shifts_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -94,7 +96,7 @@ def delete_shifts(shifts_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Shifts.delete(shifts_id)
+    result = delete(Shifts, shifts_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200

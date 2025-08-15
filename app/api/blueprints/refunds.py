@@ -14,6 +14,7 @@ Misc variables:
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
+from app.db.crud import read, create, update, delete
 from app.db.records.refunds import Refunds
 
 non_id_columns = ['receipt_id',
@@ -44,7 +45,7 @@ def get_refunds(refunds_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Refunds.read(refunds_id)
+    result = read(Refunds, id=refunds_id)
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
@@ -59,7 +60,7 @@ def create_refunds():
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Refunds.create(receipt_id=request.values.get('receipt_id'),
+    refund_obj = Refunds(receipt_id=request.values.get('receipt_id'),
         order_id=request.values.get('order_id'),
         refund_datetime=request.values.get('refund_datetime'),
         total_refund_amount=request.values.get('total_refund_amount'),
@@ -69,6 +70,7 @@ def create_refunds():
         created_by=request.values.get('created_by'),
         note=request.values.get('note'),
         created_at=request.values.get('created_at'))
+    result = create(refund_obj)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -88,7 +90,7 @@ def update_refunds(refunds_id):
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
-    result = Refunds.update(refunds_id, **changes)
+    result = update(Refunds, refunds_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -106,7 +108,7 @@ def delete_refunds(refunds_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Refunds.delete(refunds_id)
+    result = delete(Refunds, refunds_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200

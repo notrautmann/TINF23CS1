@@ -14,6 +14,7 @@ Misc variables:
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
+from app.db.crud import read, create, update, delete
 from app.db.records.allergens import Allergens
 
 non_id_columns = ['code',
@@ -37,7 +38,7 @@ def get_allergens(allergens_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Allergens.read(allergens_id)
+    result = read(Allergens, id=allergens_id)
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
@@ -52,9 +53,10 @@ def create_allergens():
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Allergens.create(code=request.values.get('code'),
+    allergen_obj = Allergens(code=request.values.get('code'),
         name=request.values.get('name'),
         description=request.values.get('description'))
+    result = create(allergen_obj)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -74,7 +76,7 @@ def update_allergens(allergens_id):
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
-    result = Allergens.update(allergens_id, **changes)
+    result = update(Allergens, allergens_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -92,7 +94,7 @@ def delete_allergens(allergens_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Allergens.delete(allergens_id)
+    result = delete(Allergens, allergens_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200

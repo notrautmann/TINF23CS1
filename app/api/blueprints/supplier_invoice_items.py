@@ -14,6 +14,7 @@ Misc variables:
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
+from app.db.crud import read, create, update, delete
 from app.db.records.supplier_invoice_items import Supplier_invoice_items
 
 non_id_columns = ['invoice_id',
@@ -39,7 +40,7 @@ def get_supplier_invoice_items(supplier_invoice_items_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Supplier_invoice_items.read(supplier_invoice_items_id)
+    result = read(Supplier_invoice_items, id=supplier_invoice_items_id)
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
@@ -54,11 +55,12 @@ def create_supplier_invoice_items():
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Supplier_invoice_items.create(invoice_id=request.values.get('invoice_id'),
+    obj = Supplier_invoice_items(invoice_id=request.values.get('invoice_id'),
         ingredient_id=request.values.get('ingredient_id'),
         qty=request.values.get('qty'),
         unit_price=request.values.get('unit_price'),
         tax_code_id=request.values.get('tax_code_id'))
+    result = create(obj)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -78,7 +80,7 @@ def update_supplier_invoice_items(supplier_invoice_items_id):
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
-    result = Supplier_invoice_items.update(supplier_invoice_items_id, **changes)
+    result = update(Supplier_invoice_items, supplier_invoice_items_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -96,7 +98,7 @@ def delete_supplier_invoice_items(supplier_invoice_items_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Supplier_invoice_items.delete(supplier_invoice_items_id)
+    result = delete(Supplier_invoice_items, supplier_invoice_items_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200

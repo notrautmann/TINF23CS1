@@ -14,6 +14,7 @@ Misc variables:
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
+from app.db.crud import read, create, update, delete
 from app.db.records.production_plans import Production_plans
 
 non_id_columns = ['branch_id',
@@ -39,7 +40,7 @@ def get_production_plans(production_plans_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Production_plans.read(production_plans_id)
+    result = read(Production_plans, id=production_plans_id)
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
@@ -54,11 +55,12 @@ def create_production_plans():
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Production_plans.create(branch_id=request.values.get('branch_id'),
+    obj = Production_plans(branch_id=request.values.get('branch_id'),
         planned_date=request.values.get('planned_date'),
         status=request.values.get('status'),
         created_at=request.values.get('created_at'),
         updated_at=request.values.get('updated_at'))
+    result = create(obj)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -78,7 +80,7 @@ def update_production_plans(production_plans_id):
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
-    result = Production_plans.update(production_plans_id, **changes)
+    result = update(Production_plans, production_plans_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -96,7 +98,7 @@ def delete_production_plans(production_plans_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Production_plans.delete(production_plans_id)
+    result = delete(Production_plans, production_plans_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200

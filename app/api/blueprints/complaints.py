@@ -14,6 +14,7 @@ Misc variables:
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
+from app.db.crud import read, create, update, delete
 from app.db.records.complaints import Complaints
 
 non_id_columns = ['customer_id',
@@ -41,7 +42,7 @@ def get_complaints(complaints_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Complaints.read(complaints_id)
+    result = read(Complaints, id=complaints_id)
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
@@ -56,13 +57,14 @@ def create_complaints():
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Complaints.create(customer_id=request.values.get('customer_id'),
+    complaint_obj = Complaints(customer_id=request.values.get('customer_id'),
         order_id=request.values.get('order_id'),
         product_id=request.values.get('product_id'),
         description=request.values.get('description'),
         resolved=request.values.get('resolved'),
         created_at=request.values.get('created_at'),
         resolved_at=request.values.get('resolved_at'))
+    result = create(complaint_obj)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -82,7 +84,7 @@ def update_complaints(complaints_id):
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
-    result = Complaints.update(complaints_id, **changes)
+    result = update(Complaints, complaints_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -100,7 +102,7 @@ def delete_complaints(complaints_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Complaints.delete(complaints_id)
+    result = delete(Complaints, complaints_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200

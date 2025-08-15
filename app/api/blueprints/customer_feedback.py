@@ -14,6 +14,7 @@ Misc variables:
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
+from app.db.crud import read, create, update, delete
 from app.db.records.customer_feedback import Customer_feedback
 
 non_id_columns = ['customer_id',
@@ -40,7 +41,7 @@ def get_customer_feedback(customer_feedback_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Customer_feedback.read(customer_feedback_id)
+    result = read(Customer_feedback, id=customer_feedback_id)
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
@@ -55,12 +56,13 @@ def create_customer_feedback():
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Customer_feedback.create(customer_id=request.values.get('customer_id'),
+    feedback_obj = Customer_feedback(customer_id=request.values.get('customer_id'),
         branch_id=request.values.get('branch_id'),
         order_id=request.values.get('order_id'),
         rating=request.values.get('rating'),
         comment=request.values.get('comment'),
         created_at=request.values.get('created_at'))
+    result = create(feedback_obj)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -80,7 +82,7 @@ def update_customer_feedback(customer_feedback_id):
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
-    result = Customer_feedback.update(customer_feedback_id, **changes)
+    result = update(Customer_feedback, customer_feedback_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -98,7 +100,7 @@ def delete_customer_feedback(customer_feedback_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Customer_feedback.delete(customer_feedback_id)
+    result = delete(Customer_feedback, customer_feedback_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200

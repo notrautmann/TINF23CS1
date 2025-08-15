@@ -14,6 +14,7 @@ Misc variables:
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
+from app.db.crud import read, create, update, delete
 from app.db.records.ingredients import Ingredients
 
 non_id_columns = ['name',
@@ -41,7 +42,7 @@ def get_ingredients(ingredients_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Ingredients.read(ingredients_id)
+    result = read(Ingredients, id=ingredients_id)
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
@@ -56,13 +57,14 @@ def create_ingredients():
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Ingredients.create(name=request.values.get('name'),
+    ingredient_obj = Ingredients(name=request.values.get('name'),
         unit=request.values.get('unit'),
         purchase_price=request.values.get('purchase_price'),
         tax_code_id=request.values.get('tax_code_id'),
         is_active=request.values.get('is_active'),
         created_at=request.values.get('created_at'),
         updated_at=request.values.get('updated_at'))
+    result = create(ingredient_obj)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -82,7 +84,7 @@ def update_ingredients(ingredients_id):
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
-    result = Ingredients.update(ingredients_id, **changes)
+    result = update(Ingredients, ingredients_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -100,7 +102,7 @@ def delete_ingredients(ingredients_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Ingredients.delete(ingredients_id)
+    result = delete(Ingredients, ingredients_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200

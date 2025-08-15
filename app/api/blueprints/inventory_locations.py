@@ -14,6 +14,7 @@ Misc variables:
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
+from app.db.crud import read, create, update, delete
 from app.db.records.inventory_locations import Inventory_locations
 
 non_id_columns = ['warehouse_id',
@@ -37,7 +38,7 @@ def get_inventory_locations(inventory_locations_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Inventory_locations.read(inventory_locations_id)
+    result = read(Inventory_locations, id=inventory_locations_id)
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
@@ -52,9 +53,10 @@ def create_inventory_locations():
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Inventory_locations.create(warehouse_id=request.values.get('warehouse_id'),
+    obj = Inventory_locations(warehouse_id=request.values.get('warehouse_id'),
         code=request.values.get('code'),
         description=request.values.get('description'))
+    result = create(obj)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -74,7 +76,7 @@ def update_inventory_locations(inventory_locations_id):
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
-    result = Inventory_locations.update(inventory_locations_id, **changes)
+    result = update(Inventory_locations, inventory_locations_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -92,7 +94,7 @@ def delete_inventory_locations(inventory_locations_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Inventory_locations.delete(inventory_locations_id)
+    result = delete(Inventory_locations, inventory_locations_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200

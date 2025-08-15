@@ -14,6 +14,7 @@ Misc variables:
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
+from app.db.crud import read, create, update, delete
 from app.db.records.payment_transactions import Payment_transactions
 
 non_id_columns = ['account_id',
@@ -43,7 +44,7 @@ def get_payment_transactions(payment_transactions_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Payment_transactions.read(payment_transactions_id)
+    result = read(Payment_transactions, id=payment_transactions_id)
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
@@ -58,7 +59,7 @@ def create_payment_transactions():
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Payment_transactions.create(account_id=request.values.get('account_id'),
+    payment_obj = Payment_transactions(account_id=request.values.get('account_id'),
         payment_method_id=request.values.get('payment_method_id'),
         reference_type=request.values.get('reference_type'),
         reference_id=request.values.get('reference_id'),
@@ -67,6 +68,7 @@ def create_payment_transactions():
         direction=request.values.get('direction'),
         transaction_date=request.values.get('transaction_date'),
         created_at=request.values.get('created_at'))
+    result = create(payment_obj)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -86,7 +88,7 @@ def update_payment_transactions(payment_transactions_id):
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
-    result = Payment_transactions.update(payment_transactions_id, **changes)
+    result = update(Payment_transactions, payment_transactions_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -103,7 +105,7 @@ def delete_payment_transactions(payment_transactions_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Payment_transactions.delete(payment_transactions_id)
+    result = delete(Payment_transactions, payment_transactions_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200

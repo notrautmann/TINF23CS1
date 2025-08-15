@@ -34,19 +34,19 @@ def auth_header(app):
 
 class TestUsersAPI:
     def test_get_users_success(self, client, auth_header, mocker):
-        mocker.patch('db.Users.read', return_value={'id': 1, 'username': 'test'})
+        mocker.patch('app.db.crud.read', return_value={'id': 1, 'username': 'test'})
         resp = client.get('/users/1', headers=auth_header)
         assert resp.status_code == 200
         assert resp.json['success'] is True
 
     def test_get_users_not_found(self, client, auth_header, mocker):
-        mocker.patch('db.Users.read', return_value=None)
+        mocker.patch('app.db.crud.read', return_value=None)
         resp = client.get('/users/999', headers=auth_header)
         assert resp.status_code == 404
         assert resp.json['success'] is False
 
     def test_create_users_success(self, client, auth_header, mocker):
-        mocker.patch('db.Users.create', return_value={'id': 1, 'username': 'test'})
+        mocker.patch('app.db.crud.create', return_value={'id': 1, 'username': 'test'})
         data = {'username': 'test', 'password_hash': 'pw', 'role_id': 1,
                 'employee_id': 1, 'is_active': True, 'created_at': '2024-01-01',
                 'updated_at': '2024-01-01'}
@@ -55,34 +55,34 @@ class TestUsersAPI:
         assert resp.json['success'] is True
 
     def test_create_users_error(self, client, auth_header, mocker):
-        mocker.patch('db.Users.create', return_value=None)
+        mocker.patch('app.db.crud.create', return_value=None)
         data = {'username': 'test'}
         resp = client.post('/users/', data=data, headers=auth_header)
         assert resp.status_code == 500
         assert resp.json['success'] is False
 
     def test_update_users_success(self, client, auth_header, mocker):
-        mocker.patch('db.Users.update', return_value={'id': 1, 'username': 'test'})
+        mocker.patch('app.db.crud.update', return_value={'id': 1, 'username': 'test'})
         data = {'username': 'newname'}
         resp = client.put('/users/1', data=data, headers=auth_header)
         assert resp.status_code == 200
         assert resp.json['success'] is True
 
     def test_update_users_error(self, client, auth_header, mocker):
-        mocker.patch('db.Users.update', return_value=None)
+        mocker.patch('app.db.crud.update', return_value=None)
         data = {'username': 'fail'}
         resp = client.put('/users/1', data=data, headers=auth_header)
         assert resp.status_code == 500
         assert resp.json['success'] is False
 
     def test_delete_users_success(self, client, auth_header, mocker):
-        mocker.patch('db.Users.delete', return_value={'id': 1})
+        mocker.patch('app.db.crud.delete', return_value={'id': 1})
         resp = client.delete('/users/1', headers=auth_header)
         assert resp.status_code == 200
         assert resp.json['success'] is True
 
     def test_delete_users_error(self, client, auth_header, mocker):
-        mocker.patch('db.Users.delete', return_value=None)
+        mocker.patch('app.db.crud.delete', return_value=None)
         resp = client.delete('/users/1', headers=auth_header)
         assert resp.status_code == 500
         assert resp.json['success'] is False

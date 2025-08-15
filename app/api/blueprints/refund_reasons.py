@@ -14,6 +14,7 @@ Misc variables:
 """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
+from app.db.crud import read, create, update, delete
 from app.db.records.refund_reasons import Refund_reasons
 
 non_id_columns = ['code',
@@ -36,7 +37,7 @@ def get_refund_reasons(refund_reasons_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Refund_reasons.read(refund_reasons_id)
+    result = read(Refund_reasons, id=refund_reasons_id)
     if result is None:
         return jsonify({'success': False, 'error': 'Not found'}), 404
     return jsonify({'success': True, 'data': result}), 200
@@ -51,8 +52,9 @@ def create_refund_reasons():
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Refund_reasons.create(code=request.values.get('code'),
+    refund_reason_obj = Refund_reasons(code=request.values.get('code'),
         description=request.values.get('description'))
+    result = create(refund_reason_obj)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -72,7 +74,7 @@ def update_refund_reasons(refund_reasons_id):
     """
     changes = {f'{col[0]}': request.values.get(f'{col[0]}')
         for col in non_id_columns if request.values.get(f'{col[0]}') is not None}
-    result = Refund_reasons.update(refund_reasons_id, **changes)
+    result = update(Refund_reasons, refund_reasons_id, **changes)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
@@ -90,7 +92,7 @@ def delete_refund_reasons(refund_reasons_id):
         json-structure: Returns status code and if operation succeeded the returned data
             otherwise an error message
     """
-    result = Refund_reasons.delete(refund_reasons_id)
+    result = delete(Refund_reasons, refund_reasons_id)
     if result is None:
         return jsonify({'success': False, 'error': 'error when writing data'}), 500
     return jsonify({'success': True, 'data': result}), 200
